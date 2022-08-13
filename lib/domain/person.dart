@@ -59,4 +59,6 @@ class AllType {
   Gender? myNullableEnum;
   Uri myUri = Uri(scheme: 'https', host: 'dart.dev');
   Uri? myNullableUri ;
+  BigInt myBigInt = BigInt.from(0);
+  BigInt? myNullableBigInt ;
 }

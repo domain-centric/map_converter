@@ -28,12 +28,13 @@ class ValueExpressionFactories extends DelegatingList<ValueExpressionFactory> {
           BasicTypeExpressionFactory(int),
           BasicTypeExpressionFactory(bool),
           DoubleExpressionFactory(),
-          UriExpressionFactory(),
-
-          ///TODO supported types from dart core library: BigInt, DateTime, Duration, Enum,  Iterable, List, Map, Object, Set
+          ParsableTypeExpressionFactory(Uri),
+          ParsableTypeExpressionFactory(BigInt),
+          ///TODO supported types from dart core library: BigInt, DateTime, Duration, Enum, Object, Iterable, List, Map, Set
         ]);
 }
 
+/// Generic [ValueExpressionFactory] for basic Dart types
 class BasicTypeExpressionFactory implements ValueExpressionFactory {
   final Type basicType;
 
@@ -83,9 +84,14 @@ class DoubleExpressionFactory extends ValueExpressionFactory {
       ]);
 }
 
-class UriExpressionFactory extends ValueExpressionFactory {
+/// Generic [ValueExpressionFactory] for basic parsable Dart types such as [Uri] and [BigInt]
+class ParsableTypeExpressionFactory extends ValueExpressionFactory {
+  final Type parsableType;
+
+  ParsableTypeExpressionFactory(this.parsableType);
+
   @override
-  bool canConvert(Type typeToConvert) => typeToConvert == Uri;
+  bool canConvert(Type typeToConvert) => typeToConvert == parsableType;
 
   @override
   code.Expression createToMapValueCode(
@@ -103,6 +109,6 @@ class UriExpressionFactory extends ValueExpressionFactory {
       code.Expression([
         if (nullable)
           code.Code("$mapVariableName['$propertyName'] == null ? null : "),
-        code.Code("Uri.parse($mapVariableName['$propertyName'] as String)"),
+        code.Code("$parsableType.parse($mapVariableName['$propertyName'] as String)"),
       ]);
 }

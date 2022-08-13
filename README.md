@@ -1,2 +1,6 @@
-A sample command-line application with an entrypoint in `bin/`, library code
-in `lib/`, and example unit test in `test/`.
+A builder that generates classes to convert objects to key-value maps and vise versa 
+
+e.g. for:
+* JSON conversions
+* YAML conversions 
+* Key-value storage libraries
