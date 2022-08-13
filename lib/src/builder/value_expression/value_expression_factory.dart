@@ -30,7 +30,6 @@ class ValueExpressionFactories extends DelegatingList<ValueExpressionFactory> {
           DoubleExpressionFactory(),
           ParsableTypeExpressionFactory(Uri),
           ParsableTypeExpressionFactory(BigInt),
-          ///TODO supported types from dart core library: DateTime, Duration, Enum, Object, Iterable, List, Map, Set
         ]);
 }
 
