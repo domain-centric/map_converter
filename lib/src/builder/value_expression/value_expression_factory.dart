@@ -30,6 +30,7 @@ class ValueExpressionFactories extends DelegatingList<ValueExpressionFactory> {
           DoubleExpressionFactory(),
           ParsableTypeExpressionFactory(Uri),
           ParsableTypeExpressionFactory(BigInt),
+          ParsableTypeExpressionFactory(DateTime, toStringCode: 'toIso8601String()'),
         ]);
 }
 
@@ -86,8 +87,9 @@ class DoubleExpressionFactory extends ValueExpressionFactory {
 /// Generic [ValueExpressionFactory] for basic parsable Dart types such as [Uri] and [BigInt]
 class ParsableTypeExpressionFactory extends ValueExpressionFactory {
   final Type parsableType;
+  final String toStringCode;
 
-  ParsableTypeExpressionFactory(this.parsableType);
+  ParsableTypeExpressionFactory(this.parsableType, {this.toStringCode='toString()'});
 
   @override
   bool canConvert(Type typeToConvert) => typeToConvert == parsableType;
@@ -98,7 +100,7 @@ class ParsableTypeExpressionFactory extends ValueExpressionFactory {
           {required bool nullable}) =>
       code.Expression([
         code.Code(
-            '$instanceVariableName.$propertyName${nullable ? '?' : ''}.toString()')
+            '$instanceVariableName.$propertyName${nullable ? '?' : ''}.$toStringCode')
       ]);
 
   @override

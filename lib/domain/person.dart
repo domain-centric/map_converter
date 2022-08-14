@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
+
+/// dart run build_runner build
 @JsonSerializable()
 class Person {
   String name;
@@ -61,4 +63,7 @@ class AllType {
   Uri? myNullableUri ;
   BigInt myBigInt = BigInt.from(0);
   BigInt? myNullableBigInt ;
+  DateTime myDateTime=DateTime(2022);
+  DateTime? myNullableDateTime;
+
 }

@@ -224,4 +224,50 @@ main() {
 
     });
   });
+
+  group("$ParsableTypeExpressionFactory(DateTime, toStringCode: 'toIso8601String()')", () {
+    var expressionFactory =  ParsableTypeExpressionFactory(DateTime, toStringCode: 'toIso8601String()');
+    var propertyName = 'dateOfBirth';
+    test('canConvert(DateTime)==true', () {
+      expect(expressionFactory.canConvert(DateTime), true);
+    });
+    test('canConvert(int)==false', () {
+      expect(expressionFactory.canConvert(int), false);
+    });
+    test('createToObjectPropertyValue nullable=false', () {
+      expect(
+          CodeFormatter().unFormatted(expressionFactory
+              .createToObjectPropertyValueCode(mapVariableName, propertyName,
+              nullable: false)),
+          "DateTime.parse($mapVariableName['$propertyName'] as String)");
+    });
+    test('createToObjectPropertyValue nullable=true', () {
+      expect(
+          CodeFormatter().unFormatted(expressionFactory
+              .createToObjectPropertyValueCode(mapVariableName, propertyName,
+              nullable: true)),
+          "$mapVariableName['$propertyName'] == null ? null : DateTime.parse($mapVariableName['$propertyName'] as String)");
+    });
+
+    test('createToObjectPropertyValue nullable=false', () {
+      expect(
+          CodeFormatter().unFormatted(expressionFactory.createToMapValueCode(
+            personVariableName,
+            propertyName,
+            nullable: false,
+          )),
+          "$personVariableName.$propertyName.toIso8601String()");
+
+    });
+    test('createToObjectPropertyValue nullable=true', () {
+      expect(
+          CodeFormatter().unFormatted(expressionFactory.createToMapValueCode(
+            personVariableName,
+            propertyName,
+            nullable: true,
+          )),
+          "$personVariableName.$propertyName?.toIso8601String()");
+
+    });
+  });
 }
