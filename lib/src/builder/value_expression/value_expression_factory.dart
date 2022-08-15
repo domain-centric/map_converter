@@ -28,79 +28,31 @@ class ValueExpressionFactories extends DelegatingList<ValueExpressionFactory> {
           BasicTypeExpressionFactory(int),
           BasicTypeExpressionFactory(bool),
           DoubleExpressionFactory(),
-          ParsableTypeExpressionFactory(Uri),
-          ParsableTypeExpressionFactory(BigInt),
-          ParsableTypeExpressionFactory(DateTime, toStringCode: 'toIso8601String()'),
+          UriExpressionFactory(),
+          BigIntExpressionFactory(),
+          DateTimeExpressionFactory(),
+          DurationExpressionFactory(),
         ]);
 }
 
-/// Generic [ValueExpressionFactory] for basic Dart types
-class BasicTypeExpressionFactory implements ValueExpressionFactory {
-  final Type basicType;
-
-  BasicTypeExpressionFactory(this.basicType);
-
-  @override
-  bool canConvert(Type typeToConvert) => typeToConvert == basicType;
-
-  @override
-  code.Expression createToMapValueCode(
-          String instanceVariableName, String propertyName,
-          {required bool nullable}) =>
-      code.Expression.ofVariable(instanceVariableName)
-          .getProperty(propertyName);
-
-  @override
-  code.Expression createToObjectPropertyValueCode(
-          String mapVariableName, String propertyName,
-          {required bool nullable}) =>
-      code.Expression([code.Code("$mapVariableName['$propertyName']")])
-          .asA(_typeExpression(nullable: nullable));
-
-  code.Expression _typeExpression({required bool nullable}) => code.Expression(
-      [code.Code(basicType.toString()), if (nullable) code.Code('?')]);
-}
-
-class DoubleExpressionFactory extends ValueExpressionFactory {
-  @override
-  bool canConvert(Type typeToConvert) => typeToConvert == double;
-
-  @override
-  code.Expression createToMapValueCode(
-          String instanceVariableName, String propertyName,
-          {required bool nullable}) =>
-      code.Expression.ofVariable(instanceVariableName)
-          .getProperty(propertyName);
-
-  @override
-  code.Expression createToObjectPropertyValueCode(
-          String mapVariableName, String propertyName,
-          {required bool nullable}) =>
-      code.Expression([
-        code.Code("("),
-        code.Code("$mapVariableName['$propertyName']"),
-        if (nullable) code.Code(' as num?)?.toDouble()'),
-        if (!nullable) code.Code(' as num).toDouble()'),
-      ]);
-}
-
 /// Generic [ValueExpressionFactory] for basic parsable Dart types such as [Uri] and [BigInt]
-class ParsableTypeExpressionFactory extends ValueExpressionFactory {
-  final Type parsableType;
-  final String toStringCode;
+class BasicTypeExpressionFactory extends ValueExpressionFactory {
+  final Type propertyType;
 
-  ParsableTypeExpressionFactory(this.parsableType, {this.toStringCode='toString()'});
+  BasicTypeExpressionFactory(this.propertyType);
 
   @override
-  bool canConvert(Type typeToConvert) => typeToConvert == parsableType;
+  bool canConvert(Type typeToConvert) => typeToConvert == propertyType;
 
   @override
   code.Expression createToMapValueCode(
           String instanceVariableName, String propertyName,
           {required bool nullable}) =>
       code.Expression([
-        code.Code(
-            '$instanceVariableName.$propertyName${nullable ? '?' : ''}.$toStringCode')
+        code.Code(nullable
+            ? createToMapNullableValueCodeString(
+                instanceVariableName, propertyName)
+            : createToMapValueCodeString(instanceVariableName, propertyName))
       ]);
 
   @override
@@ -108,8 +60,144 @@ class ParsableTypeExpressionFactory extends ValueExpressionFactory {
           String mapVariableName, String propertyName,
           {required bool nullable}) =>
       code.Expression([
-        if (nullable)
-          code.Code("$mapVariableName['$propertyName'] == null ? null : "),
-        code.Code("$parsableType.parse($mapVariableName['$propertyName'] as String)"),
+        code.Code(nullable
+            ? createToObjectNullablePropertyValueCodeString(
+                mapVariableName, propertyName)
+            : createToObjectPropertyValueCodeString(
+                mapVariableName, propertyName))
       ]);
+
+  String createToMapValueCodeString(
+          String instanceVariableName, String propertyName) =>
+      '$instanceVariableName.$propertyName';
+
+  String createToMapNullableValueCodeString(
+          String instanceVariableName, String propertyName) =>
+      '$instanceVariableName.$propertyName';
+
+  String createToObjectPropertyValueCodeString(
+          String mapVariableName, String propertyName) =>
+      "$mapVariableName['$propertyName'] as $propertyType";
+
+  String createToObjectNullablePropertyValueCodeString(
+          String mapVariableName, String propertyName) =>
+      "$mapVariableName['$propertyName'] as $propertyType?";
+}
+
+class DoubleExpressionFactory extends BasicTypeExpressionFactory {
+  DoubleExpressionFactory() : super(double);
+
+  @override
+  String createToObjectPropertyValueCodeString(
+          String mapVariableName, String propertyName) =>
+      "($mapVariableName['$propertyName'] as num).toDouble()";
+
+  @override
+  String createToObjectNullablePropertyValueCodeString(
+          String mapVariableName, String propertyName) =>
+      "($mapVariableName['$propertyName'] as num?)?.toDouble()";
+}
+
+class UriExpressionFactory extends BasicTypeExpressionFactory {
+  UriExpressionFactory() : super(Uri);
+
+  @override
+  String createToMapValueCodeString(
+          String instanceVariableName, String propertyName) =>
+      '$instanceVariableName.$propertyName.toString()';
+
+  @override
+  String createToMapNullableValueCodeString(
+          String instanceVariableName, String propertyName) =>
+      '$instanceVariableName.$propertyName?.toString()';
+
+  @override
+  String createToObjectPropertyValueCodeString(
+          String mapVariableName, String propertyName) =>
+      "Uri.parse($mapVariableName['$propertyName'] as String)";
+
+  @override
+  String createToObjectNullablePropertyValueCodeString(
+          String mapVariableName, String propertyName) =>
+      "$mapVariableName['$propertyName'] == null "
+      "? null "
+      ": Uri.parse($mapVariableName['$propertyName'] as String)";
+}
+
+class BigIntExpressionFactory extends BasicTypeExpressionFactory {
+  BigIntExpressionFactory() : super(BigInt);
+
+  @override
+  String createToMapValueCodeString(
+          String instanceVariableName, String propertyName) =>
+      '$instanceVariableName.$propertyName.toString()';
+
+  @override
+  String createToMapNullableValueCodeString(
+          String instanceVariableName, String propertyName) =>
+      '$instanceVariableName.$propertyName?.toString()';
+
+  @override
+  String createToObjectPropertyValueCodeString(
+          String mapVariableName, String propertyName) =>
+      "BigInt.parse($mapVariableName['$propertyName'] as String)";
+
+  @override
+  String createToObjectNullablePropertyValueCodeString(
+          String mapVariableName, String propertyName) =>
+      "$mapVariableName['$propertyName'] == null "
+      "? null "
+      ": BigInt.parse($mapVariableName['$propertyName'] as String)";
+}
+
+class DateTimeExpressionFactory extends BasicTypeExpressionFactory {
+  DateTimeExpressionFactory() : super(DateTime);
+
+  @override
+  String createToMapValueCodeString(
+          String instanceVariableName, String propertyName) =>
+      '$instanceVariableName.$propertyName.toIso8601String()';
+
+  @override
+  String createToMapNullableValueCodeString(
+          String instanceVariableName, String propertyName) =>
+      '$instanceVariableName.$propertyName?.toIso8601String()';
+
+  @override
+  String createToObjectPropertyValueCodeString(
+          String mapVariableName, String propertyName) =>
+      "DateTime.parse($mapVariableName['$propertyName'] as String)";
+
+  @override
+  String createToObjectNullablePropertyValueCodeString(
+          String mapVariableName, String propertyName) =>
+      "$mapVariableName['$propertyName'] == null "
+      "? null "
+      ": DateTime.parse($mapVariableName['$propertyName'] as String)";
+}
+
+class DurationExpressionFactory extends BasicTypeExpressionFactory {
+  DurationExpressionFactory() : super(Duration);
+
+  @override
+  String createToMapValueCodeString(
+          String instanceVariableName, String propertyName) =>
+      '$instanceVariableName.$propertyName.inMicroseconds';
+
+  @override
+  String createToMapNullableValueCodeString(
+          String instanceVariableName, String propertyName) =>
+      '$instanceVariableName.$propertyName?.inMicroseconds';
+
+  @override
+  String createToObjectPropertyValueCodeString(
+          String mapVariableName, String propertyName) =>
+      "Duration(microseconds: $mapVariableName['$propertyName'] as int)";
+
+  @override
+  String createToObjectNullablePropertyValueCodeString(
+          String mapVariableName, String propertyName) =>
+      "$mapVariableName['$propertyName'] == null "
+      "? null "
+      ": Duration(microseconds: $mapVariableName['$propertyName'] as int)";
 }

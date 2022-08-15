@@ -1,6 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 
-
 /// dart run build_runner build
 @JsonSerializable()
 class Person {
@@ -60,10 +59,11 @@ class AllType {
   Gender myEnum = Gender.male;
   Gender? myNullableEnum;
   Uri myUri = Uri(scheme: 'https', host: 'dart.dev');
-  Uri? myNullableUri ;
+  Uri? myNullableUri;
   BigInt myBigInt = BigInt.from(0);
-  BigInt? myNullableBigInt ;
-  DateTime myDateTime=DateTime(2022);
+  BigInt? myNullableBigInt;
+  DateTime myDateTime = DateTime(2022);
   DateTime? myNullableDateTime;
-
+  Duration myDuration = Duration.zero;
+  Duration? myNullableDuration;
 }

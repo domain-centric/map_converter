@@ -133,8 +133,8 @@ main() {
 
 
 
-  group('$ParsableTypeExpressionFactory(Uri)', () {
-    var expressionFactory = ParsableTypeExpressionFactory(Uri);
+  group('$UriExpressionFactory()', () {
+    var expressionFactory = UriExpressionFactory();
     var propertyName = 'webSite';
     test('canConvert(Uri)==true', () {
       expect(expressionFactory.canConvert(Uri), true);
@@ -179,8 +179,8 @@ main() {
     });
   });
 
-  group('$ParsableTypeExpressionFactory(BigInt)', () {
-    var expressionFactory = ParsableTypeExpressionFactory(BigInt);
+  group('$BigIntExpressionFactory()', () {
+    var expressionFactory = BigIntExpressionFactory();
     var propertyName = 'ageInMicroSeconds';
     test('canConvert(Uri)==true', () {
       expect(expressionFactory.canConvert(BigInt), true);
@@ -225,8 +225,8 @@ main() {
     });
   });
 
-  group("$ParsableTypeExpressionFactory(DateTime, toStringCode: 'toIso8601String()')", () {
-    var expressionFactory =  ParsableTypeExpressionFactory(DateTime, toStringCode: 'toIso8601String()');
+  group("$DateTimeExpressionFactory()", () {
+    var expressionFactory =  DateTimeExpressionFactory();
     var propertyName = 'dateOfBirth';
     test('canConvert(DateTime)==true', () {
       expect(expressionFactory.canConvert(DateTime), true);
@@ -267,6 +267,53 @@ main() {
             nullable: true,
           )),
           "$personVariableName.$propertyName?.toIso8601String()");
+
+    });
+  });
+
+
+  group("$DurationExpressionFactory()", () {
+    var expressionFactory =  DurationExpressionFactory();
+    var propertyName = 'age';
+    test('canConvert(Duration)==true', () {
+      expect(expressionFactory.canConvert(Duration), true);
+    });
+    test('canConvert(int)==false', () {
+      expect(expressionFactory.canConvert(int), false);
+    });
+    test('createToObjectPropertyValue nullable=false', () {
+      expect(
+          CodeFormatter().unFormatted(expressionFactory
+              .createToObjectPropertyValueCode(mapVariableName, propertyName,
+              nullable: false)),
+          "Duration(microseconds: $mapVariableName['$propertyName'] as int)");
+    });
+    test('createToObjectPropertyValue nullable=true', () {
+      expect(
+          CodeFormatter().unFormatted(expressionFactory
+              .createToObjectPropertyValueCode(mapVariableName, propertyName,
+              nullable: true)),
+          "$mapVariableName['$propertyName'] == null ? null : Duration(microseconds: $mapVariableName['$propertyName'] as int)");
+    });
+
+    test('createToObjectPropertyValue nullable=false', () {
+      expect(
+          CodeFormatter().unFormatted(expressionFactory.createToMapValueCode(
+            personVariableName,
+            propertyName,
+            nullable: false,
+          )),
+          "$personVariableName.$propertyName.inMicroseconds");
+
+    });
+    test('createToObjectPropertyValue nullable=true', () {
+      expect(
+          CodeFormatter().unFormatted(expressionFactory.createToMapValueCode(
+            personVariableName,
+            propertyName,
+            nullable: true,
+          )),
+          "$personVariableName.$propertyName?.inMicroseconds");
 
     });
   });
