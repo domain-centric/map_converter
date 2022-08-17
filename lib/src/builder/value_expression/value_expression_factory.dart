@@ -1,14 +1,15 @@
+import 'package:analyzer/dart/element/type.dart';
 import 'package:collection/collection.dart';
 import 'package:dart_code/dart_code.dart' as code;
 
 /// Creates a Dart code expressions for a generated MapConverter
 abstract class ValueExpressionFactory {
-  bool canConvert(Type typeToConvert);
+  bool canConvert(InterfaceType typeToConvert);
 
   /// Creates a Dart code expressions for a generated MapConverter
   /// to set a property value of an object property from a map variable
   code.Expression createToObjectPropertyValueCode(
-      String mapVariableName, String propertyName,
+      String mapVariableName, String propertyName, code.Type propertyType,
       {required bool nullable});
 
   /// Creates a Dart code expressions for a generated MapConverter
@@ -19,31 +20,23 @@ abstract class ValueExpressionFactory {
 }
 
 /// Supported types from dart core library: BigInt, bool, DateTime, double, Duration, Enum, int, Iterable, List, Map, num, Object, Set, String, Uri
-
 class ValueExpressionFactories extends DelegatingList<ValueExpressionFactory> {
   ValueExpressionFactories()
       : super([
-          BasicTypeExpressionFactory(String),
-          BasicTypeExpressionFactory(num),
-          BasicTypeExpressionFactory(int),
-          BasicTypeExpressionFactory(bool),
+          BoolExpressionFactory(),
+          NumExpressionFactory(),
+          IntExpressionFactory(),
           DoubleExpressionFactory(),
+          StringExpressionFactory(),
           UriExpressionFactory(),
           BigIntExpressionFactory(),
           DateTimeExpressionFactory(),
           DurationExpressionFactory(),
+          EnumExpressionFactory(),
         ]);
 }
 
-/// Generic [ValueExpressionFactory] for basic parsable Dart types such as [Uri] and [BigInt]
-class BasicTypeExpressionFactory extends ValueExpressionFactory {
-  final Type propertyType;
-
-  BasicTypeExpressionFactory(this.propertyType);
-
-  @override
-  bool canConvert(Type typeToConvert) => typeToConvert == propertyType;
-
+abstract class BasicTypeExpressionFactory extends ValueExpressionFactory {
   @override
   code.Expression createToMapValueCode(
           String instanceVariableName, String propertyName,
@@ -57,7 +50,7 @@ class BasicTypeExpressionFactory extends ValueExpressionFactory {
 
   @override
   code.Expression createToObjectPropertyValueCode(
-          String mapVariableName, String propertyName,
+          String mapVariableName, String propertyName, code.Type propertyType,
           {required bool nullable}) =>
       code.Expression([
         code.Code(nullable
@@ -75,17 +68,78 @@ class BasicTypeExpressionFactory extends ValueExpressionFactory {
           String instanceVariableName, String propertyName) =>
       '$instanceVariableName.$propertyName';
 
+  createToObjectNullablePropertyValueCodeString(
+      String mapVariableName, String propertyName);
+
+  createToObjectPropertyValueCodeString(
+      String mapVariableName, String propertyName);
+}
+
+class BoolExpressionFactory extends BasicTypeExpressionFactory {
+  @override
+  bool canConvert(InterfaceType typeToConvert) => typeToConvert.isDartCoreBool;
+
+  @override
   String createToObjectPropertyValueCodeString(
           String mapVariableName, String propertyName) =>
-      "$mapVariableName['$propertyName'] as $propertyType";
+      "$mapVariableName['$propertyName'] as bool";
 
+  @override
   String createToObjectNullablePropertyValueCodeString(
           String mapVariableName, String propertyName) =>
-      "$mapVariableName['$propertyName'] as $propertyType?";
+      "$mapVariableName['$propertyName'] as bool?";
+}
+
+class StringExpressionFactory extends BasicTypeExpressionFactory {
+  @override
+  bool canConvert(InterfaceType typeToConvert) =>
+      typeToConvert.isDartCoreString;
+
+  @override
+  String createToObjectPropertyValueCodeString(
+          String mapVariableName, String propertyName) =>
+      "$mapVariableName['$propertyName'] as String";
+
+  @override
+  String createToObjectNullablePropertyValueCodeString(
+          String mapVariableName, String propertyName) =>
+      "$mapVariableName['$propertyName'] as String?";
+}
+
+class NumExpressionFactory extends BasicTypeExpressionFactory {
+  @override
+  bool canConvert(InterfaceType typeToConvert) => typeToConvert.isDartCoreNum;
+
+  @override
+  String createToObjectPropertyValueCodeString(
+          String mapVariableName, String propertyName) =>
+      "$mapVariableName['$propertyName'] as num";
+
+  @override
+  String createToObjectNullablePropertyValueCodeString(
+          String mapVariableName, String propertyName) =>
+      "$mapVariableName['$propertyName'] as num?";
+}
+
+class IntExpressionFactory extends BasicTypeExpressionFactory {
+  @override
+  bool canConvert(InterfaceType typeToConvert) => typeToConvert.isDartCoreInt;
+
+  @override
+  String createToObjectPropertyValueCodeString(
+          String mapVariableName, String propertyName) =>
+      "$mapVariableName['$propertyName'] as int";
+
+  @override
+  String createToObjectNullablePropertyValueCodeString(
+          String mapVariableName, String propertyName) =>
+      "$mapVariableName['$propertyName'] as int?";
 }
 
 class DoubleExpressionFactory extends BasicTypeExpressionFactory {
-  DoubleExpressionFactory() : super(double);
+  @override
+  bool canConvert(InterfaceType typeToConvert) =>
+      typeToConvert.isDartCoreDouble;
 
   @override
   String createToObjectPropertyValueCodeString(
@@ -99,7 +153,10 @@ class DoubleExpressionFactory extends BasicTypeExpressionFactory {
 }
 
 class UriExpressionFactory extends BasicTypeExpressionFactory {
-  UriExpressionFactory() : super(Uri);
+  @override
+  bool canConvert(InterfaceType typeToConvert) =>
+      typeToConvert.getDisplayString(withNullability: false) == 'Uri' &&
+      typeToConvert.element2.library.name == 'dart.core';
 
   @override
   String createToMapValueCodeString(
@@ -125,7 +182,10 @@ class UriExpressionFactory extends BasicTypeExpressionFactory {
 }
 
 class BigIntExpressionFactory extends BasicTypeExpressionFactory {
-  BigIntExpressionFactory() : super(BigInt);
+  @override
+  bool canConvert(InterfaceType typeToConvert) =>
+      typeToConvert.getDisplayString(withNullability: false) == 'BigInt' &&
+      typeToConvert.element2.library.name == 'dart.core';
 
   @override
   String createToMapValueCodeString(
@@ -151,7 +211,10 @@ class BigIntExpressionFactory extends BasicTypeExpressionFactory {
 }
 
 class DateTimeExpressionFactory extends BasicTypeExpressionFactory {
-  DateTimeExpressionFactory() : super(DateTime);
+  @override
+  bool canConvert(InterfaceType typeToConvert) =>
+      typeToConvert.getDisplayString(withNullability: false) == 'DateTime' &&
+      typeToConvert.element2.library.name == 'dart.core';
 
   @override
   String createToMapValueCodeString(
@@ -177,7 +240,10 @@ class DateTimeExpressionFactory extends BasicTypeExpressionFactory {
 }
 
 class DurationExpressionFactory extends BasicTypeExpressionFactory {
-  DurationExpressionFactory() : super(Duration);
+  @override
+  bool canConvert(InterfaceType typeToConvert) =>
+      typeToConvert.getDisplayString(withNullability: false) == 'Duration' &&
+      typeToConvert.element2.library.name == 'dart.core';
 
   @override
   String createToMapValueCodeString(
@@ -200,4 +266,31 @@ class DurationExpressionFactory extends BasicTypeExpressionFactory {
       "$mapVariableName['$propertyName'] == null "
       "? null "
       ": Duration(microseconds: $mapVariableName['$propertyName'] as int)";
+}
+
+class EnumExpressionFactory implements ValueExpressionFactory {
+  @override
+  bool canConvert(InterfaceType typeToConvert) =>
+      typeToConvert.element2.toString().startsWith('enum ');
+
+  @override
+  code.Expression createToMapValueCode(
+          String instanceVariableName, String propertyName,
+          {required bool nullable}) =>
+      code.Expression([
+        code.Code(
+            '$instanceVariableName.$propertyName${nullable ? '?' : '!'}.name'),
+      ]);
+
+  @override
+  code.Expression createToObjectPropertyValueCode(
+          String mapVariableName, String propertyName, code.Type propertyType,
+          {required bool nullable}) =>
+      code.Expression([
+        if (nullable)
+          code.Code("$mapVariableName['$propertyName'] == null ? null : "),
+        propertyType,
+        code.Code(
+            ".values.firstWhere((enumValue) => enumValue.name==$mapVariableName['$propertyName'])")
+      ]);
 }

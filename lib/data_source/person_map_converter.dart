@@ -1,4 +1,4 @@
-import 'package:map_converter/domain/person.dart';
+import '../domain/example_object2.dart';
 ///TODO to be generated
 
 Person toPerson(Map<String, dynamic> map) =>

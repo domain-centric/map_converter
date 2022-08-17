@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:map_converter/data_source/person_map_converter.dart';
-import 'package:map_converter/domain/person.dart';
+import 'package:map_converter/domain/example_object2.dart';
 import 'package:test/test.dart';
 import 'package:yaml_writer/yaml_writer.dart';
 

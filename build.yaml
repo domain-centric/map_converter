@@ -1,0 +1,17 @@
+# Read about `build.yaml` at https://pub.dev/packages/build_config
+targets:
+  $default:
+    builders:
+      map_converter|map_converter_builder:
+        enabled: True
+
+
+builders:
+  map_converter_builder:
+    import: 'package:map_converter/builder.dart'
+    builder_factories: ['mapConverterBuilder']
+    build_extensions:
+      .dart: # Note that this is ignored because its overridden by the Builder.buildExtensions method
+        - dummy.dummy # Note that this is ignored because its overridden by the Builder.buildExtensions method
+    build_to: source
+    auto_apply: dependents
