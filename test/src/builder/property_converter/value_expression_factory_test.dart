@@ -20,7 +20,6 @@ const mapVariableName = 'map';
 const instanceVariableName = 'person';
 
 main() {
-// TODO  NumExpressionFactory(),           IntExpressionFactory()
   group('class: $BoolExpressionFactory', () {
     var expressionFactory = BoolExpressionFactory();
     var propertyName = 'adult';
