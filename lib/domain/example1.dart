@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'example_object2.dart';
+import 'example2.dart';
 
 /// dart run build_runner build
 

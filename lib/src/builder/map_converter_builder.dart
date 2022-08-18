@@ -20,31 +20,30 @@ class MapConverterBuilder implements Builder {
   Future<FutureOr<void>> build(BuildStep buildStep) async {
     try {
       var libraryElement = await buildStep.inputLibrary;
-      log.log(Level.INFO, '$libraryElement');
       var topElements = libraryElement.topLevelElements;
       for (var topElement in topElements) {
         if (topElement is ClassElement &&
             topElement.isPublic &&
             !topElement.isAbstract &&
-            topElement is! EnumElement) {
-          //TODO check if element does not implement a MAP or a LIST or a SET
+            topElement is! EnumElement &&
+            topElement.thisType.allSupertypes
+                .none((e) => _isListSetMapIteratorType(e.element2))) {
           //TODO configure which classes to exclude, e.g. yaml file with regexp to exclude the paths to dart files and class names.
 
-          log.log(Level.INFO, '  $topElement');
           var classElement = topElement;
-          var propertyFields = _findAllPropertyFields(classElement);
-          for (var propertyField in propertyFields) {
-            var fieldType = propertyField.type as InterfaceType;
-            var valueExpressionFactory = valueExpressionFactories
-                .firstWhereOrNull((valueExpressionFactory) =>
-                    valueExpressionFactory.canConvert(fieldType));
-            var nullable =
-                fieldType.nullabilitySuffix == NullabilitySuffix.question;
+          var propertyMap = _propertyMap(classElement);
+          if (propertyMap.isNotEmpty) {
+            log.log(Level.INFO, '  $classElement');
+            for (var property in propertyMap.keys) {
+              var fieldType = property.type as InterfaceType;
+              var valueExpressionFactory = propertyMap[property];
+              var nullable =
+                  fieldType.nullabilitySuffix == NullabilitySuffix.question;
 
-            var fieldType2 = (propertyField.type as InterfaceType).element2;
-            log.log(Level.INFO,
-                '    ${propertyField.name} $fieldType2 $nullable ${fieldType2.librarySource} ${valueExpressionFactory?.runtimeType}');
-
+              var fieldType2 = (property.type as InterfaceType).element2;
+              log.log(Level.INFO,
+                  '    ${property.name} $fieldType2 $nullable ${fieldType2.librarySource} ${valueExpressionFactory?.runtimeType}');
+            }
           }
         }
       }
@@ -58,20 +57,43 @@ class MapConverterBuilder implements Builder {
 
   /// Gets all fields that represent properties from the [InterfaceElement]
   /// including those from super classes, mixins and interfaces
-  List<FieldElement> _findAllPropertyFields(InterfaceElement interfaceElement) {
+  List<FieldElement> _findAllProperties(InterfaceElement interfaceElement) {
     Map<String, FieldElement> fields = {};
     for (var fieldElement in interfaceElement.fields) {
       if (_isPropertyField(fieldElement)) {
-        fields[fieldElement.name]=fieldElement;
+        fields[fieldElement.name] = fieldElement;
       }
     }
     for (var superType in interfaceElement.allSupertypes) {
-      var superTypeFields = _findAllPropertyFields(superType.element2);
+      var superTypeFields = _findAllProperties(superType.element2);
       for (var superTypeField in superTypeFields) {
-        fields[superTypeField.name]=superTypeField;
+        fields[superTypeField.name] = superTypeField;
       }
     }
     return fields.values.toList();
+  }
+
+  /// creates a [MAP] with [FieldElement] and [ValueExpressionFactory] for
+  /// any property in a [ClassElement]
+  /// if there is a matching [ValueExpressionFactory].
+  Map<FieldElement, ValueExpressionFactory> _propertyMap(
+      InterfaceElement classElement) {
+    var propertyMap = <FieldElement, ValueExpressionFactory>{};
+    var properties = _findAllProperties(classElement);
+    for (var property in properties) {
+      var propertyType = property.type as InterfaceType;
+      var valueExpressionFactory = valueExpressionFactories.firstWhereOrNull(
+          (valueExpressionFactory) =>
+              valueExpressionFactory.canConvert(propertyType));
+      if (valueExpressionFactory == null) {
+        log.log(Level.WARNING, 'Could not find a $ValueExpressionFactory '
+                'for type: $propertyType '
+                'in: ${classElement.name}.${property.name}');
+      } else {
+        propertyMap[property] = valueExpressionFactory;
+      }
+    }
+    return propertyMap;
   }
 
   bool _isPropertyField(FieldElement fieldElement) =>
@@ -82,4 +104,14 @@ class MapConverterBuilder implements Builder {
       fieldElement.type is InterfaceType;
 
   bool _isSetInConstructor(FieldElement fieldElement) => false;
+
+  _isListSetMapIteratorType(InterfaceElement element) {
+    String string = element.toString();
+    // print("-- $string");
+    return element.library.name == 'dart.core' &&
+        (string.contains('class List<') ||
+            string.contains('class Set<') ||
+            string.contains('class Map<') ||
+            string.contains('class Iterator<'));
+  }
 }
