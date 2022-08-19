@@ -1,4 +1,4 @@
-import '../domain/example2.dart';
+import '../domain/person/person.dart';
 ///TODO to be generated
 
 Person toPerson(Map<String, dynamic> map) =>

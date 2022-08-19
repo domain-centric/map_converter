@@ -327,13 +327,13 @@ class EnumExpressionFactory implements ValueExpressionFactory {
 }
 
 class DomainObjectExpressionFactory implements ValueExpressionFactory {
-  final mapConverterBuilder = MapConverterBuilder();
+  final mapConverterLibraryFactory = MapConverterLibraryFactory();
 
   @override
   bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
       classElement == typeToConvert.element2 // prevent endless round trips
       ||
-      mapConverterBuilder
+      mapConverterLibraryFactory
           .isDomainClassWithKnownPropertyTypes(typeToConvert.element2);
 
   @override

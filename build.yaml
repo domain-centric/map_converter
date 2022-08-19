@@ -11,7 +11,9 @@ builders:
     import: 'package:map_converter/builder.dart'
     builder_factories: ['mapConverterBuilder']
     build_extensions:
-      .dart: # Note that this is ignored because its overridden by the Builder.buildExtensions method
-        - dummy.dummy # Note that this is ignored because its overridden by the Builder.buildExtensions method
+      ^lib/domain/{{}}.dart:
+        - lib/data/{{}}_map_converter.dart
+#      .dart: # Note that this is ignored because its overridden by the Builder.buildExtensions method
+ #       - dummy.dummy # Note that this is ignored because its overridden by the Builder.buildExtensions method
     build_to: source
     auto_apply: dependents

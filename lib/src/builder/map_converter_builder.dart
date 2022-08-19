@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:analyzer/dart/element/element.dart';
-import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
 import 'package:collection/collection.dart';
@@ -13,32 +12,19 @@ final valueExpressionFactories = ValueExpressionFactories();
 class MapConverterBuilder implements Builder {
   @override
   Map<String, List<String>> get buildExtensions => {
-        '.dart': ['map_converter.dart']
+        '^lib/domain/{{}}.dart': ['lib/data/{{}}_map_converter.dart']
       };
 
   @override
   Future<FutureOr<void>> build(BuildStep buildStep) async {
     try {
+      String result = '';
       var libraryElement = await buildStep.inputLibrary;
-      var topElements = libraryElement.topLevelElements;
-      for (var topElement in topElements) {
-        if (_isDomainClass(topElement)) {
-          var classElement = topElement as ClassElement;
-          var propertyMap = _propertyMap(classElement);
-          if (propertyMap.isNotEmpty) {
-            log.log(Level.INFO, '  $classElement');
-            for (var property in propertyMap.keys) {
-              var fieldType = property.type as InterfaceType;
-              var valueExpressionFactory = propertyMap[property];
-              var nullable =
-                  fieldType.nullabilitySuffix == NullabilitySuffix.question;
 
-              var fieldType2 = (property.type as InterfaceType).element2;
-              log.log(Level.INFO,
-                  '    ${property.name} $fieldType2 $nullable ${fieldType2.librarySource} ${valueExpressionFactory?.runtimeType}');
-            }
-          }
-        }
+      result = MapConverterLibraryFactory().create(libraryElement, result);
+      if (result.isNotEmpty) {
+        var outputs = expectedOutputs(this, buildStep.inputId);
+        buildStep.writeAsString(outputs.first, result);
       }
     } catch (e, stackTrace) {
       log.log(
@@ -46,6 +32,35 @@ class MapConverterBuilder implements Builder {
           'Error processing: ${buildStep.inputId.path}. Error: \n$e',
           stackTrace);
     }
+  }
+}
+
+class MapConverterLibraryFactory {
+  String create(LibraryElement libraryElement, String result) {
+    var topElements = libraryElement.topLevelElements;
+    for (var topElement in topElements) {
+      if (_isDomainClass(topElement)) {
+        var classElement = topElement as ClassElement;
+        var propertyMap = _propertyMap(classElement);
+        if (propertyMap.isNotEmpty) {
+          result += '$classElement\n';
+          for (FieldElement propertyElement in propertyMap.keys) {
+            var propertyType = propertyElement.type as InterfaceType;
+            var valueExpressionFactory = propertyMap[propertyElement];
+            result +=
+                '  $propertyType ${propertyElement.name} ${valueExpressionFactory.runtimeType}\n';
+// var nullable =
+//     propertyType.nullabilitySuffix == NullabilitySuffix.question;
+// var fieldType2 = (propertyElement.type as InterfaceType).element2;
+//
+// log.log(Level.INFO,
+//     '    ${propertyElement.name} $fieldType2 $nullable ${fieldType2.librarySource} ${valueExpressionFactory?.runtimeType}');
+
+          }
+        }
+      }
+    }
+    return result;
   }
 
   bool _isDomainClass(Element element) {
@@ -60,6 +75,16 @@ class MapConverterBuilder implements Builder {
   bool isDomainClassWithKnownPropertyTypes(Element element) {
     return _isDomainClass(element) &&
         _propertyMap(element as ClassElement).isNotEmpty;
+  }
+
+  _isListSetMapIteratorType(InterfaceElement element) {
+    String string = element.toString();
+    // print("-- $string");
+    return element.library.name == 'dart.core' &&
+        (string.contains('class List<') ||
+            string.contains('class Set<') ||
+            string.contains('class Map<') ||
+            string.contains('class Iterator<'));
   }
 
   /// Gets all fields that represent properties from the [InterfaceElement]
@@ -90,7 +115,8 @@ class MapConverterBuilder implements Builder {
     for (var property in properties) {
       var propertyType = property.type as InterfaceType;
 
-      var valueExpressionFactory = valueExpressionFactories.findFor(classElement, propertyType);
+      var valueExpressionFactory =
+          valueExpressionFactories.findFor(classElement, propertyType);
       if (valueExpressionFactory == null) {
         log.log(
             Level.WARNING,
@@ -104,7 +130,6 @@ class MapConverterBuilder implements Builder {
     return propertyMap;
   }
 
-
   bool _isPropertyField(FieldElement fieldElement) =>
       !fieldElement.isAbstract &&
       !fieldElement.isStatic &&
@@ -113,14 +138,4 @@ class MapConverterBuilder implements Builder {
       fieldElement.type is InterfaceType;
 
   bool _isSetInConstructor(FieldElement fieldElement) => false;
-
-  _isListSetMapIteratorType(InterfaceElement element) {
-    String string = element.toString();
-    // print("-- $string");
-    return element.library.name == 'dart.core' &&
-        (string.contains('class List<') ||
-            string.contains('class Set<') ||
-            string.contains('class Map<') ||
-            string.contains('class Iterator<'));
-  }
 }
