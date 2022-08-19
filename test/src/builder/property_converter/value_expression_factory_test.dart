@@ -23,17 +23,17 @@ main() {
   group('class: $BoolExpressionFactory', () {
     var expressionFactory = BoolExpressionFactory();
     var propertyName = 'adult';
-    var propertyType = code.Type('$bool');
+    var propertyType = TypeFake.bool();
     test('canConvert(bool)==true', () {
       expect(
           expressionFactory.canConvert(
-              TestType.personClass().element2, TestType.bool()),
+              TypeFake.personClass().element2, propertyType),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TestType.personClass().element2, TestType.int()),
+              TypeFake.personClass().element2, TypeFake.int()),
           false);
     });
     test('createToObjectPropertyValue nullable=false', () {
@@ -59,16 +59,18 @@ main() {
               .unFormatted(expressionFactory.createToMapValueCode(
             instanceVariableName,
             propertyName,
+            TypeFake.bool(),
             nullable: false,
           )),
           "$instanceVariableName.$propertyName");
     });
-      test('createToMapValueCode nullable=true', () {
+    test('createToMapValueCode nullable=true', () {
       expect(
           code.CodeFormatter()
               .unFormatted(expressionFactory.createToMapValueCode(
             instanceVariableName,
             propertyName,
+            TypeFake.bool(),
             nullable: true,
           )),
           "$instanceVariableName.$propertyName");
@@ -78,17 +80,17 @@ main() {
   group('class $NumExpressionFactory()', () {
     var expressionFactory = NumExpressionFactory();
     var propertyName = 'ageInDays';
-    var propertyType = code.Type('$double');
+    var propertyType = TypeFake.num();
     test('canConvert(num)==true', () {
       expect(
           expressionFactory.canConvert(
-              TestType.personClass().element2, TestType.num()),
+              TypeFake.personClass().element2, propertyType),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TestType.personClass().element2, TestType.int()),
+              TypeFake.personClass().element2, TypeFake.int()),
           false);
     });
     test('createToObjectPropertyValue nullable=false', () {
@@ -113,6 +115,7 @@ main() {
               .unFormatted(expressionFactory.createToMapValueCode(
             instanceVariableName,
             propertyName,
+            propertyType,
             nullable: false,
           )),
           "$instanceVariableName.$propertyName");
@@ -123,6 +126,7 @@ main() {
               .unFormatted(expressionFactory.createToMapValueCode(
             instanceVariableName,
             propertyName,
+            propertyType,
             nullable: true,
           )),
           "$instanceVariableName.$propertyName");
@@ -132,17 +136,17 @@ main() {
   group('class $IntExpressionFactory()', () {
     var expressionFactory = IntExpressionFactory();
     var propertyName = 'ageInDays';
-    var propertyType = code.Type('$double');
+    var propertyType = TypeFake.int();
     test('canConvert(int)==true', () {
       expect(
           expressionFactory.canConvert(
-              TestType.personClass().element2, TestType.int()),
+              TypeFake.personClass().element2, propertyType),
           true);
     });
     test('canConvert(double)==false', () {
       expect(
           expressionFactory.canConvert(
-              TestType.personClass().element2, TestType.double()),
+              TypeFake.personClass().element2, TypeFake.double()),
           false);
     });
     test('createToObjectPropertyValue nullable=false', () {
@@ -167,6 +171,7 @@ main() {
               .unFormatted(expressionFactory.createToMapValueCode(
             instanceVariableName,
             propertyName,
+            propertyType,
             nullable: false,
           )),
           "$instanceVariableName.$propertyName");
@@ -177,6 +182,7 @@ main() {
               .unFormatted(expressionFactory.createToMapValueCode(
             instanceVariableName,
             propertyName,
+            propertyType,
             nullable: true,
           )),
           "$instanceVariableName.$propertyName");
@@ -186,17 +192,17 @@ main() {
   group('class $DoubleExpressionFactory()', () {
     var expressionFactory = DoubleExpressionFactory();
     var propertyName = 'ageInDays';
-    var propertyType = code.Type('$double');
+    var propertyType = TypeFake.double();
     test('canConvert(double)==true', () {
       expect(
           expressionFactory.canConvert(
-              TestType.personClass().element2, TestType.double()),
+              TypeFake.personClass().element2, propertyType),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TestType.personClass().element2, TestType.int()),
+              TypeFake.personClass().element2, TypeFake.int()),
           false);
     });
     test('createToObjectPropertyValue nullable=false', () {
@@ -222,6 +228,7 @@ main() {
               .unFormatted(expressionFactory.createToMapValueCode(
             instanceVariableName,
             propertyName,
+            propertyType,
             nullable: false,
           )),
           "$instanceVariableName.$propertyName");
@@ -232,6 +239,7 @@ main() {
               .unFormatted(expressionFactory.createToMapValueCode(
             instanceVariableName,
             propertyName,
+            propertyType,
             nullable: true,
           )),
           "$instanceVariableName.$propertyName");
@@ -241,17 +249,17 @@ main() {
   group('class: $StringExpressionFactory', () {
     var expressionFactory = StringExpressionFactory();
     var propertyName = 'name';
-    var propertyType = code.Type('$String');
+    var propertyType = TypeFake.string();
     test('canConvert(String)==true', () {
       expect(
           expressionFactory.canConvert(
-              TestType.personClass().element2, TestType.string()),
+              TypeFake.personClass().element2, propertyType),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TestType.personClass().element2, TestType.int()),
+              TypeFake.personClass().element2, TypeFake.int()),
           false);
     });
     test('createToObjectPropertyValue nullable=false', () {
@@ -277,6 +285,7 @@ main() {
               .unFormatted(expressionFactory.createToMapValueCode(
             instanceVariableName,
             propertyName,
+            propertyType,
             nullable: false,
           )),
           "$instanceVariableName.$propertyName");
@@ -287,6 +296,7 @@ main() {
               .unFormatted(expressionFactory.createToMapValueCode(
             instanceVariableName,
             propertyName,
+            propertyType,
             nullable: true,
           )),
           "$instanceVariableName.$propertyName");
@@ -295,17 +305,17 @@ main() {
   group('class: $UriExpressionFactory()', () {
     var expressionFactory = UriExpressionFactory();
     var propertyName = 'webSite';
-    var propertyType = code.Type('$Uri');
+    var propertyType = TypeFake.uri();
     test('canConvert(Uri)==true', () {
       expect(
           expressionFactory.canConvert(
-              TestType.personClass().element2, TestType.uri()),
+              TypeFake.personClass().element2, propertyType),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TestType.personClass().element2, TestType.int()),
+              TypeFake.personClass().element2, TypeFake.int()),
           false);
     });
     test('createToObjectPropertyValue nullable=false', () {
@@ -331,6 +341,7 @@ main() {
               .unFormatted(expressionFactory.createToMapValueCode(
             instanceVariableName,
             propertyName,
+            propertyType,
             nullable: false,
           )),
           "$instanceVariableName.$propertyName.toString()");
@@ -341,6 +352,7 @@ main() {
               .unFormatted(expressionFactory.createToMapValueCode(
             instanceVariableName,
             propertyName,
+            propertyType,
             nullable: true,
           )),
           "$instanceVariableName.$propertyName?.toString()");
@@ -350,17 +362,17 @@ main() {
   group('class: $BigIntExpressionFactory()', () {
     var expressionFactory = BigIntExpressionFactory();
     var propertyName = 'ageInMicroSeconds';
-    var propertyType = code.Type('$BigInt');
+    var propertyType = TypeFake.bigInt();
     test('canConvert(Uri)==true', () {
       expect(
           expressionFactory.canConvert(
-              TestType.personClass().element2, TestType.bigInt()),
+              TypeFake.personClass().element2, propertyType),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TestType.personClass().element2, TestType.int()),
+              TypeFake.personClass().element2, TypeFake.int()),
           false);
     });
     test('createToObjectPropertyValue nullable=false', () {
@@ -386,6 +398,7 @@ main() {
               .unFormatted(expressionFactory.createToMapValueCode(
             instanceVariableName,
             propertyName,
+            propertyType,
             nullable: false,
           )),
           "$instanceVariableName.$propertyName.toString()");
@@ -396,6 +409,7 @@ main() {
               .unFormatted(expressionFactory.createToMapValueCode(
             instanceVariableName,
             propertyName,
+            propertyType,
             nullable: true,
           )),
           "$instanceVariableName.$propertyName?.toString()");
@@ -405,17 +419,17 @@ main() {
   group("class: $DateTimeExpressionFactory()", () {
     var expressionFactory = DateTimeExpressionFactory();
     var propertyName = 'dateOfBirth';
-    var propertyType = code.Type('$DateTime');
+    var propertyType = TypeFake.dateTime();
     test('canConvert(DateTime)==true', () {
       expect(
           expressionFactory.canConvert(
-              TestType.personClass().element2, TestType.dateTime()),
+              TypeFake.personClass().element2, propertyType),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TestType.personClass().element2, TestType.int()),
+              TypeFake.personClass().element2, TypeFake.int()),
           false);
     });
     test('createToObjectPropertyValue nullable=false', () {
@@ -441,6 +455,7 @@ main() {
               .unFormatted(expressionFactory.createToMapValueCode(
             instanceVariableName,
             propertyName,
+            propertyType,
             nullable: false,
           )),
           "$instanceVariableName.$propertyName.toIso8601String()");
@@ -451,6 +466,7 @@ main() {
               .unFormatted(expressionFactory.createToMapValueCode(
             instanceVariableName,
             propertyName,
+            propertyType,
             nullable: true,
           )),
           "$instanceVariableName.$propertyName?.toIso8601String()");
@@ -460,17 +476,17 @@ main() {
   group("class: $DurationExpressionFactory()", () {
     var expressionFactory = DurationExpressionFactory();
     var propertyName = 'age';
-    var propertyType = code.Type('$Duration');
+    var propertyType = TypeFake.duration();
     test('canConvert(Duration)==true', () {
       expect(
           expressionFactory.canConvert(
-              TestType.personClass().element2, TestType.duration()),
+              TypeFake.personClass().element2, propertyType),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TestType.personClass().element2, TestType.int()),
+              TypeFake.personClass().element2, TypeFake.int()),
           false);
     });
     test('createToObjectPropertyValue nullable=false', () {
@@ -496,6 +512,7 @@ main() {
               .unFormatted(expressionFactory.createToMapValueCode(
             instanceVariableName,
             propertyName,
+            propertyType,
             nullable: false,
           )),
           "$instanceVariableName.$propertyName.inMicroseconds");
@@ -506,6 +523,7 @@ main() {
               .unFormatted(expressionFactory.createToMapValueCode(
             instanceVariableName,
             propertyName,
+            propertyType,
             nullable: true,
           )),
           "$instanceVariableName.$propertyName?.inMicroseconds");
@@ -514,18 +532,18 @@ main() {
 
   group("class: $EnumExpressionFactory()", () {
     var expressionFactory = EnumExpressionFactory();
-    var propertyName = 'children';
-    var propertyType = code.Type('$TestEnum');
+    var propertyName = 'gender';
+    var propertyType = TypeFake.genderEnum();
     test('canConvert(TestEnum)==true', () {
       expect(
           expressionFactory.canConvert(
-              TestType.personClass().element2, TestType.genderEnum()),
+              TypeFake.personClass().element2, propertyType),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TestType.personClass().element2, TestType.int()),
+              TypeFake.personClass().element2, TypeFake.int()),
           false);
     });
     test('createToObjectPropertyValue nullable=false', () {
@@ -534,7 +552,7 @@ main() {
               expressionFactory.createToObjectPropertyValueCode(
                   mapVariableName, propertyName, propertyType,
                   nullable: false)),
-          "TestEnum.values.firstWhere((enumValue) "
+          "_i1.Gender.values.firstWhere((enumValue) "
           "=> enumValue.name==$mapVariableName['$propertyName'])");
     });
     test('createToObjectPropertyValue nullable=true', () {
@@ -545,7 +563,7 @@ main() {
                   nullable: true)),
           "$mapVariableName['$propertyName'] == null "
           "? null "
-          ": TestEnum.values.firstWhere((enumValue) "
+          ": _i1.Gender.values.firstWhere((enumValue) "
           "=> enumValue.name==$mapVariableName['$propertyName'])");
     });
 
@@ -555,6 +573,7 @@ main() {
               .unFormatted(expressionFactory.createToMapValueCode(
             instanceVariableName,
             propertyName,
+            propertyType,
             nullable: false,
           )),
           '$instanceVariableName.$propertyName!.name');
@@ -565,6 +584,7 @@ main() {
               .unFormatted(expressionFactory.createToMapValueCode(
             instanceVariableName,
             propertyName,
+            propertyType,
             nullable: true,
           )),
           '$instanceVariableName.$propertyName?.name');
@@ -574,17 +594,17 @@ main() {
   group("class: $DomainObjectExpressionFactory()", () {
     var expressionFactory = DomainObjectExpressionFactory();
     var propertyName = 'parent';
-    var propertyType = code.Type('$TestEnum');
+    var propertyType = TypeFake.personClass();
     test('canConvert(Person,Person)==true', () {
       expect(
           expressionFactory.canConvert(
-              TestType.personClass().element2, TestType.personClass()),
+              TypeFake.personClass().element2, propertyType),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TestType.personClass().element2, TestType.int()),
+              TypeFake.personClass().element2, TypeFake.int()),
           false);
     });
     test('createToObjectPropertyValue nullable=false', () {
@@ -593,7 +613,7 @@ main() {
               expressionFactory.createToObjectPropertyValueCode(
                   mapVariableName, propertyName, propertyType,
                   nullable: false)),
-          "mapToPerson($mapVariableName['$propertyName'] as Map<String, dynamic>)");
+          "_i1.mapToPerson($mapVariableName['$propertyName'] as Map<String, dynamic>)");
     });
     test('createToObjectPropertyValue nullable=true', () {
       expect(
@@ -602,8 +622,8 @@ main() {
                   mapVariableName, propertyName, propertyType,
                   nullable: true)),
           "$mapVariableName['$propertyName'] == null "
-              "? null "
-              ": mapToPerson($mapVariableName['$propertyName'] as Map<String, dynamic>)");
+          "? null "
+          ": _i1.mapToPerson($mapVariableName['$propertyName'] as Map<String, dynamic>)");
     });
     test('createToMapValueCode nullable=false', () {
       expect(
@@ -611,9 +631,10 @@ main() {
               .unFormatted(expressionFactory.createToMapValueCode(
             instanceVariableName,
             propertyName,
+            propertyType,
             nullable: false,
           )),
-          '$instanceVariableName.$propertyName');
+          "_i1.personToMap($instanceVariableName['$propertyName'])");
     });
     test('createToMapValueCode nullable=true', () {
       expect(
@@ -621,60 +642,89 @@ main() {
               .unFormatted(expressionFactory.createToMapValueCode(
             instanceVariableName,
             propertyName,
+            propertyType,
             nullable: true,
           )),
-          '$instanceVariableName.$propertyName');
+          "_i1.personToMap($instanceVariableName['$propertyName'])");
     });
   });
 }
 
-class TestType implements InterfaceType {
+class TypeFake implements InterfaceType {
   final String typeAsString;
   final bool dartCore;
+  final String libraryUrl;
 
-  TestType.bool()
+  TypeFake.bool()
       : typeAsString = "bool",
-        dartCore = true;
+        dartCore = true,
+        libraryUrl='';
 
-  TestType.num()
+  TypeFake.num()
       : typeAsString = "num",
-        dartCore = true;
+        dartCore = true,
+        libraryUrl='';
 
-  TestType.int()
+  TypeFake.int()
       : typeAsString = "int",
-        dartCore = true;
+        dartCore = true,
+        libraryUrl='';
 
-  TestType.double()
+  TypeFake.double()
       : typeAsString = "double",
-        dartCore = true;
+        dartCore = true,
+        libraryUrl='';
 
-  TestType.string()
+  TypeFake.string()
       : typeAsString = "String",
-        dartCore = true;
+        dartCore = true,
+        libraryUrl='';
 
-  TestType.uri()
+  TypeFake.uri()
       : typeAsString = "Uri",
-        dartCore = true;
+        dartCore = true,
+        libraryUrl='';
 
-  TestType.bigInt()
+  TypeFake.bigInt()
       : typeAsString = "BigInt",
-        dartCore = true;
+        dartCore = true,
+        libraryUrl='';
 
-  TestType.dateTime()
+  TypeFake.dateTime()
       : typeAsString = "DateTime",
-        dartCore = true;
+        dartCore = true,
+        libraryUrl='';
 
-  TestType.duration()
+  TypeFake.duration()
       : typeAsString = "Duration",
-        dartCore = true;
+        dartCore = true,
+        libraryUrl='';
 
-  TestType.genderEnum()
+  TypeFake.genderEnum()
       : typeAsString = "Gender",
-        dartCore = false;
+        dartCore = false,
+        libraryUrl='';//TODO
 
-  TestType.personClass()
+  TypeFake.personClass()
       : typeAsString = "Person",
-        dartCore = false;
+        dartCore = false,
+        libraryUrl='';//TODO
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TypeFake &&
+          runtimeType == other.runtimeType &&
+          typeAsString == other.typeAsString &&
+          dartCore == other.dartCore &&
+          libraryUrl == other.libraryUrl;
+
+  @override
+  int get hashCode =>
+      typeAsString.hashCode ^ dartCore.hashCode ^ libraryUrl.hashCode;
+
+
+
 
   @override
   R accept<R>(TypeVisitor<R> visitor) {
@@ -711,7 +761,7 @@ class TestType implements InterfaceType {
   ClassElement get element => throw UnimplementedError();
 
   @override
-  InterfaceElement get element2 => TestInterfaceElement(typeAsString);
+  InterfaceElement get element2 => InterfaceElementFake(this);
 
   @override
   String getDisplayString({required bool withNullability}) =>
@@ -851,21 +901,22 @@ class TestType implements InterfaceType {
   List<DartType> get typeArguments => throw UnimplementedError();
 }
 
-class TestInterfaceElement implements InterfaceElement {
-  final String typeAsString;
+class InterfaceElementFake implements InterfaceElement {
+  final TypeFake typeFake;
 
-  TestInterfaceElement(this.typeAsString);
+  InterfaceElementFake(this.typeFake);
 
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TestInterfaceElement &&
+      other is InterfaceElementFake &&
           runtimeType == other.runtimeType &&
-          typeAsString == other.typeAsString;
+          typeFake == other.typeFake;
 
   @override
-  int get hashCode => typeAsString.hashCode;
+  int get hashCode => typeFake.hashCode;
+
 
   @override
   T? accept<T>(ElementVisitor<T> visitor) {
@@ -888,7 +939,7 @@ class TestInterfaceElement implements InterfaceElement {
   Element get declaration => throw UnimplementedError();
 
   @override
-  String get displayName => throw UnimplementedError();
+  String get displayName => typeFake.typeAsString;
 
   @override
   String? get documentationComment => throw UnimplementedError();
@@ -1043,10 +1094,10 @@ class TestInterfaceElement implements InterfaceElement {
   ElementKind get kind => throw UnimplementedError();
 
   @override
-  LibraryElement get library => TestLibraryElement(typeAsString);
+  LibraryElement get library => LibraryElementFake(typeFake);
 
   @override
-  Source get librarySource => throw UnimplementedError();
+  Source get librarySource => SourceFake(typeFake);
 
   @override
   ElementLocation? get location => throw UnimplementedError();
@@ -1135,13 +1186,44 @@ class TestInterfaceElement implements InterfaceElement {
 
   @override
   String toString() =>
-      typeAsString == 'Gender' ? 'enum Gender' : 'class $typeAsString';
+      typeFake.typeAsString == 'Gender' ? 'enum Gender' : 'class ${typeFake.typeAsString}';
 }
 
-class TestLibraryElement implements LibraryElement {
-  final String typeAsString;
+class SourceFake implements Source{
+  TypeFake typeFake;
 
-  TestLibraryElement(this.typeAsString);
+  SourceFake(this.typeFake);
+
+  @override
+  // TODO: implement contents
+  TimestampedData<String> get contents => throw UnimplementedError();
+
+  @override
+  bool exists() {
+    // TODO: implement exists
+    throw UnimplementedError();
+  }
+
+  @override
+  // TODO: implement fullName
+  String get fullName => throw UnimplementedError();
+
+  @override
+  // TODO: implement shortName
+  String get shortName => throw UnimplementedError();
+
+  @override
+  // TODO: implement uri
+  Uri get uri => throw UnimplementedError();
+
+  @override
+  String toString() => typeFake.libraryUrl;
+}
+
+class LibraryElementFake implements LibraryElement {
+  final TypeFake typeFake;
+
+  LibraryElementFake(this.typeFake);
 
   @override
   T? accept<T>(ElementVisitor<T> visitor) {
