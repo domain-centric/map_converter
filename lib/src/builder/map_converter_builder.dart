@@ -13,7 +13,7 @@ final valueExpressionFactories = ValueExpressionFactories();
 class MapConverterBuilder implements Builder {
   @override
   Map<String, List<String>> get buildExtensions => {
-        '.dart': ['dummy.dummy']
+        '.dart': ['map_converter.dart']
       };
 
   @override
@@ -22,15 +22,8 @@ class MapConverterBuilder implements Builder {
       var libraryElement = await buildStep.inputLibrary;
       var topElements = libraryElement.topLevelElements;
       for (var topElement in topElements) {
-        if (topElement is ClassElement &&
-            topElement.isPublic &&
-            !topElement.isAbstract &&
-            topElement is! EnumElement &&
-            topElement.thisType.allSupertypes
-                .none((e) => _isListSetMapIteratorType(e.element2))) {
-          //TODO configure which classes to exclude, e.g. yaml file with regexp to exclude the paths to dart files and class names.
-
-          var classElement = topElement;
+        if (_isDomainClass(topElement)) {
+          var classElement = topElement as ClassElement;
           var propertyMap = _propertyMap(classElement);
           if (propertyMap.isNotEmpty) {
             log.log(Level.INFO, '  $classElement');
@@ -53,6 +46,20 @@ class MapConverterBuilder implements Builder {
           'Error processing: ${buildStep.inputId.path}. Error: \n$e',
           stackTrace);
     }
+  }
+
+  bool _isDomainClass(Element element) {
+    return element is ClassElement &&
+        element.isPublic &&
+        !element.isAbstract &&
+        element is! EnumElement &&
+        element.thisType.allSupertypes
+            .none((e) => _isListSetMapIteratorType(e.element2));
+  }
+
+  bool isDomainClassWithKnownPropertyTypes(Element element) {
+    return _isDomainClass(element) &&
+        _propertyMap(element as ClassElement).isNotEmpty;
   }
 
   /// Gets all fields that represent properties from the [InterfaceElement]
@@ -82,19 +89,21 @@ class MapConverterBuilder implements Builder {
     var properties = _findAllProperties(classElement);
     for (var property in properties) {
       var propertyType = property.type as InterfaceType;
-      var valueExpressionFactory = valueExpressionFactories.firstWhereOrNull(
-          (valueExpressionFactory) =>
-              valueExpressionFactory.canConvert(propertyType));
+
+      var valueExpressionFactory = valueExpressionFactories.findFor(classElement, propertyType);
       if (valueExpressionFactory == null) {
-        log.log(Level.WARNING, 'Could not find a $ValueExpressionFactory '
-                'for type: $propertyType '
-                'in: ${classElement.name}.${property.name}');
+        log.log(
+            Level.WARNING,
+            'Could not find a $ValueExpressionFactory '
+            'for type: $propertyType '
+            'used in property: ${classElement.name}.${property.name}');
       } else {
         propertyMap[property] = valueExpressionFactory;
       }
     }
     return propertyMap;
   }
+
 
   bool _isPropertyField(FieldElement fieldElement) =>
       !fieldElement.isAbstract &&

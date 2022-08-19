@@ -26,4 +26,9 @@ class AllType {
   DateTime? myNullableDateTime;
   Duration myDuration = Duration.zero;
   Duration? myNullableDuration;
+  Person myPerson =
+      Person(name: 'John Doe', dateOfBirth: DateTime(1974, 11, 12));
+  Person? myNullablePerson;
+  AllType myAllType = AllType();
+  AllType? myNullableAllType;
 }

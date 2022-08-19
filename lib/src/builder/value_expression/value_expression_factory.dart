@@ -1,10 +1,12 @@
+import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:collection/collection.dart';
 import 'package:dart_code/dart_code.dart' as code;
+import 'package:map_converter/src/builder/map_converter_builder.dart';
 
 /// Creates a Dart code expressions for a generated MapConverter
 abstract class ValueExpressionFactory {
-  bool canConvert(InterfaceType typeToConvert);
+  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert);
 
   /// Creates a Dart code expressions for a generated MapConverter
   /// to set a property value of an object property from a map variable
@@ -33,7 +35,13 @@ class ValueExpressionFactories extends DelegatingList<ValueExpressionFactory> {
           DateTimeExpressionFactory(),
           DurationExpressionFactory(),
           EnumExpressionFactory(),
+          DomainObjectExpressionFactory(),
         ]);
+
+  ValueExpressionFactory? findFor(
+          InterfaceElement classElement, InterfaceType typeToConvert) =>
+      firstWhereOrNull((valueExpressionFactory) =>
+          valueExpressionFactory.canConvert(classElement, typeToConvert));
 }
 
 abstract class BasicTypeExpressionFactory extends ValueExpressionFactory {
@@ -77,7 +85,8 @@ abstract class BasicTypeExpressionFactory extends ValueExpressionFactory {
 
 class BoolExpressionFactory extends BasicTypeExpressionFactory {
   @override
-  bool canConvert(InterfaceType typeToConvert) => typeToConvert.isDartCoreBool;
+  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
+      typeToConvert.isDartCoreBool;
 
   @override
   String createToObjectPropertyValueCodeString(
@@ -92,7 +101,7 @@ class BoolExpressionFactory extends BasicTypeExpressionFactory {
 
 class StringExpressionFactory extends BasicTypeExpressionFactory {
   @override
-  bool canConvert(InterfaceType typeToConvert) =>
+  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
       typeToConvert.isDartCoreString;
 
   @override
@@ -108,7 +117,8 @@ class StringExpressionFactory extends BasicTypeExpressionFactory {
 
 class NumExpressionFactory extends BasicTypeExpressionFactory {
   @override
-  bool canConvert(InterfaceType typeToConvert) => typeToConvert.isDartCoreNum;
+  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
+      typeToConvert.isDartCoreNum;
 
   @override
   String createToObjectPropertyValueCodeString(
@@ -123,7 +133,8 @@ class NumExpressionFactory extends BasicTypeExpressionFactory {
 
 class IntExpressionFactory extends BasicTypeExpressionFactory {
   @override
-  bool canConvert(InterfaceType typeToConvert) => typeToConvert.isDartCoreInt;
+  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
+      typeToConvert.isDartCoreInt;
 
   @override
   String createToObjectPropertyValueCodeString(
@@ -138,7 +149,7 @@ class IntExpressionFactory extends BasicTypeExpressionFactory {
 
 class DoubleExpressionFactory extends BasicTypeExpressionFactory {
   @override
-  bool canConvert(InterfaceType typeToConvert) =>
+  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
       typeToConvert.isDartCoreDouble;
 
   @override
@@ -154,7 +165,7 @@ class DoubleExpressionFactory extends BasicTypeExpressionFactory {
 
 class UriExpressionFactory extends BasicTypeExpressionFactory {
   @override
-  bool canConvert(InterfaceType typeToConvert) =>
+  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
       typeToConvert.getDisplayString(withNullability: false) == 'Uri' &&
       typeToConvert.element2.library.name == 'dart.core';
 
@@ -183,7 +194,7 @@ class UriExpressionFactory extends BasicTypeExpressionFactory {
 
 class BigIntExpressionFactory extends BasicTypeExpressionFactory {
   @override
-  bool canConvert(InterfaceType typeToConvert) =>
+  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
       typeToConvert.getDisplayString(withNullability: false) == 'BigInt' &&
       typeToConvert.element2.library.name == 'dart.core';
 
@@ -212,7 +223,7 @@ class BigIntExpressionFactory extends BasicTypeExpressionFactory {
 
 class DateTimeExpressionFactory extends BasicTypeExpressionFactory {
   @override
-  bool canConvert(InterfaceType typeToConvert) =>
+  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
       typeToConvert.getDisplayString(withNullability: false) == 'DateTime' &&
       typeToConvert.element2.library.name == 'dart.core';
 
@@ -241,7 +252,7 @@ class DateTimeExpressionFactory extends BasicTypeExpressionFactory {
 
 class DurationExpressionFactory extends BasicTypeExpressionFactory {
   @override
-  bool canConvert(InterfaceType typeToConvert) =>
+  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
       typeToConvert.getDisplayString(withNullability: false) == 'Duration' &&
       typeToConvert.element2.library.name == 'dart.core';
 
@@ -270,7 +281,7 @@ class DurationExpressionFactory extends BasicTypeExpressionFactory {
 
 class EnumExpressionFactory implements ValueExpressionFactory {
   @override
-  bool canConvert(InterfaceType typeToConvert) =>
+  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
       typeToConvert.element2.toString().startsWith('enum ');
 
   @override
@@ -294,3 +305,45 @@ class EnumExpressionFactory implements ValueExpressionFactory {
             ".values.firstWhere((enumValue) => enumValue.name==$mapVariableName['$propertyName'])")
       ]);
 }
+
+class DomainObjectExpressionFactory implements ValueExpressionFactory {
+  final mapConverterBuilder = MapConverterBuilder();
+
+  @override
+  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
+      classElement == typeToConvert.element2 // prevent endless round trips
+      ||
+      mapConverterBuilder
+          .isDomainClassWithKnownPropertyTypes(typeToConvert.element2);
+
+  @override
+  code.Expression createToMapValueCode(
+          String instanceVariableName, String propertyName,
+          {required bool nullable}) => code.Expression([]);//TODO
+      // code.Expression.callFunction('${propertyType.name}ToMap',
+      //     libraryUri: mapConverterLibraryUri(propertyType),
+      //     parameterValues: code.ParameterValues([
+      //       code.ParameterValue(code.Expression(
+      //           [code.Code("$instanceVariableName['$propertyName']")]))
+      //     ]));
+
+  @override
+  code.Expression createToObjectPropertyValueCode(
+          String mapVariableName, String propertyName, code.Type propertyType,
+          {required bool nullable}) =>
+      code.Expression([
+        if (nullable)
+          code.Code("$mapVariableName['$propertyName'] == null ? null : "),
+        code.Expression.callFunction('mapTo${propertyType.name}',
+            libraryUri: mapConverterLibraryUri(propertyType),
+            parameterValues: code.ParameterValues([
+              code.ParameterValue(code.Expression([
+                code.Code(
+                    "($mapVariableName['$propertyName'] as Map<String, dynamic>)")
+              ]))
+            ])),
+      ]);
+}
+
+String? mapConverterLibraryUri(code.Type domainClass) =>
+    domainClass.libraryUri; //TODO conversion
