@@ -388,9 +388,6 @@ class DomainObjectExpressionFactory implements ValueExpressionFactory {
       ]);
 }
 
-// String? toMapConverterLibraryUri(InterfaceType propertyType) =>
-//     propertyType.element2.librarySource.uri.toString(); //TODO conversion
-
 code.Type toCodeType(InterfaceType propertyType) =>
     code.Type(propertyType.element2.displayName,
         libraryUri: propertyType.element2.librarySource.toString());
