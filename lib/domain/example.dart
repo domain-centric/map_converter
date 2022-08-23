@@ -5,7 +5,7 @@ import 'person/person.dart';
 /// dart run build_runner build
 
 @JsonSerializable()
-class AllType {
+class Example {
   String myString = '';
   String? myNullableString;
   num myNum = 1;
@@ -29,6 +29,6 @@ class AllType {
   Person myPerson =
       Person(name: 'John Doe', dateOfBirth: DateTime(1974, 11, 12));
   Person? myNullablePerson;
-  AllType myAllType = AllType();
-  AllType? myNullableAllType;
+  Example myExample = Example();
+  Example? myNullableExample;
 }

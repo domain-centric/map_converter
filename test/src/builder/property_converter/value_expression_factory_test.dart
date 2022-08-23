@@ -12,7 +12,10 @@ import 'package:analyzer/dart/element/type_visitor.dart';
 import 'package:analyzer/src/dart/resolver/scope.dart';
 import 'package:analyzer/src/generated/engine.dart';
 import 'package:analyzer/src/generated/source.dart';
+import 'package:build/src/asset/id.dart';
+import 'package:build/src/builder/builder.dart';
 import 'package:dart_code/dart_code.dart' as code;
+import 'package:map_converter/src/builder/map_converter_builder.dart';
 import 'package:map_converter/src/builder/value_expression/value_expression_factory.dart';
 import 'package:test/test.dart';
 
@@ -20,6 +23,8 @@ const mapVariableName = 'map';
 const instanceVariableName = 'person';
 
 main() {
+  var idFactory = MapConverterLibraryAssetIdFactoryFake();
+
   group('class: $BoolExpressionFactory', () {
     var expressionFactory = BoolExpressionFactory();
     var propertyName = 'adult';
@@ -38,18 +43,26 @@ main() {
     });
     test('createToObjectPropertyValue nullable=false', () {
       expect(
-          code.CodeFormatter().unFormatted(
-              expressionFactory.createToObjectPropertyValueCode(
-                  mapVariableName, propertyName, propertyType,
-                  nullable: false)),
+          code.CodeFormatter()
+              .unFormatted(expressionFactory.createToObjectPropertyValueCode(
+            idFactory,
+            mapVariableName,
+            propertyName,
+            propertyType,
+            nullable: false,
+          )),
           "$mapVariableName['$propertyName'] as bool");
     });
     test('createToObjectPropertyValue nullable=true', () {
       expect(
-          code.CodeFormatter().unFormatted(
-              expressionFactory.createToObjectPropertyValueCode(
-                  mapVariableName, propertyName, propertyType,
-                  nullable: true)),
+          code.CodeFormatter()
+              .unFormatted(expressionFactory.createToObjectPropertyValueCode(
+            idFactory,
+            mapVariableName,
+            propertyName,
+            propertyType,
+            nullable: true,
+          )),
           "$mapVariableName['$propertyName'] as bool?");
     });
 
@@ -57,6 +70,7 @@ main() {
       expect(
           code.CodeFormatter()
               .unFormatted(expressionFactory.createToMapValueCode(
+            idFactory,
             instanceVariableName,
             propertyName,
             TypeFake.bool(),
@@ -68,6 +82,7 @@ main() {
       expect(
           code.CodeFormatter()
               .unFormatted(expressionFactory.createToMapValueCode(
+            idFactory,
             instanceVariableName,
             propertyName,
             TypeFake.bool(),
@@ -95,24 +110,33 @@ main() {
     });
     test('createToObjectPropertyValue nullable=false', () {
       expect(
-          code.CodeFormatter().unFormatted(
-              expressionFactory.createToObjectPropertyValueCode(
-                  mapVariableName, propertyName, propertyType,
-                  nullable: false)),
+          code.CodeFormatter()
+              .unFormatted(expressionFactory.createToObjectPropertyValueCode(
+            idFactory,
+            mapVariableName,
+            propertyName,
+            propertyType,
+            nullable: false,
+          )),
           "$mapVariableName['$propertyName'] as num");
     });
     test('createToObjectPropertyValue nullable=true', () {
       expect(
-          code.CodeFormatter().unFormatted(
-              expressionFactory.createToObjectPropertyValueCode(
-                  mapVariableName, propertyName, propertyType,
-                  nullable: true)),
+          code.CodeFormatter()
+              .unFormatted(expressionFactory.createToObjectPropertyValueCode(
+            idFactory,
+            mapVariableName,
+            propertyName,
+            propertyType,
+            nullable: true,
+          )),
           "$mapVariableName['$propertyName'] as num?");
     });
     test('createToMapValueCode nullable=false', () {
       expect(
           code.CodeFormatter()
               .unFormatted(expressionFactory.createToMapValueCode(
+            idFactory,
             instanceVariableName,
             propertyName,
             propertyType,
@@ -124,6 +148,7 @@ main() {
       expect(
           code.CodeFormatter()
               .unFormatted(expressionFactory.createToMapValueCode(
+            idFactory,
             instanceVariableName,
             propertyName,
             propertyType,
@@ -151,24 +176,33 @@ main() {
     });
     test('createToObjectPropertyValue nullable=false', () {
       expect(
-          code.CodeFormatter().unFormatted(
-              expressionFactory.createToObjectPropertyValueCode(
-                  mapVariableName, propertyName, propertyType,
-                  nullable: false)),
+          code.CodeFormatter()
+              .unFormatted(expressionFactory.createToObjectPropertyValueCode(
+            idFactory,
+            mapVariableName,
+            propertyName,
+            propertyType,
+            nullable: false,
+          )),
           "$mapVariableName['$propertyName'] as int");
     });
     test('createToObjectPropertyValue nullable=true', () {
       expect(
-          code.CodeFormatter().unFormatted(
-              expressionFactory.createToObjectPropertyValueCode(
-                  mapVariableName, propertyName, propertyType,
-                  nullable: true)),
+          code.CodeFormatter()
+              .unFormatted(expressionFactory.createToObjectPropertyValueCode(
+            idFactory,
+            mapVariableName,
+            propertyName,
+            propertyType,
+            nullable: true,
+          )),
           "$mapVariableName['$propertyName'] as int?");
     });
     test('createToMapValueCode nullable=false', () {
       expect(
           code.CodeFormatter()
               .unFormatted(expressionFactory.createToMapValueCode(
+            idFactory,
             instanceVariableName,
             propertyName,
             propertyType,
@@ -180,6 +214,7 @@ main() {
       expect(
           code.CodeFormatter()
               .unFormatted(expressionFactory.createToMapValueCode(
+            idFactory,
             instanceVariableName,
             propertyName,
             propertyType,
@@ -207,18 +242,26 @@ main() {
     });
     test('createToObjectPropertyValue nullable=false', () {
       expect(
-          code.CodeFormatter().unFormatted(
-              expressionFactory.createToObjectPropertyValueCode(
-                  mapVariableName, propertyName, propertyType,
-                  nullable: false)),
+          code.CodeFormatter()
+              .unFormatted(expressionFactory.createToObjectPropertyValueCode(
+            idFactory,
+            mapVariableName,
+            propertyName,
+            propertyType,
+            nullable: false,
+          )),
           "($mapVariableName['$propertyName'] as num).toDouble()");
     });
     test('createToObjectPropertyValue nullable=true', () {
       expect(
-          code.CodeFormatter().unFormatted(
-              expressionFactory.createToObjectPropertyValueCode(
-                  mapVariableName, propertyName, propertyType,
-                  nullable: true)),
+          code.CodeFormatter()
+              .unFormatted(expressionFactory.createToObjectPropertyValueCode(
+            idFactory,
+            mapVariableName,
+            propertyName,
+            propertyType,
+            nullable: true,
+          )),
           "($mapVariableName['$propertyName'] as num?)?.toDouble()");
     });
 
@@ -226,6 +269,7 @@ main() {
       expect(
           code.CodeFormatter()
               .unFormatted(expressionFactory.createToMapValueCode(
+            idFactory,
             instanceVariableName,
             propertyName,
             propertyType,
@@ -237,6 +281,7 @@ main() {
       expect(
           code.CodeFormatter()
               .unFormatted(expressionFactory.createToMapValueCode(
+            idFactory,
             instanceVariableName,
             propertyName,
             propertyType,
@@ -264,18 +309,26 @@ main() {
     });
     test('createToObjectPropertyValue nullable=false', () {
       expect(
-          code.CodeFormatter().unFormatted(
-              expressionFactory.createToObjectPropertyValueCode(
-                  mapVariableName, propertyName, propertyType,
-                  nullable: false)),
+          code.CodeFormatter()
+              .unFormatted(expressionFactory.createToObjectPropertyValueCode(
+            idFactory,
+            mapVariableName,
+            propertyName,
+            propertyType,
+            nullable: false,
+          )),
           "$mapVariableName['$propertyName'] as String");
     });
     test('createToObjectPropertyValue nullable=true', () {
       expect(
-          code.CodeFormatter().unFormatted(
-              expressionFactory.createToObjectPropertyValueCode(
-                  mapVariableName, propertyName, propertyType,
-                  nullable: true)),
+          code.CodeFormatter()
+              .unFormatted(expressionFactory.createToObjectPropertyValueCode(
+            idFactory,
+            mapVariableName,
+            propertyName,
+            propertyType,
+            nullable: true,
+          )),
           "$mapVariableName['$propertyName'] as String?");
     });
 
@@ -283,6 +336,7 @@ main() {
       expect(
           code.CodeFormatter()
               .unFormatted(expressionFactory.createToMapValueCode(
+            idFactory,
             instanceVariableName,
             propertyName,
             propertyType,
@@ -294,6 +348,7 @@ main() {
       expect(
           code.CodeFormatter()
               .unFormatted(expressionFactory.createToMapValueCode(
+            idFactory,
             instanceVariableName,
             propertyName,
             propertyType,
@@ -320,18 +375,26 @@ main() {
     });
     test('createToObjectPropertyValue nullable=false', () {
       expect(
-          code.CodeFormatter().unFormatted(
-              expressionFactory.createToObjectPropertyValueCode(
-                  mapVariableName, propertyName, propertyType,
-                  nullable: false)),
+          code.CodeFormatter()
+              .unFormatted(expressionFactory.createToObjectPropertyValueCode(
+            idFactory,
+            mapVariableName,
+            propertyName,
+            propertyType,
+            nullable: false,
+          )),
           "Uri.parse($mapVariableName['$propertyName'] as String)");
     });
     test('createToObjectPropertyValue nullable=true', () {
       expect(
-          code.CodeFormatter().unFormatted(
-              expressionFactory.createToObjectPropertyValueCode(
-                  mapVariableName, propertyName, propertyType,
-                  nullable: true)),
+          code.CodeFormatter()
+              .unFormatted(expressionFactory.createToObjectPropertyValueCode(
+            idFactory,
+            mapVariableName,
+            propertyName,
+            propertyType,
+            nullable: true,
+          )),
           "$mapVariableName['$propertyName'] == null ? null : Uri.parse($mapVariableName['$propertyName'] as String)");
     });
 
@@ -339,6 +402,7 @@ main() {
       expect(
           code.CodeFormatter()
               .unFormatted(expressionFactory.createToMapValueCode(
+            idFactory,
             instanceVariableName,
             propertyName,
             propertyType,
@@ -350,6 +414,7 @@ main() {
       expect(
           code.CodeFormatter()
               .unFormatted(expressionFactory.createToMapValueCode(
+            idFactory,
             instanceVariableName,
             propertyName,
             propertyType,
@@ -377,18 +442,26 @@ main() {
     });
     test('createToObjectPropertyValue nullable=false', () {
       expect(
-          code.CodeFormatter().unFormatted(
-              expressionFactory.createToObjectPropertyValueCode(
-                  mapVariableName, propertyName, propertyType,
-                  nullable: false)),
+          code.CodeFormatter()
+              .unFormatted(expressionFactory.createToObjectPropertyValueCode(
+            idFactory,
+            mapVariableName,
+            propertyName,
+            propertyType,
+            nullable: false,
+          )),
           "BigInt.parse($mapVariableName['$propertyName'] as String)");
     });
     test('createToObjectPropertyValue nullable=true', () {
       expect(
-          code.CodeFormatter().unFormatted(
-              expressionFactory.createToObjectPropertyValueCode(
-                  mapVariableName, propertyName, propertyType,
-                  nullable: true)),
+          code.CodeFormatter()
+              .unFormatted(expressionFactory.createToObjectPropertyValueCode(
+            idFactory,
+            mapVariableName,
+            propertyName,
+            propertyType,
+            nullable: true,
+          )),
           "$mapVariableName['$propertyName'] == null ? null : BigInt.parse($mapVariableName['$propertyName'] as String)");
     });
 
@@ -396,6 +469,7 @@ main() {
       expect(
           code.CodeFormatter()
               .unFormatted(expressionFactory.createToMapValueCode(
+            idFactory,
             instanceVariableName,
             propertyName,
             propertyType,
@@ -407,6 +481,7 @@ main() {
       expect(
           code.CodeFormatter()
               .unFormatted(expressionFactory.createToMapValueCode(
+            idFactory,
             instanceVariableName,
             propertyName,
             propertyType,
@@ -434,18 +509,26 @@ main() {
     });
     test('createToObjectPropertyValue nullable=false', () {
       expect(
-          code.CodeFormatter().unFormatted(
-              expressionFactory.createToObjectPropertyValueCode(
-                  mapVariableName, propertyName, propertyType,
-                  nullable: false)),
+          code.CodeFormatter()
+              .unFormatted(expressionFactory.createToObjectPropertyValueCode(
+            idFactory,
+            mapVariableName,
+            propertyName,
+            propertyType,
+            nullable: false,
+          )),
           "DateTime.parse($mapVariableName['$propertyName'] as String)");
     });
     test('createToObjectPropertyValue nullable=true', () {
       expect(
-          code.CodeFormatter().unFormatted(
-              expressionFactory.createToObjectPropertyValueCode(
-                  mapVariableName, propertyName, propertyType,
-                  nullable: true)),
+          code.CodeFormatter()
+              .unFormatted(expressionFactory.createToObjectPropertyValueCode(
+            idFactory,
+            mapVariableName,
+            propertyName,
+            propertyType,
+            nullable: true,
+          )),
           "$mapVariableName['$propertyName'] == null ? null : DateTime.parse($mapVariableName['$propertyName'] as String)");
     });
 
@@ -453,6 +536,7 @@ main() {
       expect(
           code.CodeFormatter()
               .unFormatted(expressionFactory.createToMapValueCode(
+            idFactory,
             instanceVariableName,
             propertyName,
             propertyType,
@@ -464,6 +548,7 @@ main() {
       expect(
           code.CodeFormatter()
               .unFormatted(expressionFactory.createToMapValueCode(
+            idFactory,
             instanceVariableName,
             propertyName,
             propertyType,
@@ -491,18 +576,26 @@ main() {
     });
     test('createToObjectPropertyValue nullable=false', () {
       expect(
-          code.CodeFormatter().unFormatted(
-              expressionFactory.createToObjectPropertyValueCode(
-                  mapVariableName, propertyName, propertyType,
-                  nullable: false)),
+          code.CodeFormatter()
+              .unFormatted(expressionFactory.createToObjectPropertyValueCode(
+            idFactory,
+            mapVariableName,
+            propertyName,
+            propertyType,
+            nullable: false,
+          )),
           "Duration(microseconds: $mapVariableName['$propertyName'] as int)");
     });
     test('createToObjectPropertyValue nullable=true', () {
       expect(
-          code.CodeFormatter().unFormatted(
-              expressionFactory.createToObjectPropertyValueCode(
-                  mapVariableName, propertyName, propertyType,
-                  nullable: true)),
+          code.CodeFormatter()
+              .unFormatted(expressionFactory.createToObjectPropertyValueCode(
+            idFactory,
+            mapVariableName,
+            propertyName,
+            propertyType,
+            nullable: true,
+          )),
           "$mapVariableName['$propertyName'] == null ? null : Duration(microseconds: $mapVariableName['$propertyName'] as int)");
     });
 
@@ -510,6 +603,7 @@ main() {
       expect(
           code.CodeFormatter()
               .unFormatted(expressionFactory.createToMapValueCode(
+            idFactory,
             instanceVariableName,
             propertyName,
             propertyType,
@@ -521,6 +615,7 @@ main() {
       expect(
           code.CodeFormatter()
               .unFormatted(expressionFactory.createToMapValueCode(
+            idFactory,
             instanceVariableName,
             propertyName,
             propertyType,
@@ -548,19 +643,27 @@ main() {
     });
     test('createToObjectPropertyValue nullable=false', () {
       expect(
-          code.CodeFormatter().unFormatted(
-              expressionFactory.createToObjectPropertyValueCode(
-                  mapVariableName, propertyName, propertyType,
-                  nullable: false)),
+          code.CodeFormatter()
+              .unFormatted(expressionFactory.createToObjectPropertyValueCode(
+            idFactory,
+            mapVariableName,
+            propertyName,
+            propertyType,
+            nullable: false,
+          )),
           "_i1.Gender.values.firstWhere((enumValue) "
           "=> enumValue.name==$mapVariableName['$propertyName'])");
     });
     test('createToObjectPropertyValue nullable=true', () {
       expect(
-          code.CodeFormatter().unFormatted(
-              expressionFactory.createToObjectPropertyValueCode(
-                  mapVariableName, propertyName, propertyType,
-                  nullable: true)),
+          code.CodeFormatter()
+              .unFormatted(expressionFactory.createToObjectPropertyValueCode(
+            idFactory,
+            mapVariableName,
+            propertyName,
+            propertyType,
+            nullable: true,
+          )),
           "$mapVariableName['$propertyName'] == null "
           "? null "
           ": _i1.Gender.values.firstWhere((enumValue) "
@@ -571,17 +674,19 @@ main() {
       expect(
           code.CodeFormatter()
               .unFormatted(expressionFactory.createToMapValueCode(
+            idFactory,
             instanceVariableName,
             propertyName,
             propertyType,
             nullable: false,
           )),
-          '$instanceVariableName.$propertyName!.name');
+          '$instanceVariableName.$propertyName.name');
     });
     test('createToMapValueCode nullable=true', () {
       expect(
           code.CodeFormatter()
               .unFormatted(expressionFactory.createToMapValueCode(
+            idFactory,
             instanceVariableName,
             propertyName,
             propertyType,
@@ -609,18 +714,26 @@ main() {
     });
     test('createToObjectPropertyValue nullable=false', () {
       expect(
-          code.CodeFormatter().unFormatted(
-              expressionFactory.createToObjectPropertyValueCode(
-                  mapVariableName, propertyName, propertyType,
-                  nullable: false)),
+          code.CodeFormatter()
+              .unFormatted(expressionFactory.createToObjectPropertyValueCode(
+            idFactory,
+            mapVariableName,
+            propertyName,
+            propertyType,
+            nullable: false,
+          )),
           "_i1.mapToPerson($mapVariableName['$propertyName'] as Map<String, dynamic>)");
     });
     test('createToObjectPropertyValue nullable=true', () {
       expect(
-          code.CodeFormatter().unFormatted(
-              expressionFactory.createToObjectPropertyValueCode(
-                  mapVariableName, propertyName, propertyType,
-                  nullable: true)),
+          code.CodeFormatter()
+              .unFormatted(expressionFactory.createToObjectPropertyValueCode(
+            idFactory,
+            mapVariableName,
+            propertyName,
+            propertyType,
+            nullable: true,
+          )),
           "$mapVariableName['$propertyName'] == null "
           "? null "
           ": _i1.mapToPerson($mapVariableName['$propertyName'] as Map<String, dynamic>)");
@@ -629,23 +742,27 @@ main() {
       expect(
           code.CodeFormatter()
               .unFormatted(expressionFactory.createToMapValueCode(
+            idFactory,
             instanceVariableName,
             propertyName,
             propertyType,
             nullable: false,
           )),
-          "_i1.personToMap($instanceVariableName['$propertyName'])");
+          "_i1.personToMap($instanceVariableName.$propertyName)");
     });
     test('createToMapValueCode nullable=true', () {
       expect(
           code.CodeFormatter()
               .unFormatted(expressionFactory.createToMapValueCode(
+            idFactory,
             instanceVariableName,
             propertyName,
             propertyType,
             nullable: true,
           )),
-          "_i1.personToMap($instanceVariableName['$propertyName'])");
+          "$instanceVariableName.parent == null ? null : "
+              "_i1.${instanceVariableName}ToMap"
+              "($instanceVariableName.$propertyName!)");
     });
   });
 }
@@ -658,57 +775,57 @@ class TypeFake implements InterfaceType {
   TypeFake.bool()
       : typeAsString = "bool",
         dartCore = true,
-        libraryUrl='';
+        libraryUrl = '';
 
   TypeFake.num()
       : typeAsString = "num",
         dartCore = true,
-        libraryUrl='';
+        libraryUrl = '';
 
   TypeFake.int()
       : typeAsString = "int",
         dartCore = true,
-        libraryUrl='';
+        libraryUrl = '';
 
   TypeFake.double()
       : typeAsString = "double",
         dartCore = true,
-        libraryUrl='';
+        libraryUrl = '';
 
   TypeFake.string()
       : typeAsString = "String",
         dartCore = true,
-        libraryUrl='';
+        libraryUrl = '';
 
   TypeFake.uri()
       : typeAsString = "Uri",
         dartCore = true,
-        libraryUrl='';
+        libraryUrl = '';
 
   TypeFake.bigInt()
       : typeAsString = "BigInt",
         dartCore = true,
-        libraryUrl='';
+        libraryUrl = '';
 
   TypeFake.dateTime()
       : typeAsString = "DateTime",
         dartCore = true,
-        libraryUrl='';
+        libraryUrl = '';
 
   TypeFake.duration()
       : typeAsString = "Duration",
         dartCore = true,
-        libraryUrl='';
+        libraryUrl = '';
 
   TypeFake.genderEnum()
       : typeAsString = "Gender",
         dartCore = false,
-        libraryUrl='';//TODO
+        libraryUrl = ''; //TODO
 
   TypeFake.personClass()
       : typeAsString = "Person",
         dartCore = false,
-        libraryUrl='';//TODO
+        libraryUrl = ''; //TODO
 
   @override
   bool operator ==(Object other) =>
@@ -722,9 +839,6 @@ class TypeFake implements InterfaceType {
   @override
   int get hashCode =>
       typeAsString.hashCode ^ dartCore.hashCode ^ libraryUrl.hashCode;
-
-
-
 
   @override
   R accept<R>(TypeVisitor<R> visitor) {
@@ -906,7 +1020,6 @@ class InterfaceElementFake implements InterfaceElement {
 
   InterfaceElementFake(this.typeFake);
 
-
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -916,7 +1029,6 @@ class InterfaceElementFake implements InterfaceElement {
 
   @override
   int get hashCode => typeFake.hashCode;
-
 
   @override
   T? accept<T>(ElementVisitor<T> visitor) {
@@ -1185,11 +1297,12 @@ class InterfaceElementFake implements InterfaceElement {
   void visitChildren(ElementVisitor visitor) {}
 
   @override
-  String toString() =>
-      typeFake.typeAsString == 'Gender' ? 'enum Gender' : 'class ${typeFake.typeAsString}';
+  String toString() => typeFake.typeAsString == 'Gender'
+      ? 'enum Gender'
+      : 'class ${typeFake.typeAsString}';
 }
 
-class SourceFake implements Source{
+class SourceFake implements Source {
   TypeFake typeFake;
 
   SourceFake(this.typeFake);
@@ -1509,4 +1622,16 @@ class LibraryElementFake implements LibraryElement {
   void visitChildren(ElementVisitor visitor) {}
 }
 
-enum TestEnum { one, two, tree }
+class MapConverterLibraryAssetIdFactoryFake
+    implements MapConverterLibraryAssetIdFactory {
+  @override
+  Builder get builder => throw UnimplementedError();
+
+  @override
+  AssetId createOutputId(AssetId inputId) {
+    throw UnimplementedError();
+  }
+
+  @override
+  String createOutputUriForType(InterfaceType domainObjectType) => 'package:map_converter/src/builder/map_converter_builder.dart';
+}

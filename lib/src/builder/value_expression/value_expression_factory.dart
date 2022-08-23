@@ -12,6 +12,7 @@ abstract class ValueExpressionFactory {
   /// Creates a Dart code expressions for a generated MapConverter
   /// to set a property value of an object property from a map variable
   code.Expression createToObjectPropertyValueCode(
+    MapConverterLibraryAssetIdFactory idFactory,
     String mapVariableName,
     String propertyName,
     InterfaceType propertyType, {
@@ -21,6 +22,7 @@ abstract class ValueExpressionFactory {
   /// Creates a Dart code expressions for a generated MapConverter
   /// to set a map value from an object property
   code.Expression createToMapValueCode(
+    MapConverterLibraryAssetIdFactory idFactory,
     String instanceVariableName,
     String propertyName,
     InterfaceType propertyType, {
@@ -54,6 +56,7 @@ class ValueExpressionFactories extends DelegatingList<ValueExpressionFactory> {
 abstract class BasicTypeExpressionFactory extends ValueExpressionFactory {
   @override
   code.Expression createToMapValueCode(
+    MapConverterLibraryAssetIdFactory idFactory,
     String instanceVariableName,
     String propertyName,
     InterfaceType propertyType, {
@@ -68,6 +71,7 @@ abstract class BasicTypeExpressionFactory extends ValueExpressionFactory {
 
   @override
   code.Expression createToObjectPropertyValueCode(
+    MapConverterLibraryAssetIdFactory idFactory,
     String mapVariableName,
     String propertyName,
     InterfaceType propertyType, {
@@ -299,6 +303,7 @@ class EnumExpressionFactory implements ValueExpressionFactory {
 
   @override
   code.Expression createToMapValueCode(
+    MapConverterLibraryAssetIdFactory idFactory,
     String instanceVariableName,
     String propertyName,
     InterfaceType propertyType, {
@@ -306,11 +311,12 @@ class EnumExpressionFactory implements ValueExpressionFactory {
   }) =>
       code.Expression([
         code.Code(
-            '$instanceVariableName.$propertyName${nullable ? '?' : '!'}.name'),
+            '$instanceVariableName.$propertyName${nullable ? '?' : ''}.name'),
       ]);
 
   @override
   code.Expression createToObjectPropertyValueCode(
+    MapConverterLibraryAssetIdFactory idFactory,
     String mapVariableName,
     String propertyName,
     InterfaceType propertyType, {
@@ -323,35 +329,44 @@ class EnumExpressionFactory implements ValueExpressionFactory {
         code.Code(
             ".values.firstWhere((enumValue) => enumValue.name==$mapVariableName['$propertyName'])")
       ]);
-
 }
 
 class DomainObjectExpressionFactory implements ValueExpressionFactory {
-  final mapConverterLibraryFactory = MapConverterLibraryFactory();
+  final domainClassFactory = DomainClassFactory();
 
   @override
   bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
       classElement == typeToConvert.element2 // prevent endless round trips
       ||
-      mapConverterLibraryFactory
-          .isDomainClassWithKnownPropertyTypes(typeToConvert.element2);
+      domainClassFactory
+          .isDomainClassWithSupportedPropertyTypes(typeToConvert.element2);
 
   @override
   code.Expression createToMapValueCode(
+    MapConverterLibraryAssetIdFactory idFactory,
     String instanceVariableName,
     String propertyName,
     InterfaceType propertyType, {
     required bool nullable,
   }) =>
-  code.Expression.callFunction('${propertyType.getDisplayString(withNullability: false).camelCase}ToMap',
-      libraryUri: toMapConverterLibraryUri(propertyType),
-      parameterValues: code.ParameterValues([
-        code.ParameterValue(code.Expression(
-            [code.Code("$instanceVariableName['$propertyName']")]))
-      ]));
+      code.Expression([
+        if (nullable)
+          code.Code("$instanceVariableName.$propertyName == null ? null : "),
+        code.Expression.callFunction(
+            '${propertyType.getDisplayString(withNullability: false).camelCase}ToMap',
+            libraryUri: idFactory.createOutputUriForType(propertyType),
+            parameterValues: code.ParameterValues([
+              code.ParameterValue(code.Expression([
+                code.Expression.ofVariable(instanceVariableName)
+                    .getProperty(propertyName),
+                if (nullable) code.Code('!'),
+              ]))
+            ]))
+      ]);
 
   @override
   code.Expression createToObjectPropertyValueCode(
+    MapConverterLibraryAssetIdFactory idFactory,
     String mapVariableName,
     String propertyName,
     InterfaceType propertyType, {
@@ -361,19 +376,20 @@ class DomainObjectExpressionFactory implements ValueExpressionFactory {
         if (nullable)
           code.Code("$mapVariableName['$propertyName'] == null ? null : "),
         code.Expression.callFunction(
-            'mapTo${propertyType.getDisplayString(withNullability: false)}',
-            libraryUri: toMapConverterLibraryUri(propertyType),
-            parameterValues: code.ParameterValues([
-              code.ParameterValue(code.Expression([
-                code.Code(
-                    "$mapVariableName['$propertyName'] as Map<String, dynamic>")
-              ]))
-            ])),
+          'mapTo${propertyType.getDisplayString(withNullability: false)}',
+          libraryUri: idFactory.createOutputUriForType(propertyType),
+          parameterValues: code.ParameterValues([
+            code.ParameterValue(code.Expression([
+              code.Code(
+                  "$mapVariableName['$propertyName'] as Map<String, dynamic>")
+            ]))
+          ]),
+        )
       ]);
 }
 
-String? toMapConverterLibraryUri(InterfaceType propertyType) =>
-    propertyType.element2.librarySource.toString(); //TODO conversion
+// String? toMapConverterLibraryUri(InterfaceType propertyType) =>
+//     propertyType.element2.librarySource.uri.toString(); //TODO conversion
 
 code.Type toCodeType(InterfaceType propertyType) =>
     code.Type(propertyType.element2.displayName,
