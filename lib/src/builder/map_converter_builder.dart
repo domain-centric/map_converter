@@ -54,9 +54,9 @@ class MapConverterLibraryAssetIdFactory {
   }
 
   String createOutputUriForType(InterfaceType domainObjectType) {
-    var inputLibraryUri=domainObjectType.element2.librarySource.uri;
-    var inputLibraryAssetId=AssetId.resolve(inputLibraryUri);
-    var outputLibraryAssetId=createOutputId(inputLibraryAssetId);
+    var inputLibraryUri = domainObjectType.element2.librarySource.uri;
+    var inputLibraryAssetId = AssetId.resolve(inputLibraryUri);
+    var outputLibraryAssetId = createOutputId(inputLibraryAssetId);
     return outputLibraryAssetId.uri.toString();
   }
 }
@@ -96,7 +96,8 @@ class MapConverterLibraryFactory {
     for (var domainClass in domainClasses) {
       functions
           .add(ObjectToMapFunctionFactory().create(domainClass, idFactory));
-      //TODO functions.add(_createMapToObjectFunction(domainClass));
+      functions
+          .add(MapToObjectFunctionFactory().create(domainClass, idFactory));
     }
     return functions;
   }
@@ -130,23 +131,28 @@ class ObjectToMapFunctionFactory {
   }
 
   String _createName(DomainClass domainClass) =>
-      '${domainClass.classElement.displayName.camelCase}ToMap';
+      '${domainClass.element.displayName.camelCase}ToMap';
 
   code.CodeNode _createBody(
     DomainClass domainClass,
     MapConverterLibraryAssetIdFactory idFactory,
   ) {
     Map<code.Expression, code.Expression> map = {};
-    for (var propertyField in domainClass.propertyMap.keys) {
-      var propertyNameExpression = code.Expression.ofString(propertyField.name);
-      var expressionFactory = domainClass.propertyMap[propertyField]!;
+    for (var property in domainClass.properties) {
+      var propertyNameExpression =
+          code.Expression.ofString(property.element.name);
+      var expressionFactory = property.valueExpressionFactory;
       var nullable =
-          propertyField.type.nullabilitySuffix == NullabilitySuffix.question;
-      var propertyType = propertyField.type as InterfaceType;
-      var instanceVariableName = domainClass.classElement.name.camelCase;
+          property.element.type.nullabilitySuffix == NullabilitySuffix.question;
+      var propertyType = property.element.type as InterfaceType;
+      var instanceVariableName = domainClass.element.name.camelCase;
       var propertyValue = expressionFactory.createToMapValueCode(
-          idFactory, instanceVariableName, propertyField.name, propertyType,
-          nullable: nullable);
+        idFactory,
+        instanceVariableName,
+        property.element.name,
+        propertyType,
+        nullable: nullable,
+      );
       map[propertyNameExpression] = propertyValue;
     }
     return code.Expression.ofMap(map);
@@ -155,10 +161,9 @@ class ObjectToMapFunctionFactory {
   code.Parameters _createParameters(DomainClass domainClass) =>
       code.Parameters([
         code.Parameter.required(
-          domainClass.classElement.name.camelCase,
-          type: code.Type(domainClass.classElement.name,
-              libraryUri:
-                  domainClass.classElement.librarySource.uri.toString()),
+          domainClass.element.name.camelCase,
+          type: code.Type(domainClass.element.name,
+              libraryUri: domainClass.element.librarySource.uri.toString()),
         ),
       ]);
 
@@ -166,14 +171,99 @@ class ObjectToMapFunctionFactory {
       keyType: code.Type.ofString(), valueType: code.Type('dynamic'));
 }
 
-/// Contains information on a [DomainClass] to generate [MapConverter] codeclass DomainClass {
+class MapToObjectFunctionFactory {
+  code.DartFunction create(
+    DomainClass domainClass,
+    MapConverterLibraryAssetIdFactory idFactory,
+  ) {
+    return code.DartFunction.withName(
+      _createName(domainClass),
+      _createBody(domainClass, idFactory),
+      parameters: _createParameters(domainClass),
+      returnType: _createReturnType(domainClass),
+    );
+  }
+
+  String _createName(DomainClass domainClass) =>
+      'mapTo${domainClass.element.displayName}';
+
+  code.CodeNode _createBody(
+    DomainClass domainClass,
+    MapConverterLibraryAssetIdFactory idFactory,
+  ) {
+    var constructorCall =
+        code.Expression.callConstructor(_createReturnType(domainClass));
+    for (var property in domainClass.properties) {
+      var propertyName = property.element.name;
+      var expressionFactory = property.valueExpressionFactory;
+      var nullable =
+          property.element.type.nullabilitySuffix == NullabilitySuffix.question;
+      var propertyType = property.element.type as InterfaceType;
+      String mapVariableName = domainMapVariableName(domainClass);
+      var propertyValue = expressionFactory.createToObjectPropertyValueCode(
+        idFactory,
+        mapVariableName,
+        propertyName,
+        propertyType,
+        nullable: nullable,
+      );
+      constructorCall = constructorCall.setProperty(propertyName, propertyValue,
+          cascade: true);
+    }
+    return constructorCall;
+  }
+
+  code.Parameters _createParameters(DomainClass domainClass) =>
+      code.Parameters([
+        code.Parameter.required(
+          domainMapVariableName(domainClass),
+          type: code.Type.ofMap(
+              keyType: code.Type.ofString(), valueType: code.Type('dynamic')),
+        ),
+      ]);
+
+  code.Type _createReturnType(DomainClass domainClass) =>
+      code.Type(domainClass.element.name,
+          libraryUri: domainClass.element.librarySource.uri.toString());
+
+  String domainMapVariableName(DomainClass domainClass) =>
+      '${domainClass.element.name.camelCase}Map';
+}
+
+/// Contains information on a [DomainClass] to generate [MapConverter]s
 class DomainClass {
-  final ClassElement classElement;
-  final Map<FieldElement, ValueExpressionFactory> propertyMap;
+  final ClassElement element;
+  final Constructor bestConstructor;
+  final List<Property> properties;
 
   DomainClass(
-    this.classElement,
-    this.propertyMap,
+    this.element,
+    this.bestConstructor,
+    this.properties,
+  );
+}
+
+class Constructor {
+  final String? name;
+  final List<Property> requiredPositionalParameters;
+  final List<Property> namedParameters;
+  final List<Property> optionalParameters;
+
+  Constructor(
+    this.name,
+    this.requiredPositionalParameters,
+    this.namedParameters,
+    this.optionalParameters,
+  );
+}
+
+class Property {
+  final FieldElement element;
+  final ValueExpressionFactory valueExpressionFactory;
+
+  Property(
+    this.element,
+    this.valueExpressionFactory,
   );
 }
 
@@ -184,9 +274,11 @@ class DomainClassFactory {
     for (var topElement in topElements) {
       if (_isDomainClass(topElement)) {
         var classElement = topElement as ClassElement;
-        var propertyMap = _createPropertyMap(classElement);
-        if (propertyMap.isNotEmpty) {
-          var domainClass = DomainClass(classElement, propertyMap);
+        var properties = _createProperties(classElement);
+        if (properties.isNotEmpty) {
+          var bestConstructor = _findBestConstructor(classElement);
+          var domainClass =
+              DomainClass(classElement, bestConstructor, properties);
           domainClasses.add(domainClass);
         }
       }
@@ -205,7 +297,7 @@ class DomainClassFactory {
 
   bool isDomainClassWithSupportedPropertyTypes(Element element) {
     return _isDomainClass(element) &&
-        _createPropertyMap(element as ClassElement).isNotEmpty;
+        _createProperties(element as ClassElement).isNotEmpty;
   }
 
   _isListSetMapIteratorType(InterfaceElement element) {
@@ -220,7 +312,7 @@ class DomainClassFactory {
 
   /// Gets all fields that represent properties from the [InterfaceElement]
   /// including those from super classes, mixins and interfaces
-  List<FieldElement> _findAllProperties(InterfaceElement interfaceElement) {
+  List<FieldElement> _findAllFields(InterfaceElement interfaceElement) {
     Map<String, FieldElement> fields = {};
     for (var fieldElement in interfaceElement.fields) {
       if (_isPropertyField(fieldElement)) {
@@ -228,7 +320,7 @@ class DomainClassFactory {
       }
     }
     for (var superType in interfaceElement.allSupertypes) {
-      var superTypeFields = _findAllProperties(superType.element2);
+      var superTypeFields = _findAllFields(superType.element2);
       for (var superTypeField in superTypeFields) {
         fields[superTypeField.name] = superTypeField;
       }
@@ -239,12 +331,11 @@ class DomainClassFactory {
   /// creates a [MAP] with [FieldElement] and [ValueExpressionFactory] for
   /// any property in a [ClassElement]
   /// if there is a matching [ValueExpressionFactory].
-  Map<FieldElement, ValueExpressionFactory> _createPropertyMap(
-      InterfaceElement classElement) {
-    var propertyMap = <FieldElement, ValueExpressionFactory>{};
-    var properties = _findAllProperties(classElement);
-    for (var property in properties) {
-      var propertyType = property.type as InterfaceType;
+  List<Property> _createProperties(InterfaceElement classElement) {
+    var properties = <Property>[];
+    var fields = _findAllFields(classElement);
+    for (var field in fields) {
+      var propertyType = field.type as InterfaceType;
 
       var valueExpressionFactory =
           valueExpressionFactories.findFor(classElement, propertyType);
@@ -253,12 +344,13 @@ class DomainClassFactory {
             Level.WARNING,
             'Could not find a $ValueExpressionFactory '
             'for type: $propertyType '
-            'used in property: ${classElement.name}.${property.name}');
+            'used in property: ${classElement.name}.${field.name}');
       } else {
-        propertyMap[property] = valueExpressionFactory;
+        var property = Property(field, valueExpressionFactory);
+        properties.add(property);
       }
     }
-    return propertyMap;
+    return properties;
   }
 
   bool _isPropertyField(FieldElement fieldElement) =>
@@ -269,4 +361,7 @@ class DomainClassFactory {
       fieldElement.type is InterfaceType;
 
   bool _isSetInConstructor(FieldElement fieldElement) => false;
+
+  Constructor _findBestConstructor(ClassElement classElement) =>
+      Constructor(null, [], [], []); //TODO
 }

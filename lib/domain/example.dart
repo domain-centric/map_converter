@@ -31,4 +31,12 @@ class Example {
   Person? myNullablePerson;
   Example myExample = Example();
   Example? myNullableExample;
+  List<Example> myExampleList = [];
+  List<Example>? myNullableExampleList;
+  Set<Example> myExampleSet = {};
+  Set<Example>? myNullableExampleSet;
+  Iterable<Example> myExampleIterable = {};
+  Iterable<Example>? myNullableExampleIterable;
+  Map<int, Example> myIntExampleMap = {};
+  Map<int, Example>? myNullableIntExampleMap;
 }

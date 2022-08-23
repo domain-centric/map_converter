@@ -108,12 +108,12 @@ class BoolExpressionFactory extends BasicTypeExpressionFactory {
   @override
   String createToObjectPropertyValueCodeString(
           String mapVariableName, String propertyName) =>
-      "$mapVariableName['$propertyName'] as bool";
+      "$mapVariableName['$propertyName'] as bool ";
 
   @override
   String createToObjectNullablePropertyValueCodeString(
           String mapVariableName, String propertyName) =>
-      "$mapVariableName['$propertyName'] as bool?";
+      "$mapVariableName['$propertyName'] as bool? ";
 }
 
 class StringExpressionFactory extends BasicTypeExpressionFactory {
@@ -124,12 +124,12 @@ class StringExpressionFactory extends BasicTypeExpressionFactory {
   @override
   String createToObjectPropertyValueCodeString(
           String mapVariableName, String propertyName) =>
-      "$mapVariableName['$propertyName'] as String";
+      "$mapVariableName['$propertyName'] as String ";
 
   @override
   String createToObjectNullablePropertyValueCodeString(
           String mapVariableName, String propertyName) =>
-      "$mapVariableName['$propertyName'] as String?";
+      "$mapVariableName['$propertyName'] as String? ";
 }
 
 class NumExpressionFactory extends BasicTypeExpressionFactory {
@@ -140,12 +140,12 @@ class NumExpressionFactory extends BasicTypeExpressionFactory {
   @override
   String createToObjectPropertyValueCodeString(
           String mapVariableName, String propertyName) =>
-      "$mapVariableName['$propertyName'] as num";
+      "$mapVariableName['$propertyName'] as num ";
 
   @override
   String createToObjectNullablePropertyValueCodeString(
           String mapVariableName, String propertyName) =>
-      "$mapVariableName['$propertyName'] as num?";
+      "$mapVariableName['$propertyName'] as num? ";
 }
 
 class IntExpressionFactory extends BasicTypeExpressionFactory {
@@ -156,12 +156,12 @@ class IntExpressionFactory extends BasicTypeExpressionFactory {
   @override
   String createToObjectPropertyValueCodeString(
           String mapVariableName, String propertyName) =>
-      "$mapVariableName['$propertyName'] as int";
+      "$mapVariableName['$propertyName'] as int ";
 
   @override
   String createToObjectNullablePropertyValueCodeString(
           String mapVariableName, String propertyName) =>
-      "$mapVariableName['$propertyName'] as int?";
+      "$mapVariableName['$propertyName'] as int? ";
 }
 
 class DoubleExpressionFactory extends BasicTypeExpressionFactory {
@@ -325,9 +325,10 @@ class EnumExpressionFactory implements ValueExpressionFactory {
       code.Expression([
         if (nullable)
           code.Code("$mapVariableName['$propertyName'] == null ? null : "),
-        toCodeType(propertyType),
+        code.Type(propertyType.element2.displayName,
+            libraryUri: propertyType.element2.librarySource.uri.toString()),
         code.Code(
-            ".values.firstWhere((enumValue) => enumValue.name==$mapVariableName['$propertyName'])")
+            ".values.firstWhere((e) => e.name==$mapVariableName['$propertyName'])")
       ]);
 }
 
@@ -388,6 +389,6 @@ class DomainObjectExpressionFactory implements ValueExpressionFactory {
       ]);
 }
 
-code.Type toCodeType(InterfaceType propertyType) =>
-    code.Type(propertyType.element2.displayName,
-        libraryUri: propertyType.element2.librarySource.toString());
+// code.Type toCodeType(InterfaceType propertyType) =>
+//     code.Type(propertyType.element2.displayName,
+//         libraryUri: propertyType.element2.librarySource.toString());

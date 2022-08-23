@@ -51,7 +51,7 @@ main() {
             propertyType,
             nullable: false,
           )),
-          "$mapVariableName['$propertyName'] as bool");
+          "$mapVariableName['$propertyName'] as bool ");
     });
     test('createToObjectPropertyValue nullable=true', () {
       expect(
@@ -63,7 +63,7 @@ main() {
             propertyType,
             nullable: true,
           )),
-          "$mapVariableName['$propertyName'] as bool?");
+          "$mapVariableName['$propertyName'] as bool? ");
     });
 
     test('createToMapValueCode nullable=false', () {
@@ -118,7 +118,7 @@ main() {
             propertyType,
             nullable: false,
           )),
-          "$mapVariableName['$propertyName'] as num");
+          "$mapVariableName['$propertyName'] as num ");
     });
     test('createToObjectPropertyValue nullable=true', () {
       expect(
@@ -130,7 +130,7 @@ main() {
             propertyType,
             nullable: true,
           )),
-          "$mapVariableName['$propertyName'] as num?");
+          "$mapVariableName['$propertyName'] as num? ");
     });
     test('createToMapValueCode nullable=false', () {
       expect(
@@ -184,7 +184,7 @@ main() {
             propertyType,
             nullable: false,
           )),
-          "$mapVariableName['$propertyName'] as int");
+          "$mapVariableName['$propertyName'] as int ");
     });
     test('createToObjectPropertyValue nullable=true', () {
       expect(
@@ -196,7 +196,7 @@ main() {
             propertyType,
             nullable: true,
           )),
-          "$mapVariableName['$propertyName'] as int?");
+          "$mapVariableName['$propertyName'] as int? ");
     });
     test('createToMapValueCode nullable=false', () {
       expect(
@@ -317,7 +317,7 @@ main() {
             propertyType,
             nullable: false,
           )),
-          "$mapVariableName['$propertyName'] as String");
+          "$mapVariableName['$propertyName'] as String ");
     });
     test('createToObjectPropertyValue nullable=true', () {
       expect(
@@ -329,7 +329,7 @@ main() {
             propertyType,
             nullable: true,
           )),
-          "$mapVariableName['$propertyName'] as String?");
+          "$mapVariableName['$propertyName'] as String? ");
     });
 
     test('createToMapValueCode nullable=false', () {
@@ -651,8 +651,8 @@ main() {
             propertyType,
             nullable: false,
           )),
-          "_i1.Gender.values.firstWhere((enumValue) "
-          "=> enumValue.name==$mapVariableName['$propertyName'])");
+          "_i1.Gender.values.firstWhere((e) "
+          "=> e.name==$mapVariableName['$propertyName'])");
     });
     test('createToObjectPropertyValue nullable=true', () {
       expect(
@@ -666,8 +666,8 @@ main() {
           )),
           "$mapVariableName['$propertyName'] == null "
           "? null "
-          ": _i1.Gender.values.firstWhere((enumValue) "
-          "=> enumValue.name==$mapVariableName['$propertyName'])");
+          ": _i1.Gender.values.firstWhere((e) "
+          "=> e.name==$mapVariableName['$propertyName'])");
     });
 
     test('createToMapValueCode nullable=false', () {
@@ -1326,8 +1326,7 @@ class SourceFake implements Source {
   String get shortName => throw UnimplementedError();
 
   @override
-  // TODO: implement uri
-  Uri get uri => throw UnimplementedError();
+  Uri get uri => Uri.parse(typeFake.libraryUrl);
 
   @override
   String toString() => typeFake.libraryUrl;
