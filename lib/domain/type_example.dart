@@ -5,7 +5,7 @@ import 'person/person.dart';
 /// dart run build_runner build
 
 @JsonSerializable()
-class Example {
+class TypeExample {
   String myString = '';
   String? myNullableString;
   num myNum = 1;
@@ -26,17 +26,16 @@ class Example {
   DateTime? myNullableDateTime;
   Duration myDuration = Duration.zero;
   Duration? myNullableDuration;
-  Person myPerson =
-      Person(name: 'John Doe', dateOfBirth: DateTime(1974, 11, 12));
+  Person myPerson = Person('John Doe', dateOfBirth: DateTime(1974, 11, 12));
   Person? myNullablePerson;
-  Example myExample = Example();
-  Example? myNullableExample;
-  List<Example> myExampleList = [];
-  List<Example>? myNullableExampleList;
-  Set<Example> myExampleSet = {};
-  Set<Example>? myNullableExampleSet;
-  Iterable<Example> myExampleIterable = {};
-  Iterable<Example>? myNullableExampleIterable;
-  Map<int, Example> myIntExampleMap = {};
-  Map<int, Example>? myNullableIntExampleMap;
+  TypeExample myExample = TypeExample();
+  TypeExample? myNullableExample;
+  List<TypeExample> myExampleList = [];
+  List<TypeExample>? myNullableExampleList;
+  Set<TypeExample> myExampleSet = {};
+  Set<TypeExample>? myNullableExampleSet;
+  Iterable<TypeExample> myExampleIterable = {};
+  Iterable<TypeExample>? myNullableExampleIterable;
+  Map<int, TypeExample> myIntExampleMap = {};
+  Map<int, TypeExample>? myNullableIntExampleMap;
 }

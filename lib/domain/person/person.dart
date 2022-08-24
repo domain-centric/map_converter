@@ -9,8 +9,8 @@ class Person {
   String hobby = '';
   Gender gender = Gender.unknown;
 
-  Person({
-    required this.name,
+  Person(
+    this.name, {
     required this.dateOfBirth,
     this.children = const [],
   });

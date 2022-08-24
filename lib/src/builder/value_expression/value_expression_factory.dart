@@ -353,7 +353,7 @@ class DomainObjectExpressionFactory implements ValueExpressionFactory {
       code.Expression([
         if (nullable)
           code.Code("$instanceVariableName.$propertyName == null ? null : "),
-        code.Expression.callFunction(
+        code.Expression.callMethodOrFunction(
             '${propertyType.getDisplayString(withNullability: false).camelCase}ToMap',
             libraryUri: idFactory.createOutputUriForType(propertyType),
             parameterValues: code.ParameterValues([
@@ -376,7 +376,7 @@ class DomainObjectExpressionFactory implements ValueExpressionFactory {
       code.Expression([
         if (nullable)
           code.Code("$mapVariableName['$propertyName'] == null ? null : "),
-        code.Expression.callFunction(
+        code.Expression.callMethodOrFunction(
           'mapTo${propertyType.getDisplayString(withNullability: false)}',
           libraryUri: idFactory.createOutputUriForType(propertyType),
           parameterValues: code.ParameterValues([
