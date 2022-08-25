@@ -73,19 +73,6 @@ class MapConverterLibraryFactory {
         functions: _createFunctions(domainClasses, idFactory),
       );
     }
-    // var result = '';
-    // for (var domainClass in domainClasses) {
-    //   result += '$domainClass.classElement\n';
-    //
-    //   for (FieldElement propertyElement in domainClass.propertyMap.keys) {
-    //     var propertyType = propertyElement.type as InterfaceType;
-    //     var valueExpressionFactory = domainClass.propertyMap[propertyElement];
-    //     result +=
-    //         '  $propertyType ${propertyElement.name} ${valueExpressionFactory.runtimeType}\n';
-    //   }
-    // }
-    //
-    // return result;
   }
 
   List<code.DartFunction> _createFunctions(
@@ -433,21 +420,9 @@ class BestConstructorFactory {
   /// returns the best constructor to be used to create an DomainObject when
   /// converting a [Map] to a DomainObject
   Constructor createFor(ClassElement classElement, List<Property> properties) {
-    print(_createDebugString(classElement, properties));
     var constructors = _usefulConstructors(classElement, properties);
     _orderByNumberOfPropertiesSet(constructors);
     return constructors.first;
-  }
-
-  String _createDebugString(
-      ClassElement classElement, List<Property> properties) {
-    //TODO remove!
-    var s = '$classElement\n';
-    for (var property in properties) {
-      s +=
-          '  $property  ${property.element.name} ${property.element.type.element2} \n';
-    }
-    return s;
   }
 
   /// constructor that sets most properties is put at the begin of the list
@@ -507,24 +482,15 @@ class BestConstructorFactory {
   Property? _findProperty(
     ParameterElement parameter,
     List<Property> properties,
-  ) {
-    print('>>>$parameter  ${parameter.name} ${parameter.type.element2} ');
-    return properties
-        .firstWhereOrNull((property) => _isComparable(parameter, property));
-  }
+  ) =>
+      properties
+          .firstWhereOrNull((property) => _isComparable(parameter, property));
 
-  bool _isComparable(ParameterElement parameter, Property property) {
-    // if (property.element.name==parameter.name) {
-    //   print('>>>${parameter.name} ${parameter.type.element2!.name} ${parameter
-    //       .type.element2!.displayName} == ${property.element.type.element2!
-    //       .name} ${property.element.type.element2!.displayName}');
-    // }
-    return property.element.name == parameter.name &&
-        // property.element.type.element2== parameter.type.element2;
-        property.element.type.element2 != null &&
-        parameter.type.element2 != null &&
-        property.element.type.element2!.name == parameter.type.element2!.name &&
-        property.element.type.element2!.librarySource.toString() ==
-            parameter.type.element2!.librarySource.toString();
-  }
+  bool _isComparable(ParameterElement parameter, Property property) =>
+      property.element.name == parameter.name &&
+      property.element.type.element2 != null &&
+      parameter.type.element2 != null &&
+      property.element.type.element2!.name == parameter.type.element2!.name &&
+      property.element.type.element2!.librarySource.toString() ==
+          parameter.type.element2!.librarySource.toString();
 }

@@ -78,6 +78,37 @@ class ConstructorWithRequiredPositionalParametersAndOptionalParametersExample {
   ]);
 }
 
+class NamedConstructorWithRequiredPositionalParametersAndNamedParametersExample {
+  String property1;
+  String? property2;
+  final String property3;
+  String? property4;
+  String property5 = '';
+  String? property6;
+
+  NamedConstructorWithRequiredPositionalParametersAndNamedParametersExample.name(
+    this.property1,
+    this.property2, {
+    required this.property3,
+    this.property4,
+  });
+}
+
+class NamedConstructorWithRequiredPositionalParametersAndOptionalParametersExample {
+  String property1;
+  String? property2;
+  String property3;
+  final String? property4;
+  String property5 = '';
+  String? property6;
+
+  NamedConstructorWithRequiredPositionalParametersAndOptionalParametersExample.name(
+    this.property1,
+    this.property2, [
+    this.property3 = '',
+    this.property4,
+  ]);
+}
 //TODO named constructor
 
-//TODO multiple constructors
+//TODO multiple constructors (with(out) invalid parameters)
