@@ -133,10 +133,11 @@ class ObjectToMapFunctionFactory {
           property.element.type.nullabilitySuffix == NullabilitySuffix.question;
       var propertyType = property.element.type as InterfaceType;
       var instanceVariableName = domainClass.element.name.camelCase;
-      var propertyValue = expressionFactory.createToMapValueCode(
+      var source = code.Expression.ofVariable(instanceVariableName)
+          .getProperty(property.element.name);
+      var propertyValue = expressionFactory.objectToMapValue(
         idFactory,
-        instanceVariableName,
-        property.element.name,
+        source,
         propertyType,
         nullable: nullable,
       );
@@ -155,7 +156,7 @@ class ObjectToMapFunctionFactory {
       ]);
 
   code.Type _createReturnType() => code.Type.ofMap(
-      keyType: code.Type.ofString(), valueType: code.Type('dynamic'));
+      keyType: code.Type.ofString(), valueType: code.Type.ofDynamic());
 }
 
 class MapToObjectFunctionFactory {
@@ -212,7 +213,7 @@ class MapToObjectFunctionFactory {
         code.Parameter.required(
           _domainMapVariableName(domainClass),
           type: code.Type.ofMap(
-              keyType: code.Type.ofString(), valueType: code.Type('dynamic')),
+              keyType: code.Type.ofString(), valueType: code.Type.ofDynamic()),
         ),
       ]);
 
@@ -256,10 +257,10 @@ code.Expression propertyValueExpression(Property property,
   var propertyType = property.element.type as InterfaceType;
   var nullable =
       property.element.type.nullabilitySuffix == NullabilitySuffix.question;
+  var source = code.Expression.ofVariable(mapVariableName)
+      .index(code.Expression.ofString(propertyName));
   var valueExpression = property.valueExpressionFactory
-      .createToObjectPropertyValueCode(
-          idFactory, mapVariableName, propertyName, propertyType,
-          nullable: nullable);
+      .mapValueToObject(idFactory, source, propertyType, nullable: nullable);
   return valueExpression;
 }
 

@@ -11,21 +11,31 @@ abstract class ValueExpressionFactory {
 
   /// Creates a Dart code expressions for a generated MapConverter
   /// to set a property value of an object property from a map variable
-  code.Expression createToObjectPropertyValueCode(
+  code.Expression mapValueToObject(
     MapConverterLibraryAssetIdFactory idFactory,
-    String mapVariableName,
-    String propertyName,
-    InterfaceType propertyType, {
+
+    /// [source]: An expression of the source data, e.g.:
+    /// * personMap['propertyName']
+    /// * e (for an element in a collection)
+    /// * k (for a key value in a [Map])
+    /// * v (for a value in a [Map])
+    code.Expression source,
+    InterfaceType sourceType, {
     required bool nullable,
   });
 
   /// Creates a Dart code expressions for a generated MapConverter
   /// to set a map value from an object property
-  code.Expression createToMapValueCode(
+  code.Expression objectToMapValue(
     MapConverterLibraryAssetIdFactory idFactory,
-    String instanceVariableName,
-    String propertyName,
-    InterfaceType propertyType, {
+
+    /// [source]: An expression of the source data, e.g.:
+    /// * person.propertyName
+    /// * e (for an element in a collection)
+    /// * k (for a key value in a [Map])
+    /// * v (for a value in a [Map])
+    code.Expression source,
+    InterfaceType sourceType, {
     required bool nullable,
   });
 }
@@ -53,247 +63,230 @@ class ValueExpressionFactories extends DelegatingList<ValueExpressionFactory> {
           valueExpressionFactory.canConvert(classElement, typeToConvert));
 }
 
-abstract class BasicTypeExpressionFactory extends ValueExpressionFactory {
-  @override
-  code.Expression createToMapValueCode(
-    MapConverterLibraryAssetIdFactory idFactory,
-    String instanceVariableName,
-    String propertyName,
-    InterfaceType propertyType, {
-    required bool nullable,
-  }) =>
-      code.Expression([
-        code.Code(nullable
-            ? createToMapNullableValueCodeString(
-                instanceVariableName, propertyName)
-            : createToMapValueCodeString(instanceVariableName, propertyName))
-      ]);
-
-  @override
-  code.Expression createToObjectPropertyValueCode(
-    MapConverterLibraryAssetIdFactory idFactory,
-    String mapVariableName,
-    String propertyName,
-    InterfaceType propertyType, {
-    required bool nullable,
-  }) =>
-      code.Expression([
-        code.Code(nullable
-            ? createToObjectNullablePropertyValueCodeString(
-                mapVariableName, propertyName)
-            : createToObjectPropertyValueCodeString(
-                mapVariableName, propertyName))
-      ]);
-
-  String createToMapValueCodeString(
-          String instanceVariableName, String propertyName) =>
-      '$instanceVariableName.$propertyName';
-
-  String createToMapNullableValueCodeString(
-          String instanceVariableName, String propertyName) =>
-      '$instanceVariableName.$propertyName';
-
-  createToObjectNullablePropertyValueCodeString(
-      String mapVariableName, String propertyName);
-
-  createToObjectPropertyValueCodeString(
-      String mapVariableName, String propertyName);
-}
-
-class BoolExpressionFactory extends BasicTypeExpressionFactory {
+class BoolExpressionFactory extends ValueExpressionFactory {
   @override
   bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
       typeToConvert.isDartCoreBool;
 
   @override
-  String createToObjectPropertyValueCodeString(
-          String mapVariableName, String propertyName) =>
-      "$mapVariableName['$propertyName'] as bool ";
+  code.Expression objectToMapValue(
+    MapConverterLibraryAssetIdFactory idFactory,
+    code.Expression source,
+    InterfaceType sourceType, {
+    required bool nullable,
+  }) =>
+      source;
 
   @override
-  String createToObjectNullablePropertyValueCodeString(
-          String mapVariableName, String propertyName) =>
-      "$mapVariableName['$propertyName'] as bool? ";
+  code.Expression mapValueToObject(MapConverterLibraryAssetIdFactory idFactory,
+          code.Expression source, InterfaceType sourceType,
+          {required bool nullable}) =>
+      source.asA(code.Type.ofBool(nullable: nullable));
 }
 
-class StringExpressionFactory extends BasicTypeExpressionFactory {
-  @override
-  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
-      typeToConvert.isDartCoreString;
-
-  @override
-  String createToObjectPropertyValueCodeString(
-          String mapVariableName, String propertyName) =>
-      "$mapVariableName['$propertyName'] as String ";
-
-  @override
-  String createToObjectNullablePropertyValueCodeString(
-          String mapVariableName, String propertyName) =>
-      "$mapVariableName['$propertyName'] as String? ";
-}
-
-class NumExpressionFactory extends BasicTypeExpressionFactory {
+class NumExpressionFactory extends ValueExpressionFactory {
   @override
   bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
       typeToConvert.isDartCoreNum;
 
   @override
-  String createToObjectPropertyValueCodeString(
-          String mapVariableName, String propertyName) =>
-      "$mapVariableName['$propertyName'] as num ";
+  code.Expression objectToMapValue(
+    MapConverterLibraryAssetIdFactory idFactory,
+    code.Expression source,
+    InterfaceType sourceType, {
+    required bool nullable,
+  }) =>
+      source;
 
   @override
-  String createToObjectNullablePropertyValueCodeString(
-          String mapVariableName, String propertyName) =>
-      "$mapVariableName['$propertyName'] as num? ";
+  code.Expression mapValueToObject(MapConverterLibraryAssetIdFactory idFactory,
+          code.Expression source, InterfaceType sourceType,
+          {required bool nullable}) =>
+      source.asA(code.Type.ofNum(nullable: nullable));
 }
 
-class IntExpressionFactory extends BasicTypeExpressionFactory {
+class IntExpressionFactory extends ValueExpressionFactory {
   @override
   bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
       typeToConvert.isDartCoreInt;
 
   @override
-  String createToObjectPropertyValueCodeString(
-          String mapVariableName, String propertyName) =>
-      "$mapVariableName['$propertyName'] as int ";
+  code.Expression objectToMapValue(
+    MapConverterLibraryAssetIdFactory idFactory,
+    code.Expression source,
+    InterfaceType sourceType, {
+    required bool nullable,
+  }) =>
+      source;
 
   @override
-  String createToObjectNullablePropertyValueCodeString(
-          String mapVariableName, String propertyName) =>
-      "$mapVariableName['$propertyName'] as int? ";
+  code.Expression mapValueToObject(MapConverterLibraryAssetIdFactory idFactory,
+          code.Expression source, InterfaceType sourceType,
+          {required bool nullable}) =>
+      source.asA(code.Type.ofInt(nullable: nullable));
 }
 
-class DoubleExpressionFactory extends BasicTypeExpressionFactory {
+class DoubleExpressionFactory extends ValueExpressionFactory {
   @override
   bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
       typeToConvert.isDartCoreDouble;
 
   @override
-  String createToObjectPropertyValueCodeString(
-          String mapVariableName, String propertyName) =>
-      "($mapVariableName['$propertyName'] as num).toDouble()";
+  code.Expression objectToMapValue(
+    MapConverterLibraryAssetIdFactory idFactory,
+    code.Expression source,
+    InterfaceType sourceType, {
+    required bool nullable,
+  }) =>
+      source;
 
   @override
-  String createToObjectNullablePropertyValueCodeString(
-          String mapVariableName, String propertyName) =>
-      "($mapVariableName['$propertyName'] as num?)?.toDouble()";
+  code.Expression mapValueToObject(MapConverterLibraryAssetIdFactory idFactory,
+          code.Expression source, InterfaceType sourceType,
+          {required bool nullable}) =>
+      code.Expression.betweenParentheses(
+              source.asA(code.Type.ofNum(nullable: nullable)))
+          .callMethod('toDouble', ifNullReturnNull: nullable);
 }
 
-class UriExpressionFactory extends BasicTypeExpressionFactory {
+class StringExpressionFactory extends ValueExpressionFactory {
+  @override
+  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
+      typeToConvert.isDartCoreString;
+
+  @override
+  code.Expression objectToMapValue(
+    MapConverterLibraryAssetIdFactory idFactory,
+    code.Expression source,
+    InterfaceType sourceType, {
+    required bool nullable,
+  }) =>
+      source;
+
+  @override
+  code.Expression mapValueToObject(MapConverterLibraryAssetIdFactory idFactory,
+          code.Expression source, InterfaceType sourceType,
+          {required bool nullable}) =>
+      source.asA(code.Type.ofString(nullable: nullable));
+}
+
+class UriExpressionFactory extends ValueExpressionFactory {
   @override
   bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
       typeToConvert.getDisplayString(withNullability: false) == 'Uri' &&
       typeToConvert.element2.library.name == 'dart.core';
 
   @override
-  String createToMapValueCodeString(
-          String instanceVariableName, String propertyName) =>
-      '$instanceVariableName.$propertyName.toString()';
+  code.Expression objectToMapValue(
+    MapConverterLibraryAssetIdFactory idFactory,
+    code.Expression source,
+    InterfaceType sourceType, {
+    required bool nullable,
+  }) =>
+      source.callMethod('toString', ifNullReturnNull: nullable);
 
   @override
-  String createToMapNullableValueCodeString(
-          String instanceVariableName, String propertyName) =>
-      '$instanceVariableName.$propertyName?.toString()';
-
-  @override
-  String createToObjectPropertyValueCodeString(
-          String mapVariableName, String propertyName) =>
-      "Uri.parse($mapVariableName['$propertyName'] as String)";
-
-  @override
-  String createToObjectNullablePropertyValueCodeString(
-          String mapVariableName, String propertyName) =>
-      "$mapVariableName['$propertyName'] == null "
-      "? null "
-      ": Uri.parse($mapVariableName['$propertyName'] as String)";
+  code.Expression mapValueToObject(MapConverterLibraryAssetIdFactory idFactory,
+      code.Expression source, InterfaceType sourceType,
+      {required bool nullable}) {
+    var result = code.Expression.ofType(code.Type.ofUri()).callMethod('parse',
+        parameterValues: code.ParameterValues(
+            [code.ParameterValue(source.asA(code.Type.ofString()))]));
+    return _wrapWithIfNullWhenNullable(nullable, source, result);
+  }
 }
 
-class BigIntExpressionFactory extends BasicTypeExpressionFactory {
+code.Expression _wrapWithIfNullWhenNullable(
+    bool nullable, code.Expression source, code.Expression result) {
+  if (nullable) {
+    return source
+        .equalTo(code.Expression.ofNull())
+        .conditional(code.Expression.ofNull(), result);
+  } else {
+    return result;
+  }
+}
+
+class BigIntExpressionFactory extends ValueExpressionFactory {
   @override
   bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
       typeToConvert.getDisplayString(withNullability: false) == 'BigInt' &&
       typeToConvert.element2.library.name == 'dart.core';
 
   @override
-  String createToMapValueCodeString(
-          String instanceVariableName, String propertyName) =>
-      '$instanceVariableName.$propertyName.toString()';
+  code.Expression objectToMapValue(
+    MapConverterLibraryAssetIdFactory idFactory,
+    code.Expression source,
+    InterfaceType sourceType, {
+    required bool nullable,
+  }) =>
+      source.callMethod('toString', ifNullReturnNull: nullable);
 
   @override
-  String createToMapNullableValueCodeString(
-          String instanceVariableName, String propertyName) =>
-      '$instanceVariableName.$propertyName?.toString()';
-
-  @override
-  String createToObjectPropertyValueCodeString(
-          String mapVariableName, String propertyName) =>
-      "BigInt.parse($mapVariableName['$propertyName'] as String)";
-
-  @override
-  String createToObjectNullablePropertyValueCodeString(
-          String mapVariableName, String propertyName) =>
-      "$mapVariableName['$propertyName'] == null "
-      "? null "
-      ": BigInt.parse($mapVariableName['$propertyName'] as String)";
+  code.Expression mapValueToObject(MapConverterLibraryAssetIdFactory idFactory,
+      code.Expression source, InterfaceType sourceType,
+      {required bool nullable}) {
+    var result = code.Expression.ofType(code.Type.ofBigInt()).callMethod(
+        'parse',
+        parameterValues: code.ParameterValues(
+            [code.ParameterValue(source.asA(code.Type.ofString()))]));
+    return _wrapWithIfNullWhenNullable(nullable, source, result);
+  }
 }
 
-class DateTimeExpressionFactory extends BasicTypeExpressionFactory {
+class DateTimeExpressionFactory extends ValueExpressionFactory {
   @override
   bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
       typeToConvert.getDisplayString(withNullability: false) == 'DateTime' &&
       typeToConvert.element2.library.name == 'dart.core';
 
   @override
-  String createToMapValueCodeString(
-          String instanceVariableName, String propertyName) =>
-      '$instanceVariableName.$propertyName.toIso8601String()';
+  code.Expression objectToMapValue(
+    MapConverterLibraryAssetIdFactory idFactory,
+    code.Expression source,
+    InterfaceType sourceType, {
+    required bool nullable,
+  }) =>
+      source.callMethod('toIso8601String', ifNullReturnNull: nullable);
 
   @override
-  String createToMapNullableValueCodeString(
-          String instanceVariableName, String propertyName) =>
-      '$instanceVariableName.$propertyName?.toIso8601String()';
-
-  @override
-  String createToObjectPropertyValueCodeString(
-          String mapVariableName, String propertyName) =>
-      "DateTime.parse($mapVariableName['$propertyName'] as String)";
-
-  @override
-  String createToObjectNullablePropertyValueCodeString(
-          String mapVariableName, String propertyName) =>
-      "$mapVariableName['$propertyName'] == null "
-      "? null "
-      ": DateTime.parse($mapVariableName['$propertyName'] as String)";
+  code.Expression mapValueToObject(MapConverterLibraryAssetIdFactory idFactory,
+      code.Expression source, InterfaceType sourceType,
+      {required bool nullable}) {
+    var result = code.Expression.ofType(code.Type.ofDateTime()).callMethod(
+        'parse',
+        parameterValues: code.ParameterValues(
+            [code.ParameterValue(source.asA(code.Type.ofString()))]));
+    return _wrapWithIfNullWhenNullable(nullable, source, result);
+  }
 }
 
-class DurationExpressionFactory extends BasicTypeExpressionFactory {
+class DurationExpressionFactory extends ValueExpressionFactory {
   @override
   bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
       typeToConvert.getDisplayString(withNullability: false) == 'Duration' &&
       typeToConvert.element2.library.name == 'dart.core';
 
   @override
-  String createToMapValueCodeString(
-          String instanceVariableName, String propertyName) =>
-      '$instanceVariableName.$propertyName.inMicroseconds';
+  code.Expression objectToMapValue(
+    MapConverterLibraryAssetIdFactory idFactory,
+    code.Expression source,
+    InterfaceType sourceType, {
+    required bool nullable,
+  }) =>
+      source.getProperty('inMicroseconds', ifNullReturnNull: nullable);
 
   @override
-  String createToMapNullableValueCodeString(
-          String instanceVariableName, String propertyName) =>
-      '$instanceVariableName.$propertyName?.inMicroseconds';
-
-  @override
-  String createToObjectPropertyValueCodeString(
-          String mapVariableName, String propertyName) =>
-      "Duration(microseconds: $mapVariableName['$propertyName'] as int)";
-
-  @override
-  String createToObjectNullablePropertyValueCodeString(
-          String mapVariableName, String propertyName) =>
-      "$mapVariableName['$propertyName'] == null "
-      "? null "
-      ": Duration(microseconds: $mapVariableName['$propertyName'] as int)";
+  code.Expression mapValueToObject(MapConverterLibraryAssetIdFactory idFactory,
+      code.Expression source, InterfaceType sourceType,
+      {required bool nullable}) {
+    var result = code.Expression.callConstructor(code.Type.ofDuration(),
+        parameterValues: code.ParameterValues([
+          code.ParameterValue.named(
+              'microseconds', source.asA(code.Type.ofInt()))
+        ]));
+    return _wrapWithIfNullWhenNullable(nullable, source, result);
+  }
 }
 
 class EnumExpressionFactory implements ValueExpressionFactory {
@@ -302,34 +295,32 @@ class EnumExpressionFactory implements ValueExpressionFactory {
       typeToConvert.element2.toString().startsWith('enum ');
 
   @override
-  code.Expression createToMapValueCode(
+  code.Expression objectToMapValue(
     MapConverterLibraryAssetIdFactory idFactory,
-    String instanceVariableName,
-    String propertyName,
-    InterfaceType propertyType, {
+    code.Expression source,
+    InterfaceType sourceType, {
     required bool nullable,
   }) =>
-      code.Expression([
-        code.Code(
-            '$instanceVariableName.$propertyName${nullable ? '?' : ''}.name'),
-      ]);
+      source.getProperty('name', ifNullReturnNull: nullable);
 
   @override
-  code.Expression createToObjectPropertyValueCode(
-    MapConverterLibraryAssetIdFactory idFactory,
-    String mapVariableName,
-    String propertyName,
-    InterfaceType propertyType, {
-    required bool nullable,
-  }) =>
-      code.Expression([
-        if (nullable)
-          code.Code("$mapVariableName['$propertyName'] == null ? null : "),
-        code.Type(propertyType.element2.displayName,
-            libraryUri: propertyType.element2.librarySource.uri.toString()),
-        code.Code(
-            ".values.firstWhere((e) => e.name==$mapVariableName['$propertyName'])")
-      ]);
+  code.Expression mapValueToObject(MapConverterLibraryAssetIdFactory idFactory,
+      code.Expression source, InterfaceType sourceType,
+      {required bool nullable}) {
+    var result = code.Expression.ofType(code.Type(
+            sourceType.element2.displayName,
+            libraryUri: sourceType.element2.librarySource.uri.toString()))
+        .getProperty('values')
+        .callMethod('firstWhere',
+            parameterValues: code.ParameterValues(([
+              code.ParameterValue(code.Expression([
+                code.Code('(e) => e.name=='),
+                source,
+              ]))
+            ])));
+
+    return _wrapWithIfNullWhenNullable(nullable, source, result);
+  }
 }
 
 class DomainObjectExpressionFactory implements ValueExpressionFactory {
@@ -343,52 +334,36 @@ class DomainObjectExpressionFactory implements ValueExpressionFactory {
           .isDomainClassWithSupportedPropertyTypes(typeToConvert.element2);
 
   @override
-  code.Expression createToMapValueCode(
-    MapConverterLibraryAssetIdFactory idFactory,
-    String instanceVariableName,
-    String propertyName,
-    InterfaceType propertyType, {
-    required bool nullable,
-  }) =>
-      code.Expression([
-        if (nullable)
-          code.Code("$instanceVariableName.$propertyName == null ? null : "),
-        code.Expression.callMethodOrFunction(
-            '${propertyType.getDisplayString(withNullability: false).camelCase}ToMap',
-            libraryUri: idFactory.createOutputUriForType(propertyType),
-            parameterValues: code.ParameterValues([
-              code.ParameterValue(code.Expression([
-                code.Expression.ofVariable(instanceVariableName)
-                    .getProperty(propertyName),
-                if (nullable) code.Code('!'),
-              ]))
-            ]))
-      ]);
+  code.Expression mapValueToObject(MapConverterLibraryAssetIdFactory idFactory,
+      code.Expression source, InterfaceType sourceType,
+      {required bool nullable}) {
+    var functionName =
+        'mapTo${sourceType.getDisplayString(withNullability: false)}';
+    var result = code.Expression.callMethodOrFunction(functionName,
+        libraryUri: idFactory.createOutputUriForType(sourceType),
+        parameterValues: code.ParameterValues([
+          code.ParameterValue(source.asA(code.Type.ofMap(
+            keyType: code.Type.ofString(),
+            valueType: code.Type.ofDynamic(),
+          )))
+        ]));
+    return _wrapWithIfNullWhenNullable(nullable, source, result);
+  }
 
   @override
-  code.Expression createToObjectPropertyValueCode(
-    MapConverterLibraryAssetIdFactory idFactory,
-    String mapVariableName,
-    String propertyName,
-    InterfaceType propertyType, {
-    required bool nullable,
-  }) =>
-      code.Expression([
-        if (nullable)
-          code.Code("$mapVariableName['$propertyName'] == null ? null : "),
-        code.Expression.callMethodOrFunction(
-          'mapTo${propertyType.getDisplayString(withNullability: false)}',
-          libraryUri: idFactory.createOutputUriForType(propertyType),
-          parameterValues: code.ParameterValues([
-            code.ParameterValue(code.Expression([
-              code.Code(
-                  "$mapVariableName['$propertyName'] as Map<String, dynamic>")
-            ]))
-          ]),
-        )
-      ]);
+  code.Expression objectToMapValue(MapConverterLibraryAssetIdFactory idFactory,
+      code.Expression source, InterfaceType sourceType,
+      {required bool nullable}) {
+    var functionName =
+        '${sourceType.getDisplayString(withNullability: false).camelCase}ToMap';
+    var result = code.Expression.callMethodOrFunction(functionName,
+        libraryUri: idFactory.createOutputUriForType(sourceType),
+        parameterValues: code.ParameterValues([
+          code.ParameterValue(code.Expression([
+            source,
+            if (nullable) code.Code('!'),
+          ]))
+        ]));
+    return _wrapWithIfNullWhenNullable(nullable, source, result);
+  }
 }
-
-// code.Type toCodeType(InterfaceType propertyType) =>
-//     code.Type(propertyType.element2.displayName,
-//         libraryUri: propertyType.element2.librarySource.toString());
