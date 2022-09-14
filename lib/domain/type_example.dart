@@ -30,8 +30,30 @@ class TypeExample {
   Person? myNullablePerson;
   TypeExample myExample = TypeExample();
   TypeExample? myNullableExample;
+
+  List<bool> myBoolList = [];
+  List<bool?>? myNullableBoolList;
+  List<num> myNumList = [];
+  List<num?>? myNullableNumList;
+  List<int> myIntList = [];
+  List<int?>? myNullableIntList;
+  List<double> myDoubleList = [];
+  List<double?>? myNullableDoubleList;
+  List<String> myStringList = [];
+  List<String?>? myNullableStringList;
+  List<Uri> myUriList = [];
+  List<Uri?>? myNullableUriList;
+  List<BigInt> myBigIntList = [];
+  List<BigInt?>? myNullableBigIntList;
+  List<DateTime> myDateTimeList = [];
+  List<DateTime?>? myNullableDateTimeList;
+  List<Duration> myDurationList = [];
+  List<Duration?>? myNullableDurationList;
+  List<Gender> myGenderList = [];
+  List<Gender?>? myNullableGenderList;
   List<TypeExample> myExampleList = [];
-  List<TypeExample>? myNullableExampleList;
+  List<TypeExample?>? myNullableExampleList;
+
   Set<TypeExample> myExampleSet = {};
   Set<TypeExample>? myNullableExampleSet;
   Iterable<TypeExample> myExampleIterable = {};

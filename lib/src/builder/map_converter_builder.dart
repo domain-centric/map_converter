@@ -10,7 +10,7 @@ import 'package:logging/logging.dart';
 import 'package:map_converter/src/builder/value_expression/value_expression_factory.dart';
 import 'package:recase/recase.dart';
 
-final valueExpressionFactories = ValueExpressionFactories();
+final valueExpressionFactories = ValueExpressionFactories.all();
 
 class MapConverterBuilder implements Builder {
   @override
@@ -137,6 +137,7 @@ class ObjectToMapFunctionFactory {
           .getProperty(property.element.name);
       var propertyValue = expressionFactory.objectToMapValue(
         idFactory,
+        domainClass.element,
         source,
         propertyType,
         nullable: nullable,
@@ -259,8 +260,13 @@ code.Expression propertyValueExpression(Property property,
       property.element.type.nullabilitySuffix == NullabilitySuffix.question;
   var source = code.Expression.ofVariable(mapVariableName)
       .index(code.Expression.ofString(propertyName));
-  var valueExpression = property.valueExpressionFactory
-      .mapValueToObject(idFactory, source, propertyType, nullable: nullable);
+  var valueExpression = property.valueExpressionFactory.mapValueToObject(
+    idFactory,
+    property.classElement,
+    source,
+    propertyType,
+    nullable: nullable,
+  );
   return valueExpression;
 }
 
@@ -312,10 +318,12 @@ class Constructor {
 }
 
 class Property {
+  final ClassElement classElement;
   final FieldElement element;
   final ValueExpressionFactory valueExpressionFactory;
 
   Property(
+    this.classElement,
     this.element,
     this.valueExpressionFactory,
   );
@@ -385,7 +393,7 @@ class DomainClassFactory {
   /// creates a [MAP] with [FieldElement] and [ValueExpressionFactory] for
   /// any property in a [ClassElement]
   /// if there is a matching [ValueExpressionFactory].
-  List<Property> _createProperties(InterfaceElement classElement) {
+  List<Property> _createProperties(ClassElement classElement) {
     var properties = <Property>[];
     var fields = _findAllFields(classElement);
     for (var field in fields) {
@@ -400,7 +408,7 @@ class DomainClassFactory {
             'for type: $propertyType '
             'used in property: ${classElement.name}.${field.name}');
       } else {
-        var property = Property(field, valueExpressionFactory);
+        var property = Property(classElement, field, valueExpressionFactory);
         properties.add(property);
       }
     }
