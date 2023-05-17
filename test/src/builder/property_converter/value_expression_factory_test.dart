@@ -21,13 +21,13 @@ main() {
     test('canConvert(bool)==true', () {
       expect(
           expressionFactory.canConvert(
-              TypeFake.personClass().element2, propertyType),
+              TypeFake.personClass().element, propertyType),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TypeFake.personClass().element2, TypeFake.int()),
+              TypeFake.personClass().element, TypeFake.int()),
           false);
     });
     test('mapValueToObject nullable=false', () {
@@ -83,13 +83,13 @@ main() {
     var type = TypeFake.num();
     test('canConvert(num)==true', () {
       expect(
-          expressionFactory.canConvert(TypeFake.personClass().element2, type),
+          expressionFactory.canConvert(TypeFake.personClass().element, type),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TypeFake.personClass().element2, TypeFake.int()),
+              TypeFake.personClass().element, TypeFake.int()),
           false);
     });
     test('mapValueToObject nullable=false', () {
@@ -144,13 +144,13 @@ main() {
     var type = TypeFake.int();
     test('canConvert(int)==true', () {
       expect(
-          expressionFactory.canConvert(TypeFake.personClass().element2, type),
+          expressionFactory.canConvert(TypeFake.personClass().element, type),
           true);
     });
     test('canConvert(double)==false', () {
       expect(
           expressionFactory.canConvert(
-              TypeFake.personClass().element2, TypeFake.double()),
+              TypeFake.personClass().element, TypeFake.double()),
           false);
     });
     test('mapValueToObject nullable=false', () {
@@ -205,13 +205,13 @@ main() {
     var type = TypeFake.double();
     test('canConvert(double)==true', () {
       expect(
-          expressionFactory.canConvert(TypeFake.personClass().element2, type),
+          expressionFactory.canConvert(TypeFake.personClass().element, type),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TypeFake.personClass().element2, TypeFake.int()),
+              TypeFake.personClass().element, TypeFake.int()),
           false);
     });
     test('mapValueToObject nullable=false', () {
@@ -267,13 +267,13 @@ main() {
     var type = TypeFake.string();
     test('canConvert(String)==true', () {
       expect(
-          expressionFactory.canConvert(TypeFake.personClass().element2, type),
+          expressionFactory.canConvert(TypeFake.personClass().element, type),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TypeFake.personClass().element2, TypeFake.int()),
+              TypeFake.personClass().element, TypeFake.int()),
           false);
     });
     test('mapValueToObject nullable=false', () {
@@ -328,13 +328,13 @@ main() {
     var type = TypeFake.uri();
     test('canConvert(Uri)==true', () {
       expect(
-          expressionFactory.canConvert(TypeFake.personClass().element2, type),
+          expressionFactory.canConvert(TypeFake.personClass().element, type),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TypeFake.personClass().element2, TypeFake.int()),
+              TypeFake.personClass().element, TypeFake.int()),
           false);
     });
     test('mapValueToObject nullable=false', () {
@@ -390,13 +390,13 @@ main() {
     var type = TypeFake.bigInt();
     test('canConvert(Uri)==true', () {
       expect(
-          expressionFactory.canConvert(TypeFake.personClass().element2, type),
+          expressionFactory.canConvert(TypeFake.personClass().element, type),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TypeFake.personClass().element2, TypeFake.int()),
+              TypeFake.personClass().element, TypeFake.int()),
           false);
     });
     test('mapValueToObject nullable=false', () {
@@ -452,13 +452,13 @@ main() {
     var type = TypeFake.dateTime();
     test('canConvert(DateTime)==true', () {
       expect(
-          expressionFactory.canConvert(TypeFake.personClass().element2, type),
+          expressionFactory.canConvert(TypeFake.personClass().element, type),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TypeFake.personClass().element2, TypeFake.int()),
+              TypeFake.personClass().element, TypeFake.int()),
           false);
     });
     test('mapValueToObject nullable=false', () {
@@ -514,13 +514,13 @@ main() {
     var type = TypeFake.duration();
     test('canConvert(Duration)==true', () {
       expect(
-          expressionFactory.canConvert(TypeFake.personClass().element2, type),
+          expressionFactory.canConvert(TypeFake.personClass().element, type),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TypeFake.personClass().element2, TypeFake.int()),
+              TypeFake.personClass().element, TypeFake.int()),
           false);
     });
     test('mapValueToObject nullable=false', () {
@@ -576,13 +576,13 @@ main() {
     var type = TypeFake.genderEnum();
     test('canConvert(TestEnum)==true', () {
       expect(
-          expressionFactory.canConvert(TypeFake.personClass().element2, type),
+          expressionFactory.canConvert(TypeFake.personClass().element, type),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TypeFake.personClass().element2, TypeFake.int()),
+              TypeFake.personClass().element, TypeFake.int()),
           false);
     });
     test('mapValueToObject nullable=false', () {
@@ -642,13 +642,13 @@ main() {
     var type = TypeFake.personClass();
     test('canConvert(Person,Person)==true', () {
       expect(
-          expressionFactory.canConvert(TypeFake.personClass().element2, type),
+          expressionFactory.canConvert(TypeFake.personClass().element, type),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TypeFake.personClass().element2, TypeFake.int()),
+              TypeFake.personClass().element, TypeFake.int()),
           false);
     });
     test('mapValueToObject nullable=false', () {
@@ -711,13 +711,13 @@ main() {
       test('canConvert(Person,$propertyType>)==true', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element2, propertyType),
+                TypeFake.personClass().element, propertyType),
             true);
       });
       test('canConvert(Person, int)==false', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element2, TypeFake.int()),
+                TypeFake.personClass().element, TypeFake.int()),
             false);
       });
       test('mapValueToObject nullable=false', () {
@@ -773,13 +773,13 @@ main() {
       test('canConvert(Person,$propertyType>)==true', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element2, propertyType),
+                TypeFake.personClass().element, propertyType),
             true);
       });
       test('canConvert(Person, int)==false', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element2, TypeFake.int()),
+                TypeFake.personClass().element, TypeFake.int()),
             false);
       });
       test('mapValueToObject nullable=false', () {
@@ -835,13 +835,13 @@ main() {
       test('canConvert(Person,$propertyType>)==true', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element2, propertyType),
+                TypeFake.personClass().element, propertyType),
             true);
       });
       test('canConvert(Person, int)==false', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element2, TypeFake.int()),
+                TypeFake.personClass().element, TypeFake.int()),
             false);
       });
       test('mapValueToObject nullable=false', () {
@@ -897,13 +897,13 @@ main() {
       test('canConvert(Person,$propertyType>)==true', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element2, propertyType),
+                TypeFake.personClass().element, propertyType),
             true);
       });
       test('canConvert(Person, int)==false', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element2, TypeFake.int()),
+                TypeFake.personClass().element, TypeFake.int()),
             false);
       });
       test('mapValueToObject nullable=false', () {
@@ -959,13 +959,13 @@ main() {
       test('canConvert(Person,$propertyType>)==true', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element2, propertyType),
+                TypeFake.personClass().element, propertyType),
             true);
       });
       test('canConvert(Person, int)==false', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element2, TypeFake.int()),
+                TypeFake.personClass().element, TypeFake.int()),
             false);
       });
       test('mapValueToObject nullable=false', () {
@@ -1021,13 +1021,13 @@ main() {
       test('canConvert(Person,$propertyType>)==true', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element2, propertyType),
+                TypeFake.personClass().element, propertyType),
             true);
       });
       test('canConvert(Person, int)==false', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element2, TypeFake.int()),
+                TypeFake.personClass().element, TypeFake.int()),
             false);
       });
       test('mapValueToObject nullable=false', () {
@@ -1083,13 +1083,13 @@ main() {
       test('canConvert(Person,$propertyType>)==true', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element2, propertyType),
+                TypeFake.personClass().element, propertyType),
             true);
       });
       test('canConvert(Person, int)==false', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element2, TypeFake.int()),
+                TypeFake.personClass().element, TypeFake.int()),
             false);
       });
       test('mapValueToObject nullable=false', () {
@@ -1145,13 +1145,13 @@ main() {
       test('canConvert(Person,$propertyType>)==true', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element2, propertyType),
+                TypeFake.personClass().element, propertyType),
             true);
       });
       test('canConvert(Person, int)==false', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element2, TypeFake.int()),
+                TypeFake.personClass().element, TypeFake.int()),
             false);
       });
       test('mapValueToObject nullable=false', () {
@@ -1207,13 +1207,13 @@ main() {
       test('canConvert(Person,$propertyType>)==true', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element2, propertyType),
+                TypeFake.personClass().element, propertyType),
             true);
       });
       test('canConvert(Person, int)==false', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element2, TypeFake.int()),
+                TypeFake.personClass().element, TypeFake.int()),
             false);
       });
       test('mapValueToObject nullable=false', () {
@@ -1269,13 +1269,13 @@ main() {
       test('canConvert(Person,$propertyType>)==true', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element2, propertyType),
+                TypeFake.personClass().element, propertyType),
             true);
       });
       test('canConvert(Person, int)==false', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element2, TypeFake.int()),
+                TypeFake.personClass().element, TypeFake.int()),
             false);
       });
       test('mapValueToObject nullable=false', () {
@@ -1331,13 +1331,13 @@ main() {
       test('canConvert(Person,$propertyType>)==true', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element2, propertyType),
+                TypeFake.personClass().element, propertyType),
             true);
       });
       test('canConvert(Person, int)==false', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element2, TypeFake.int()),
+                TypeFake.personClass().element, TypeFake.int()),
             false);
       });
       test('mapValueToObject nullable=false', () {

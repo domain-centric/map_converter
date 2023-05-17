@@ -16,74 +16,75 @@ import 'package:analyzer/src/generated/source.dart';
 import 'package:build/src/asset/id.dart';
 import 'package:build/src/builder/builder.dart';
 import 'package:map_converter/src/builder/map_converter_builder.dart';
-
+import 'package:pub_semver/src/version.dart';
 const _person = "Person";
 
 class TypeFake implements InterfaceType {
   final String typeAsString;
-  final bool dartCore;
+  @override
+  final bool isDartCoreType;
   final String libraryUrl;
   @override
   List<DartType> typeArguments = [];
 
   TypeFake.bool()
       : typeAsString = "bool",
-        dartCore = true,
+        isDartCoreType = true,
         libraryUrl = '';
 
   TypeFake.num()
       : typeAsString = "num",
-        dartCore = true,
+        isDartCoreType = true,
         libraryUrl = '';
 
   TypeFake.int()
       : typeAsString = "int",
-        dartCore = true,
+        isDartCoreType = true,
         libraryUrl = '';
 
   TypeFake.double()
       : typeAsString = "double",
-        dartCore = true,
+        isDartCoreType = true,
         libraryUrl = '';
 
   TypeFake.string()
       : typeAsString = "String",
-        dartCore = true,
+        isDartCoreType = true,
         libraryUrl = '';
 
   TypeFake.uri()
       : typeAsString = "Uri",
-        dartCore = true,
+        isDartCoreType = true,
         libraryUrl = '';
 
   TypeFake.bigInt()
       : typeAsString = "BigInt",
-        dartCore = true,
+        isDartCoreType = true,
         libraryUrl = '';
 
   TypeFake.dateTime()
       : typeAsString = "DateTime",
-        dartCore = true,
+        isDartCoreType = true,
         libraryUrl = '';
 
   TypeFake.duration()
       : typeAsString = "Duration",
-        dartCore = true,
+        isDartCoreType = true,
         libraryUrl = '';
 
   TypeFake.genderEnum()
       : typeAsString = "Gender",
-        dartCore = false,
+        isDartCoreType = false,
         libraryUrl = 'person/person.dart';
 
   TypeFake.personClass()
       : typeAsString = _person,
-        dartCore = false,
+        isDartCoreType = false,
         libraryUrl = 'person/person.dart';
 
   TypeFake.list(TypeFake genericType)
       : typeAsString = "List",
-        dartCore = true,
+        isDartCoreType = true,
         libraryUrl = '',
         typeArguments = [genericType];
 
@@ -93,14 +94,14 @@ class TypeFake implements InterfaceType {
       other is TypeFake &&
           runtimeType == other.runtimeType &&
           typeAsString == other.typeAsString &&
-          dartCore == other.dartCore &&
+          isDartCoreType == other.isDartCoreType &&
           libraryUrl == other.libraryUrl &&
           typeArguments == other.typeArguments;
 
   @override
   int get hashCode =>
       typeAsString.hashCode ^
-      dartCore.hashCode ^
+      isDartCoreType.hashCode ^
       libraryUrl.hashCode ^
       typeArguments.hashCode;
 
@@ -132,14 +133,12 @@ class TypeFake implements InterfaceType {
   @override
   List<ConstructorElement> get constructors => throw UnimplementedError();
 
+  
   @override
-  String get displayName => throw UnimplementedError();
+  ClassElement get element2 => throw UnimplementedError();
 
   @override
-  ClassElement get element => throw UnimplementedError();
-
-  @override
-  InterfaceElement get element2 {
+  InterfaceElement get element {
     if (typeAsString == _person) {
       return PersonElementFake();
     } else {
@@ -294,6 +293,8 @@ class TypeFake implements InterfaceType {
     }
     return string;
   }
+  
+
 }
 
 class InterfaceElementFake implements InterfaceElement {
@@ -340,9 +341,7 @@ class InterfaceElementFake implements InterfaceElement {
   @override
   CompilationUnitElement get enclosingElement => throw UnimplementedError();
 
-  @override
-  CompilationUnitElement get enclosingElement2 => throw UnimplementedError();
-
+  
   @override
   CompilationUnitElement get enclosingElement3 => throw UnimplementedError();
 
@@ -599,6 +598,15 @@ class InterfaceElementFake implements InterfaceElement {
       String setterName, LibraryElement library) {
     throw UnimplementedError();
   }
+
+  @override
+  List<Element> get children => throw UnimplementedError();
+
+  @override
+  bool get hasReopen => throw UnimplementedError();
+
+  @override
+  Version? get sinceSdkVersion => throw UnimplementedError();
 }
 
 class SourceFake implements Source {
@@ -663,9 +671,7 @@ class LibraryElementFake implements LibraryElement {
   @override
   Element? get enclosingElement => throw UnimplementedError();
 
-  @override
-  Element? get enclosingElement2 => throw UnimplementedError();
-
+  
   @override
   Element? get enclosingElement3 => throw UnimplementedError();
 
@@ -678,8 +684,6 @@ class LibraryElementFake implements LibraryElement {
   @override
   List<LibraryElement> get exportedLibraries => throw UnimplementedError();
 
-  @override
-  List<ExportElement> get exports => throw UnimplementedError();
 
   @override
   FeatureSet get featureSet => throw UnimplementedError();
@@ -700,16 +704,7 @@ class LibraryElementFake implements LibraryElement {
     throw UnimplementedError();
   }
 
-  @override
-  List<ImportElement> getImportsWithPrefix(PrefixElement prefix) {
-    throw UnimplementedError();
-  }
-
-  @override
-  ClassElement? getType(String className) {
-    throw UnimplementedError();
-  }
-
+  
   @override
   bool get hasAlwaysThrows => throw UnimplementedError();
 
@@ -782,8 +777,6 @@ class LibraryElementFake implements LibraryElement {
   @override
   List<LibraryElement> get importedLibraries => throw UnimplementedError();
 
-  @override
-  List<ImportElement> get imports => throw UnimplementedError();
 
   @override
   bool isAccessibleIn(LibraryElement? library) {
@@ -858,8 +851,6 @@ class LibraryElementFake implements LibraryElement {
   @override
   Element get nonSynthetic => throw UnimplementedError();
 
-  @override
-  List<CompilationUnitElement> get parts => throw UnimplementedError();
 
   @override
   List<PartElement> get parts2 => throw UnimplementedError();
@@ -914,6 +905,18 @@ class LibraryElementFake implements LibraryElement {
 
   @override
   void visitChildren(ElementVisitor visitor) {}
+  
+  @override
+  List<Element> get children => throw UnimplementedError();
+  
+  @override
+  bool get hasReopen => throw UnimplementedError();
+  
+  @override
+  Version? get sinceSdkVersion => throw UnimplementedError();
+  
+  @override
+  List<PartElement> get parts => throw UnimplementedError();
 }
 
 class MapConverterLibraryAssetIdFactoryFake
@@ -967,9 +970,7 @@ class PersonElementFake extends ClassElement {
   @override
   CompilationUnitElement get enclosingElement => throw UnimplementedError();
 
-  @override
-  CompilationUnitElement get enclosingElement2 => throw UnimplementedError();
-
+  
   @override
   CompilationUnitElement get enclosingElement3 => throw UnimplementedError();
 
@@ -1067,9 +1068,7 @@ class PersonElementFake extends ClassElement {
   @override
   bool get hasSealed => throw UnimplementedError();
 
-  @override
-  bool get hasStaticMember => throw UnimplementedError();
-
+  
   @override
   bool get hasUseResult => throw UnimplementedError();
 
@@ -1114,12 +1113,7 @@ class PersonElementFake extends ClassElement {
   @override
   bool get isDartCoreObject => throw UnimplementedError();
 
-  @override
-  bool get isEnum => throw UnimplementedError();
-
-  @override
-  bool get isMixin => throw UnimplementedError();
-
+  
   @override
   bool get isMixinApplication => throw UnimplementedError();
 
@@ -1252,6 +1246,51 @@ class PersonElementFake extends ClassElement {
 
   @override
   void visitChildren(ElementVisitor visitor) {}
+  
+  @override
+  List<Element> get children => throw UnimplementedError();
+  
+  @override
+  bool get hasReopen => throw UnimplementedError();
+  
+  @override
+  bool get isBase => throw UnimplementedError();
+  
+  @override
+  bool get isConstructable => throw UnimplementedError();
+  
+  @override
+  bool get isExhaustive => throw UnimplementedError();
+  
+  @override
+  bool isExtendableIn(LibraryElement library) {
+    throw UnimplementedError();
+  }
+  
+  @override
+  bool get isFinal => throw UnimplementedError();
+  
+  @override
+  bool isImplementableIn(LibraryElement library) {
+    throw UnimplementedError();
+  }
+  
+  @override
+  bool get isInterface => throw UnimplementedError();
+  
+  @override
+  bool isMixableIn(LibraryElement library) {
+    throw UnimplementedError();
+  }
+  
+  @override
+  bool get isMixinClass => throw UnimplementedError();
+  
+  @override
+  bool get isSealed => throw UnimplementedError();
+  
+  @override
+  Version? get sinceSdkVersion => throw UnimplementedError();
 }
 
 class FieldElementFake extends FieldElement {
@@ -1290,9 +1329,7 @@ class FieldElementFake extends FieldElement {
   @override
   Element get enclosingElement => throw UnimplementedError();
 
-  @override
-  Element get enclosingElement2 => throw UnimplementedError();
-
+  
   @override
   Element get enclosingElement3 => throw UnimplementedError();
 
@@ -1474,6 +1511,18 @@ class FieldElementFake extends FieldElement {
 
   @override
   void visitChildren(ElementVisitor visitor) {}
+  
+  @override
+  List<Element> get children => throw UnimplementedError();
+  
+  @override
+  bool get hasReopen => throw UnimplementedError();
+  
+  @override
+  bool get isPromotable => throw UnimplementedError();
+  
+  @override
+  Version? get sinceSdkVersion => throw UnimplementedError();
 }
 
 class PropertyAccessorElementFake extends PropertyAccessorElement {
@@ -1509,9 +1558,7 @@ class PropertyAccessorElementFake extends PropertyAccessorElement {
   @override
   Element get enclosingElement => throw UnimplementedError();
 
-  @override
-  Element get enclosingElement2 => throw UnimplementedError();
-
+  
   @override
   Element get enclosingElement3 => throw UnimplementedError();
 
@@ -1705,4 +1752,13 @@ class PropertyAccessorElementFake extends PropertyAccessorElement {
 
   @override
   void visitChildren(ElementVisitor visitor) {}
+  
+  @override
+  List<Element> get children => throw UnimplementedError();
+  
+  @override
+  bool get hasReopen => throw UnimplementedError();
+  
+  @override
+  Version? get sinceSdkVersion => throw UnimplementedError();
 }

@@ -54,7 +54,7 @@ class MapConverterLibraryAssetIdFactory {
   }
 
   String createOutputUriForType(InterfaceType domainObjectType) {
-    var inputLibraryUri = domainObjectType.element2.librarySource.uri;
+    var inputLibraryUri = domainObjectType.element.librarySource.uri;
     var inputLibraryAssetId = AssetId.resolve(inputLibraryUri);
     var outputLibraryAssetId = createOutputId(inputLibraryAssetId);
     return outputLibraryAssetId.uri.toString();
@@ -355,7 +355,7 @@ class DomainClassFactory {
         !element.isAbstract &&
         element is! EnumElement &&
         element.thisType.allSupertypes
-            .none((e) => _isListSetMapIteratorType(e.element2));
+            .none((e) => _isListSetMapIteratorType(e.element));
   }
 
   bool isDomainClassWithSupportedPropertyTypes(Element element) {
@@ -382,7 +382,7 @@ class DomainClassFactory {
       }
     }
     for (var superType in interfaceElement.allSupertypes) {
-      var superTypeFields = _findAllFields(superType.element2);
+      var superTypeFields = _findAllFields(superType.element);
       for (var superTypeField in superTypeFields) {
         fields[superTypeField.name] = superTypeField;
       }
@@ -497,9 +497,9 @@ class BestConstructorFactory {
 
   bool _isComparable(ParameterElement parameter, Property property) =>
       property.element.name == parameter.name &&
-      property.element.type.element2 != null &&
-      parameter.type.element2 != null &&
-      property.element.type.element2!.name == parameter.type.element2!.name &&
-      property.element.type.element2!.librarySource.toString() ==
-          parameter.type.element2!.librarySource.toString();
+      property.element.type.element != null &&
+      parameter.type.element != null &&
+      property.element.type.element!.name == parameter.type.element!.name &&
+      property.element.type.element!.librarySource.toString() ==
+          parameter.type.element!.librarySource.toString();
 }

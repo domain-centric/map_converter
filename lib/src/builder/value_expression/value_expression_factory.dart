@@ -244,7 +244,7 @@ class UriExpressionFactory extends ValueExpressionFactory {
   @override
   bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) {
     return typeToConvert.getDisplayString(withNullability: false) == 'Uri' &&
-        typeToConvert.element2.library.name == 'dart.core';
+        typeToConvert.element.library.name == 'dart.core';
   }
 
   @override
@@ -286,7 +286,7 @@ class BigIntExpressionFactory extends ValueExpressionFactory {
   @override
   bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
       typeToConvert.getDisplayString(withNullability: false) == 'BigInt' &&
-      typeToConvert.element2.library.name == 'dart.core';
+      typeToConvert.element.library.name == 'dart.core';
 
   @override
   code.Expression objectToMapValue(
@@ -317,7 +317,7 @@ class DateTimeExpressionFactory extends ValueExpressionFactory {
   @override
   bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
       typeToConvert.getDisplayString(withNullability: false) == 'DateTime' &&
-      typeToConvert.element2.library.name == 'dart.core';
+      typeToConvert.element.library.name == 'dart.core';
 
   @override
   code.Expression objectToMapValue(
@@ -348,7 +348,7 @@ class DurationExpressionFactory extends ValueExpressionFactory {
   @override
   bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
       typeToConvert.getDisplayString(withNullability: false) == 'Duration' &&
-      typeToConvert.element2.library.name == 'dart.core';
+      typeToConvert.element.library.name == 'dart.core';
 
   @override
   code.Expression objectToMapValue(
@@ -379,7 +379,7 @@ class DurationExpressionFactory extends ValueExpressionFactory {
 class EnumExpressionFactory implements ValueExpressionFactory {
   @override
   bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
-      typeToConvert.element2.toString().startsWith('enum ');
+      typeToConvert.element.toString().startsWith('enum ');
 
   @override
   code.Expression objectToMapValue(
@@ -417,10 +417,10 @@ class DomainObjectExpressionFactory implements ValueExpressionFactory {
 
   @override
   bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
-      classElement == typeToConvert.element2 // prevent endless round trips
+      classElement == typeToConvert.element // prevent endless round trips
       ||
       domainClassFactory
-          .isDomainClassWithSupportedPropertyTypes(typeToConvert.element2);
+          .isDomainClassWithSupportedPropertyTypes(typeToConvert.element);
 
   @override
   code.Expression mapValueToObject(
@@ -476,7 +476,7 @@ class ListExpressionFactory implements ValueExpressionFactory {
       return false;
     }
     var genericType = _genericType(typeToConvert);
-    return classElement == genericType.element2 // prevent endless round trips
+    return classElement == genericType.element // prevent endless round trips
         ||
         basicValueExpressionFactories.supports(classElement, genericType);
   }
@@ -563,7 +563,7 @@ class ListExpressionFactory implements ValueExpressionFactory {
 }
 
 code.Type _createType(InterfaceType interfaceType, bool nullable) {
-  String? libraryUri = interfaceType.element2.librarySource.uri.toString();
+  String? libraryUri = interfaceType.element.librarySource.uri.toString();
   if (libraryUri == 'dart:core') {
     libraryUri = null;
   }
