@@ -1,8 +1,10 @@
+// ignore_for_file: avoid_relative_lib_imports
+
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
-import 'package:map_converter/data/person/person_map_converter.dart';
-import 'package:map_converter/domain/person/person.dart';
+import '../../../example/lib/person/person.data.converter.map.dart';
+import '../../../example/lib/person/person.domain.dart';
 import 'package:test/test.dart';
 import 'package:yaml_writer/yaml_writer.dart';
 

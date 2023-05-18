@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'person/person.dart';
+import '../person/person.domain.dart';
 
 /// dart run build_runner build
 

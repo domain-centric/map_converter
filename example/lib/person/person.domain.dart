@@ -1,7 +1,3 @@
-import 'package:json_annotation/json_annotation.dart';
-
-/// dart run build_runner build
-@JsonSerializable()
 class Person {
   String name;
   DateTime dateOfBirth;
