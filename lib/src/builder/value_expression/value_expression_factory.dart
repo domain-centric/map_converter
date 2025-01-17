@@ -43,9 +43,9 @@ abstract class ValueExpressionFactory {
 }
 
 /// By convention, a [SimplifiedMap] map:
-/// * Has key values that are none empty [String]s, much like dart method names
+/// * Has key values that are camelCased [String]
 /// * Has a limited set of values types, see [SimplifiedMapValue]
-class SimplifiedMapValue {
+class SimplifiedMap {
   //only used as documentation
 }
 
@@ -57,7 +57,7 @@ class SimplifiedMapValue {
 /// * [String]
 /// * [List] with only of the types above
 /// * [Map] see [SimplifiedMap]
-class SimplifiedMap {
+class SimplifiedMapValue {
   //only used as documentation
 }
 
@@ -398,7 +398,7 @@ class EnumExpressionFactory implements ValueExpressionFactory {
       code.Expression source,
       InterfaceType sourceType,
       {required bool nullable}) {
-    var result = code.Expression.ofType(_createType(sourceType, false))
+    var result = code.Expression.ofType(createType(sourceType, false))
         .getProperty('values')
         .callMethod('firstWhere',
             parameterValues: code.ParameterValues(([
@@ -410,6 +410,33 @@ class EnumExpressionFactory implements ValueExpressionFactory {
 
     return _wrapWithIfNullWhenNullable(nullable, source, result);
   }
+}
+
+code.Type createType(InterfaceType interfaceType, bool nullable) => code.Type(
+      interfaceType.getDisplayString(withNullability: false),
+      libraryUri: createLibraryUri(interfaceType.element),
+      nullable: nullable,
+    );
+
+String? createLibraryUri(InterfaceElement element) {
+  String? libraryUri = element.librarySource.uri.toString();
+  if (libraryUri == 'dart:core') {
+    return null;
+  }
+  if (libraryUri.startsWith('package:')) {
+    return libraryUri;
+  }
+  return createRelativeLibraryUri(libraryUri);
+}
+
+String createRelativeLibraryUri(String libraryUri) {
+  var numberOfSlashes = '/'.allMatches(libraryUri).length;
+  var foldersUpToRoot = numberOfSlashes - 1;
+  int indexFirstSlash = libraryUri.indexOf('/');
+  if (indexFirstSlash == -1) {
+    return libraryUri;
+  }
+  return '${'../' * foldersUpToRoot}${libraryUri.substring(indexFirstSlash + 1)}';
 }
 
 class DomainObjectExpressionFactory implements ValueExpressionFactory {
@@ -432,7 +459,7 @@ class DomainObjectExpressionFactory implements ValueExpressionFactory {
     var functionName =
         'mapTo${sourceType.getDisplayString(withNullability: false)}';
     var result = code.Expression.callMethodOrFunction(functionName,
-        libraryUri: idFactory.createOutputUriForType(sourceType),
+        libraryUri: createRelativeLibraryUri(idFactory.createOutputUriForType(sourceType)),
         parameterValues: code.ParameterValues([
           code.ParameterValue(source.asA(code.Type.ofMap(
             keyType: code.Type.ofString(),
@@ -454,7 +481,7 @@ class DomainObjectExpressionFactory implements ValueExpressionFactory {
     var sourceIsProperty =
         code.CodeFormatter().unFormatted(source).contains('.');
     var result = code.Expression.callMethodOrFunction(functionName,
-        libraryUri: idFactory.createOutputUriForType(sourceType),
+        libraryUri:  createRelativeLibraryUri(idFactory.createOutputUriForType(sourceType)),
         parameterValues: code.ParameterValues([
           code.ParameterValue(code.Expression([
             source,
@@ -543,7 +570,7 @@ class ListExpressionFactory implements ValueExpressionFactory {
             parameterValues: code.ParameterValues([
               code.ParameterValue(code.Expression([
                 code.Code('('),
-                _createType(genericType, nullable),
+                createType(genericType, nullable),
                 code.Code(' $_listElementVariableName) => '),
                 valueExpression,
               ]))
@@ -560,13 +587,4 @@ class ListExpressionFactory implements ValueExpressionFactory {
 
   InterfaceType _genericType(InterfaceType listType) =>
       listType.typeArguments.first as InterfaceType;
-}
-
-code.Type _createType(InterfaceType interfaceType, bool nullable) {
-  String? libraryUri = interfaceType.element.librarySource.uri.toString();
-  if (libraryUri == 'dart:core') {
-    libraryUri = null;
-  }
-  return code.Type(interfaceType.getDisplayString(withNullability: false),
-      libraryUri: libraryUri, nullable: nullable);
 }

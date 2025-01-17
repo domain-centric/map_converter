@@ -6,7 +6,7 @@ targets:
         enabled: True
         options:
           input: '^{{}}.domain.dart'
-          output: '{{}}.data.converter.map.dart'
+          output: '{{}}_map_converter.data.dart'
 
 builders:
   map_converter_builder:

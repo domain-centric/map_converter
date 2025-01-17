@@ -51,12 +51,14 @@ class MapConverterBuilder implements Builder {
   @override
   Map<String, List<String>> get buildExtensions {
     if (input.isEmpty) {
-      log.log(Level.SEVERE,
+      log.log(
+          Level.SEVERE,
           'input option in build.yaml file is not defined. '
           'See documentation on: https://pub.dev/packages/map_converter');
     }
     if (output.isEmpty) {
-      log.log(Level.SEVERE,
+      log.log(
+          Level.SEVERE,
           'output option in build.yaml file is not defined. '
           'See documentation on: https://pub.dev/packages/map_converter');
     }
@@ -202,8 +204,7 @@ class ObjectToMapFunctionFactory {
       code.Parameters([
         code.Parameter.required(
           domainClass.element.name.camelCase,
-          type: code.Type(domainClass.element.name,
-              libraryUri: domainClass.element.librarySource.uri.toString()),
+          type: createDomainType(domainClass),
         ),
       ]);
 
@@ -220,7 +221,7 @@ class MapToObjectFunctionFactory {
       _createName(domainClass),
       _createBody(domainClass, idFactory),
       parameters: _createFunctionParameters(domainClass),
-      returnType: _createReturnType(domainClass),
+      returnType: createDomainType(domainClass),
     );
   }
 
@@ -256,8 +257,10 @@ class MapToObjectFunctionFactory {
       DomainClass domainClass, MapConverterLibraryAssetIdFactory idFactory) {
     var name = domainClass.bestConstructor.name;
     var parameters = _createConstructorParameterValues(domainClass, idFactory);
-    return code.Expression.callConstructor(_createReturnType(domainClass),
-        name: name, parameterValues: parameters);
+    return code.Expression.callConstructor(
+        createDomainType(domainClass),
+        name: name,
+        parameterValues: parameters);
   }
 
   code.Parameters _createFunctionParameters(DomainClass domainClass) =>
@@ -268,10 +271,6 @@ class MapToObjectFunctionFactory {
               keyType: code.Type.ofString(), valueType: code.Type.ofDynamic()),
         ),
       ]);
-
-  code.Type _createReturnType(DomainClass domainClass) =>
-      code.Type(domainClass.element.name,
-          libraryUri: domainClass.element.librarySource.uri.toString());
 
   String _domainMapVariableName(DomainClass domainClass) =>
       '${domainClass.element.name.camelCase}Map';
@@ -302,6 +301,11 @@ class MapToObjectFunctionFactory {
     return code.ParameterValues(parameterValues);
   }
 }
+
+createDomainType(DomainClass domainClass) => code.Type(
+      domainClass.element.name,
+      libraryUri: createLibraryUri(domainClass.element),
+    );
 
 code.Expression propertyValueExpression(Property property,
     MapConverterLibraryAssetIdFactory idFactory, String mapVariableName) {

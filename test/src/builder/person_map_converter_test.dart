@@ -3,10 +3,11 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
-import '../../../example/lib/person/person.data.converter.map.dart';
-import '../../../example/lib/person/person.domain.dart';
+import '../../../example/person/person.domain.dart';
 import 'package:test/test.dart';
 import 'package:yaml_writer/yaml_writer.dart';
+
+import '../../../example/person/person_map_converter.data.dart';
 
 main() {
   group('toMap', () {
