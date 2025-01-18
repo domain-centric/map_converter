@@ -1,15 +1,18 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:_fe_analyzer_shared/src/types/shared_type.dart';
 import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/dart/analysis/session.dart';
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/element2.dart';
 import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/scope.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/dart/element/type_provider.dart';
 import 'package:analyzer/dart/element/type_system.dart';
 import 'package:analyzer/dart/element/type_visitor.dart';
+import 'package:analyzer/error/error.dart';
 import 'package:analyzer/src/dart/resolver/scope.dart';
 import 'package:analyzer/src/generated/engine.dart';
 import 'package:analyzer/src/generated/source.dart';
@@ -17,6 +20,7 @@ import 'package:build/src/asset/id.dart';
 import 'package:build/src/builder/builder.dart';
 import 'package:map_converter/src/builder/map_converter_builder.dart';
 import 'package:pub_semver/src/version.dart';
+
 const _person = "Person";
 
 class TypeFake implements InterfaceType {
@@ -26,6 +30,11 @@ class TypeFake implements InterfaceType {
   final String libraryUrl;
   @override
   List<DartType> typeArguments = [];
+
+  TypeFake.mapConverter()
+      : typeAsString = "MapConverter",
+        isDartCoreType = false,
+        libraryUrl = '';
 
   TypeFake.bool()
       : typeAsString = "bool",
@@ -133,7 +142,6 @@ class TypeFake implements InterfaceType {
   @override
   List<ConstructorElement> get constructors => throw UnimplementedError();
 
-  
   @override
   ClassElement get element2 => throw UnimplementedError();
 
@@ -145,10 +153,6 @@ class TypeFake implements InterfaceType {
       return InterfaceElementFake(this);
     }
   }
-
-  @override
-  String getDisplayString({required bool withNullability}) =>
-      "$typeAsString${withNullability ? '?' : ''}";
 
   @override
   PropertyAccessorElement? getGetter(String name) {
@@ -293,8 +297,38 @@ class TypeFake implements InterfaceType {
     }
     return string;
   }
-  
 
+  @override
+  InterfaceType? asInstanceOf2(InterfaceElement2 element) {
+    throw UnimplementedError();
+  }
+
+  @override
+  List<ConstructorElement2> get constructors2 => throw UnimplementedError();
+
+  @override
+  InterfaceElement2 get element3 => throw UnimplementedError();
+
+  @override
+  DartType get extensionTypeErasure => throw UnimplementedError();
+
+  @override
+  List<GetterElement> get getters => throw UnimplementedError();
+
+  @override
+  List<MethodElement2> get methods2 => throw UnimplementedError();
+
+  @override
+  List<SetterElement> get setters => throw UnimplementedError();
+
+  @override
+  String getDisplayString({bool withNullability = true}) =>
+      "$typeAsString${withNullability ? '?' : ''}";
+
+  @override
+  bool isStructurallyEqualTo(SharedTypeStructure<DartType> other) {
+    throw UnimplementedError();
+  }
 }
 
 class InterfaceElementFake implements InterfaceElement {
@@ -341,18 +375,11 @@ class InterfaceElementFake implements InterfaceElement {
   @override
   CompilationUnitElement get enclosingElement => throw UnimplementedError();
 
-  
   @override
   CompilationUnitElement get enclosingElement3 => throw UnimplementedError();
 
   @override
   List<FieldElement> get fields => throw UnimplementedError();
-
-  @override
-  String getDisplayString(
-      {required bool withNullability, bool multiline = false}) {
-    throw UnimplementedError();
-  }
 
   @override
   String getExtendedDisplayName(String? shortName) {
@@ -466,11 +493,6 @@ class InterfaceElementFake implements InterfaceElement {
   }
 
   @override
-  bool isAccessibleIn2(LibraryElement library) {
-    throw UnimplementedError();
-  }
-
-  @override
   bool get isPrivate => throw UnimplementedError();
 
   @override
@@ -524,7 +546,7 @@ class InterfaceElementFake implements InterfaceElement {
   }
 
   @override
-  List<ElementAnnotation> get metadata => throw UnimplementedError();
+  List<ElementAnnotation> get metadata => [ElementAnnotationFake(typeFake)];
 
   @override
   List<MethodElement> get methods => throw UnimplementedError();
@@ -533,7 +555,7 @@ class InterfaceElementFake implements InterfaceElement {
   List<InterfaceType> get mixins => throw UnimplementedError();
 
   @override
-  String get name => throw UnimplementedError();
+  String get name => typeFake.typeAsString;
 
   @override
   int get nameLength => throw UnimplementedError();
@@ -607,6 +629,50 @@ class InterfaceElementFake implements InterfaceElement {
 
   @override
   Version? get sinceSdkVersion => throw UnimplementedError();
+
+  @override
+  InstanceElement? get augmentation => throw UnimplementedError();
+
+  @override
+  InterfaceElement? get augmentationTarget => throw UnimplementedError();
+
+  @override
+  AugmentedInterfaceElement get augmented => throw UnimplementedError();
+
+  @override
+  bool get hasDoNotSubmit => throw UnimplementedError();
+
+  @override
+  bool get hasImmutable => throw UnimplementedError();
+
+  @override
+  bool get hasMustBeConst => throw UnimplementedError();
+
+  @override
+  bool get hasRedeclare => throw UnimplementedError();
+
+  @override
+  bool get hasVisibleOutsideTemplate => throw UnimplementedError();
+
+  @override
+  bool get isAugmentation => throw UnimplementedError();
+
+  @override
+  E? thisOrAncestorMatching3<E extends Element>(
+      bool Function(Element p1) predicate) {
+    throw UnimplementedError();
+  }
+
+  @override
+  E? thisOrAncestorOfType3<E extends Element>() {
+    throw UnimplementedError();
+  }
+
+  @override
+  String getDisplayString(
+      {bool withNullability = true, bool multiline = false}) {
+    throw UnimplementedError();
+  }
 }
 
 class SourceFake implements Source {
@@ -649,10 +715,6 @@ class LibraryElementFake implements LibraryElement {
   List<ExtensionElement> get accessibleExtensions => throw UnimplementedError();
 
   @override
-  List<AugmentationImportElement> get augmentationImports =>
-      throw UnimplementedError();
-
-  @override
   AnalysisContext get context => throw UnimplementedError();
 
   @override
@@ -671,10 +733,6 @@ class LibraryElementFake implements LibraryElement {
   @override
   Element? get enclosingElement => throw UnimplementedError();
 
-  
-  @override
-  Element? get enclosingElement3 => throw UnimplementedError();
-
   @override
   FunctionElement? get entryPoint => throw UnimplementedError();
 
@@ -683,7 +741,6 @@ class LibraryElementFake implements LibraryElement {
 
   @override
   List<LibraryElement> get exportedLibraries => throw UnimplementedError();
-
 
   @override
   FeatureSet get featureSet => throw UnimplementedError();
@@ -694,17 +751,10 @@ class LibraryElementFake implements LibraryElement {
   }
 
   @override
-  String getDisplayString(
-      {required bool withNullability, bool multiline = false}) {
-    throw UnimplementedError();
-  }
-
-  @override
   String getExtendedDisplayName(String? shortName) {
     throw UnimplementedError();
   }
 
-  
   @override
   bool get hasAlwaysThrows => throw UnimplementedError();
 
@@ -777,14 +827,8 @@ class LibraryElementFake implements LibraryElement {
   @override
   List<LibraryElement> get importedLibraries => throw UnimplementedError();
 
-
   @override
   bool isAccessibleIn(LibraryElement? library) {
-    throw UnimplementedError();
-  }
-
-  @override
-  bool isAccessibleIn2(LibraryElement library) {
     throw UnimplementedError();
   }
 
@@ -851,10 +895,6 @@ class LibraryElementFake implements LibraryElement {
   @override
   Element get nonSynthetic => throw UnimplementedError();
 
-
-  @override
-  List<PartElement> get parts2 => throw UnimplementedError();
-
   @override
   List<PrefixElement> get prefixes => throw UnimplementedError();
 
@@ -905,18 +945,53 @@ class LibraryElementFake implements LibraryElement {
 
   @override
   void visitChildren(ElementVisitor visitor) {}
-  
+
   @override
   List<Element> get children => throw UnimplementedError();
-  
+
   @override
   bool get hasReopen => throw UnimplementedError();
-  
+
   @override
   Version? get sinceSdkVersion => throw UnimplementedError();
-  
+
   @override
   List<PartElement> get parts => throw UnimplementedError();
+
+  @override
+  bool get hasDoNotSubmit => throw UnimplementedError();
+
+  @override
+  bool get hasImmutable => throw UnimplementedError();
+
+  @override
+  bool get hasMustBeConst => throw UnimplementedError();
+
+  @override
+  bool get hasRedeclare => throw UnimplementedError();
+
+  @override
+  bool get hasVisibleOutsideTemplate => throw UnimplementedError();
+
+  @override
+  E? thisOrAncestorMatching3<E extends Element>(
+      bool Function(Element p1) predicate) {
+    throw UnimplementedError();
+  }
+
+  @override
+  E? thisOrAncestorOfType3<E extends Element>() {
+    throw UnimplementedError();
+  }
+
+  @override
+  Null get enclosingElement3 => throw UnimplementedError();
+
+  @override
+  String getDisplayString(
+      {bool withNullability = true, bool multiline = false}) {
+    throw UnimplementedError();
+  }
 }
 
 class MapConverterLibraryAssetIdFactoryFake
@@ -947,9 +1022,6 @@ class PersonElementFake extends ClassElement {
   List<InterfaceType> get allSupertypes => [];
 
   @override
-  ClassAugmentationElement? get augmentation => throw UnimplementedError();
-
-  @override
   AugmentedClassElement get augmented => throw UnimplementedError();
 
   @override
@@ -970,19 +1042,12 @@ class PersonElementFake extends ClassElement {
   @override
   CompilationUnitElement get enclosingElement => throw UnimplementedError();
 
-  
   @override
   CompilationUnitElement get enclosingElement3 => throw UnimplementedError();
 
   @override
   List<FieldElement> get fields =>
       [FieldElementFake('name', TypeFake.string())];
-
-  @override
-  String getDisplayString(
-      {required bool withNullability, bool multiline = false}) {
-    throw UnimplementedError();
-  }
 
   @override
   String getExtendedDisplayName(String? shortName) {
@@ -1068,7 +1133,6 @@ class PersonElementFake extends ClassElement {
   @override
   bool get hasSealed => throw UnimplementedError();
 
-  
   @override
   bool get hasUseResult => throw UnimplementedError();
 
@@ -1103,17 +1167,11 @@ class PersonElementFake extends ClassElement {
   }
 
   @override
-  bool isAccessibleIn2(LibraryElement library) {
-    throw UnimplementedError();
-  }
-
-  @override
   bool get isDartCoreEnum => throw UnimplementedError();
 
   @override
   bool get isDartCoreObject => throw UnimplementedError();
 
-  
   @override
   bool get isMixinApplication => throw UnimplementedError();
 
@@ -1192,7 +1250,8 @@ class PersonElementFake extends ClassElement {
   }
 
   @override
-  List<ElementAnnotation> get metadata => throw UnimplementedError();
+  List<ElementAnnotation> get metadata =>
+      [ElementAnnotationFake(TypeFake.mapConverter())];
 
   @override
   List<MethodElement> get methods => throw UnimplementedError();
@@ -1219,9 +1278,6 @@ class PersonElementFake extends ClassElement {
   Source get source => throw UnimplementedError();
 
   @override
-  List<InterfaceType> get superclassConstraints => throw UnimplementedError();
-
-  @override
   InterfaceType? get supertype => throw UnimplementedError();
 
   @override
@@ -1246,51 +1302,508 @@ class PersonElementFake extends ClassElement {
 
   @override
   void visitChildren(ElementVisitor visitor) {}
-  
+
   @override
   List<Element> get children => throw UnimplementedError();
-  
+
   @override
   bool get hasReopen => throw UnimplementedError();
-  
+
   @override
   bool get isBase => throw UnimplementedError();
-  
+
   @override
   bool get isConstructable => throw UnimplementedError();
-  
+
   @override
   bool get isExhaustive => throw UnimplementedError();
-  
+
   @override
   bool isExtendableIn(LibraryElement library) {
     throw UnimplementedError();
   }
-  
+
   @override
   bool get isFinal => throw UnimplementedError();
-  
+
   @override
   bool isImplementableIn(LibraryElement library) {
     throw UnimplementedError();
   }
-  
+
   @override
   bool get isInterface => throw UnimplementedError();
-  
+
   @override
   bool isMixableIn(LibraryElement library) {
     throw UnimplementedError();
   }
-  
+
   @override
   bool get isMixinClass => throw UnimplementedError();
-  
+
   @override
   bool get isSealed => throw UnimplementedError();
-  
+
   @override
   Version? get sinceSdkVersion => throw UnimplementedError();
+
+  @override
+  ClassElement? get augmentation => throw UnimplementedError();
+
+  @override
+  ClassElement? get augmentationTarget => throw UnimplementedError();
+
+  @override
+  bool get hasDoNotSubmit => throw UnimplementedError();
+
+  @override
+  bool get hasImmutable => throw UnimplementedError();
+
+  @override
+  bool get hasMustBeConst => throw UnimplementedError();
+
+  @override
+  bool get hasRedeclare => throw UnimplementedError();
+
+  @override
+  bool get hasVisibleOutsideTemplate => throw UnimplementedError();
+
+  @override
+  bool get isAugmentation => throw UnimplementedError();
+
+  @override
+  E? thisOrAncestorMatching3<E extends Element>(
+      bool Function(Element p1) predicate) {
+    throw UnimplementedError();
+  }
+
+  @override
+  E? thisOrAncestorOfType3<E extends Element>() {
+    throw UnimplementedError();
+  }
+
+  @override
+  String getDisplayString(
+      {bool withNullability = true, bool multiline = false}) {
+    throw UnimplementedError();
+  }
+}
+
+class ElementAnnotationFake extends ElementAnnotation {
+  final TypeFake typeFake;
+
+  ElementAnnotationFake(this.typeFake);
+
+  @override
+  DartObject? computeConstantValue() => DartObjectFake(typeFake);
+
+  @override
+  // TODO: implement constantEvaluationErrors
+  List<AnalysisError>? get constantEvaluationErrors =>
+      throw UnimplementedError();
+
+  @override
+  // TODO: implement context
+  AnalysisContext get context => throw UnimplementedError();
+
+  @override
+  // TODO: implement element
+  Element? get element => throw UnimplementedError();
+
+  @override
+  // TODO: implement element2
+  Element2? get element2 => throw UnimplementedError();
+
+  @override
+  // TODO: implement isAlwaysThrows
+  bool get isAlwaysThrows => throw UnimplementedError();
+
+  @override
+  // TODO: implement isConstantEvaluated
+  bool get isConstantEvaluated => throw UnimplementedError();
+
+  @override
+  // TODO: implement isDeprecated
+  bool get isDeprecated => throw UnimplementedError();
+
+  @override
+  // TODO: implement isDoNotStore
+  bool get isDoNotStore => throw UnimplementedError();
+
+  @override
+  // TODO: implement isDoNotSubmit
+  bool get isDoNotSubmit => throw UnimplementedError();
+
+  @override
+  // TODO: implement isFactory
+  bool get isFactory => throw UnimplementedError();
+
+  @override
+  // TODO: implement isImmutable
+  bool get isImmutable => throw UnimplementedError();
+
+  @override
+  // TODO: implement isInternal
+  bool get isInternal => throw UnimplementedError();
+
+  @override
+  // TODO: implement isIsTest
+  bool get isIsTest => throw UnimplementedError();
+
+  @override
+  // TODO: implement isIsTestGroup
+  bool get isIsTestGroup => throw UnimplementedError();
+
+  @override
+  // TODO: implement isJS
+  bool get isJS => throw UnimplementedError();
+
+  @override
+  // TODO: implement isLiteral
+  bool get isLiteral => throw UnimplementedError();
+
+  @override
+  // TODO: implement isMustBeConst
+  bool get isMustBeConst => throw UnimplementedError();
+
+  @override
+  // TODO: implement isMustBeOverridden
+  bool get isMustBeOverridden => throw UnimplementedError();
+
+  @override
+  // TODO: implement isMustCallSuper
+  bool get isMustCallSuper => throw UnimplementedError();
+
+  @override
+  // TODO: implement isNonVirtual
+  bool get isNonVirtual => throw UnimplementedError();
+
+  @override
+  // TODO: implement isOptionalTypeArgs
+  bool get isOptionalTypeArgs => throw UnimplementedError();
+
+  @override
+  // TODO: implement isOverride
+  bool get isOverride => throw UnimplementedError();
+
+  @override
+  // TODO: implement isProtected
+  bool get isProtected => throw UnimplementedError();
+
+  @override
+  // TODO: implement isProxy
+  bool get isProxy => throw UnimplementedError();
+
+  @override
+  // TODO: implement isRedeclare
+  bool get isRedeclare => throw UnimplementedError();
+
+  @override
+  // TODO: implement isReopen
+  bool get isReopen => throw UnimplementedError();
+
+  @override
+  // TODO: implement isRequired
+  bool get isRequired => throw UnimplementedError();
+
+  @override
+  // TODO: implement isSealed
+  bool get isSealed => throw UnimplementedError();
+
+  @override
+  // TODO: implement isTarget
+  bool get isTarget => throw UnimplementedError();
+
+  @override
+  // TODO: implement isUseResult
+  bool get isUseResult => throw UnimplementedError();
+
+  @override
+  // TODO: implement isVisibleForOverriding
+  bool get isVisibleForOverriding => throw UnimplementedError();
+
+  @override
+  // TODO: implement isVisibleForTemplate
+  bool get isVisibleForTemplate => throw UnimplementedError();
+
+  @override
+  // TODO: implement isVisibleForTesting
+  bool get isVisibleForTesting => throw UnimplementedError();
+
+  @override
+  // TODO: implement isVisibleOutsideTemplate
+  bool get isVisibleOutsideTemplate => throw UnimplementedError();
+
+  @override
+  // TODO: implement library
+  LibraryElement? get library => throw UnimplementedError();
+
+  @override
+  // TODO: implement librarySource
+  Source? get librarySource => throw UnimplementedError();
+
+  @override
+  // TODO: implement source
+  Source? get source => throw UnimplementedError();
+
+  @override
+  String toSource() {
+    // TODO: implement toSource
+    throw UnimplementedError();
+  }
+}
+
+class DartObjectFake extends DartObject {
+  final TypeFake typeFake;
+
+  DartObjectFake(this.typeFake);
+
+  @override
+  DartObject? getField(String name) {
+    // TODO: implement getField
+    throw UnimplementedError();
+  }
+
+  @override
+  // TODO: implement hasKnownValue
+  bool get hasKnownValue => throw UnimplementedError();
+
+  @override
+  // TODO: implement isNull
+  bool get isNull => throw UnimplementedError();
+
+  @override
+  bool? toBoolValue() {
+    // TODO: implement toBoolValue
+    throw UnimplementedError();
+  }
+
+  @override
+  double? toDoubleValue() {
+    // TODO: implement toDoubleValue
+    throw UnimplementedError();
+  }
+
+  @override
+  ExecutableElement? toFunctionValue() {
+    // TODO: implement toFunctionValue
+    throw UnimplementedError();
+  }
+
+  @override
+  int? toIntValue() {
+    // TODO: implement toIntValue
+    throw UnimplementedError();
+  }
+
+  @override
+  List<DartObject>? toListValue() {
+    // TODO: implement toListValue
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<DartObject?, DartObject?>? toMapValue() {
+    // TODO: implement toMapValue
+    throw UnimplementedError();
+  }
+
+  @override
+  Set<DartObject>? toSetValue() {
+    // TODO: implement toSetValue
+    throw UnimplementedError();
+  }
+
+  @override
+  String? toStringValue() {
+    // TODO: implement toStringValue
+    throw UnimplementedError();
+  }
+
+  @override
+  String? toSymbolValue() {
+    // TODO: implement toSymbolValue
+    throw UnimplementedError();
+  }
+
+  @override
+  DartType? toTypeValue() {
+    // TODO: implement toTypeValue
+    throw UnimplementedError();
+  }
+
+  @override
+  DartType? get type => DartTypeFake(typeFake);
+
+  @override
+  // TODO: implement variable
+  VariableElement? get variable => throw UnimplementedError();
+}
+
+class DartTypeFake extends DartType {
+  final TypeFake typeFake;
+
+  DartTypeFake(this.typeFake);
+
+  @override
+  R accept<R>(TypeVisitor<R> visitor) {
+    // TODO: implement accept
+    throw UnimplementedError();
+  }
+
+  @override
+  R acceptWithArgument<R, A>(
+      TypeVisitorWithArgument<R, A> visitor, A argument) {
+    // TODO: implement acceptWithArgument
+    throw UnimplementedError();
+  }
+
+  @override
+  // TODO: implement alias
+  InstantiatedTypeAliasElement? get alias => throw UnimplementedError();
+
+  @override
+  InterfaceType? asInstanceOf(InterfaceElement element) {
+    // TODO: implement asInstanceOf
+    throw UnimplementedError();
+  }
+
+  @override
+  InterfaceType? asInstanceOf2(InterfaceElement2 element) {
+    // TODO: implement asInstanceOf2
+    throw UnimplementedError();
+  }
+
+  @override
+  // TODO: implement element
+  Element? get element => InterfaceElementFake(typeFake);
+
+  @override
+  // TODO: implement element2
+  Element? get element2 => throw UnimplementedError();
+
+  @override
+  // TODO: implement element3
+  Element2? get element3 => throw UnimplementedError();
+
+  @override
+  // TODO: implement extensionTypeErasure
+  DartType get extensionTypeErasure => throw UnimplementedError();
+
+  @override
+  String getDisplayString({bool withNullability = true}) {
+    // TODO: implement getDisplayString
+    throw UnimplementedError();
+  }
+
+  @override
+  // TODO: implement isBottom
+  bool get isBottom => throw UnimplementedError();
+
+  @override
+  // TODO: implement isDartAsyncFuture
+  bool get isDartAsyncFuture => throw UnimplementedError();
+
+  @override
+  // TODO: implement isDartAsyncFutureOr
+  bool get isDartAsyncFutureOr => throw UnimplementedError();
+
+  @override
+  // TODO: implement isDartAsyncStream
+  bool get isDartAsyncStream => throw UnimplementedError();
+
+  @override
+  // TODO: implement isDartCoreBool
+  bool get isDartCoreBool => throw UnimplementedError();
+
+  @override
+  // TODO: implement isDartCoreDouble
+  bool get isDartCoreDouble => throw UnimplementedError();
+
+  @override
+  // TODO: implement isDartCoreEnum
+  bool get isDartCoreEnum => throw UnimplementedError();
+
+  @override
+  // TODO: implement isDartCoreFunction
+  bool get isDartCoreFunction => throw UnimplementedError();
+
+  @override
+  // TODO: implement isDartCoreInt
+  bool get isDartCoreInt => throw UnimplementedError();
+
+  @override
+  // TODO: implement isDartCoreIterable
+  bool get isDartCoreIterable => throw UnimplementedError();
+
+  @override
+  // TODO: implement isDartCoreList
+  bool get isDartCoreList => throw UnimplementedError();
+
+  @override
+  // TODO: implement isDartCoreMap
+  bool get isDartCoreMap => throw UnimplementedError();
+
+  @override
+  // TODO: implement isDartCoreNull
+  bool get isDartCoreNull => throw UnimplementedError();
+
+  @override
+  // TODO: implement isDartCoreNum
+  bool get isDartCoreNum => throw UnimplementedError();
+
+  @override
+  // TODO: implement isDartCoreObject
+  bool get isDartCoreObject => throw UnimplementedError();
+
+  @override
+  // TODO: implement isDartCoreRecord
+  bool get isDartCoreRecord => throw UnimplementedError();
+
+  @override
+  // TODO: implement isDartCoreSet
+  bool get isDartCoreSet => throw UnimplementedError();
+
+  @override
+  // TODO: implement isDartCoreString
+  bool get isDartCoreString => throw UnimplementedError();
+
+  @override
+  // TODO: implement isDartCoreSymbol
+  bool get isDartCoreSymbol => throw UnimplementedError();
+
+  @override
+  // TODO: implement isDartCoreType
+  bool get isDartCoreType => throw UnimplementedError();
+
+  @override
+  // TODO: implement isDynamic
+  bool get isDynamic => throw UnimplementedError();
+
+  @override
+  bool isStructurallyEqualTo(SharedTypeStructure<DartType> other) {
+    // TODO: implement isStructurallyEqualTo
+    throw UnimplementedError();
+  }
+
+  @override
+  // TODO: implement isVoid
+  bool get isVoid => throw UnimplementedError();
+
+  @override
+  // TODO: implement name
+  String? get name => throw UnimplementedError();
+
+  @override
+  // TODO: implement nullabilitySuffix
+  NullabilitySuffix get nullabilitySuffix => throw UnimplementedError();
+
+  @override
+  DartType resolveToBound(DartType objectType) {
+    // TODO: implement resolveToBound
+    throw UnimplementedError();
+  }
 }
 
 class FieldElementFake extends FieldElement {
@@ -1305,9 +1818,6 @@ class FieldElementFake extends FieldElement {
   T? accept<T>(ElementVisitor<T> visitor) {
     throw UnimplementedError();
   }
-
-  @override
-  FieldAugmentationElement? get augmentation => throw UnimplementedError();
 
   @override
   DartObject? computeConstantValue() {
@@ -1329,15 +1839,8 @@ class FieldElementFake extends FieldElement {
   @override
   Element get enclosingElement => throw UnimplementedError();
 
-  
   @override
   Element get enclosingElement3 => throw UnimplementedError();
-
-  @override
-  String getDisplayString(
-      {required bool withNullability, bool multiline = false}) {
-    throw UnimplementedError();
-  }
 
   @override
   String getExtendedDisplayName(String? shortName) {
@@ -1428,11 +1931,6 @@ class FieldElementFake extends FieldElement {
   }
 
   @override
-  bool isAccessibleIn2(LibraryElement library) {
-    throw UnimplementedError();
-  }
-
-  @override
   bool get isConst => false;
 
   @override
@@ -1511,18 +2009,59 @@ class FieldElementFake extends FieldElement {
 
   @override
   void visitChildren(ElementVisitor visitor) {}
-  
+
   @override
   List<Element> get children => throw UnimplementedError();
-  
+
   @override
   bool get hasReopen => throw UnimplementedError();
-  
+
   @override
   bool get isPromotable => throw UnimplementedError();
-  
+
   @override
   Version? get sinceSdkVersion => throw UnimplementedError();
+
+  @override
+  FieldElement? get augmentationTarget => throw UnimplementedError();
+
+  @override
+  bool get hasDoNotSubmit => throw UnimplementedError();
+
+  @override
+  bool get hasImmutable => throw UnimplementedError();
+
+  @override
+  bool get hasMustBeConst => throw UnimplementedError();
+
+  @override
+  bool get hasRedeclare => throw UnimplementedError();
+
+  @override
+  bool get hasVisibleOutsideTemplate => throw UnimplementedError();
+
+  @override
+  bool get isAugmentation => throw UnimplementedError();
+
+  @override
+  E? thisOrAncestorMatching3<E extends Element>(
+      bool Function(Element p1) predicate) {
+    throw UnimplementedError();
+  }
+
+  @override
+  E? thisOrAncestorOfType3<E extends Element>() {
+    throw UnimplementedError();
+  }
+
+  @override
+  FieldElement? get augmentation => throw UnimplementedError();
+
+  @override
+  String getDisplayString(
+      {bool withNullability = true, bool multiline = false}) {
+    throw UnimplementedError();
+  }
 }
 
 class PropertyAccessorElementFake extends PropertyAccessorElement {
@@ -1530,10 +2069,6 @@ class PropertyAccessorElementFake extends PropertyAccessorElement {
   T? accept<T>(ElementVisitor<T> visitor) {
     throw UnimplementedError();
   }
-
-  @override
-  PropertyAccessorAugmentationElement? get augmentation =>
-      throw UnimplementedError();
 
   @override
   AnalysisContext get context => throw UnimplementedError();
@@ -1558,15 +2093,8 @@ class PropertyAccessorElementFake extends PropertyAccessorElement {
   @override
   Element get enclosingElement => throw UnimplementedError();
 
-  
   @override
   Element get enclosingElement3 => throw UnimplementedError();
-
-  @override
-  String getDisplayString(
-      {required bool withNullability, bool multiline = false}) {
-    throw UnimplementedError();
-  }
 
   @override
   String getExtendedDisplayName(String? shortName) {
@@ -1647,11 +2175,6 @@ class PropertyAccessorElementFake extends PropertyAccessorElement {
 
   @override
   bool isAccessibleIn(LibraryElement? library) {
-    throw UnimplementedError();
-  }
-
-  @override
-  bool isAccessibleIn2(LibraryElement library) {
     throw UnimplementedError();
   }
 
@@ -1752,13 +2275,60 @@ class PropertyAccessorElementFake extends PropertyAccessorElement {
 
   @override
   void visitChildren(ElementVisitor visitor) {}
-  
+
   @override
   List<Element> get children => throw UnimplementedError();
-  
+
   @override
   bool get hasReopen => throw UnimplementedError();
-  
+
   @override
   Version? get sinceSdkVersion => throw UnimplementedError();
+
+  @override
+  PropertyAccessorElement? get augmentationTarget => throw UnimplementedError();
+
+  @override
+  bool get hasDoNotSubmit => throw UnimplementedError();
+
+  @override
+  bool get hasImmutable => throw UnimplementedError();
+
+  @override
+  bool get hasMustBeConst => throw UnimplementedError();
+
+  @override
+  bool get hasRedeclare => throw UnimplementedError();
+
+  @override
+  bool get hasVisibleOutsideTemplate => throw UnimplementedError();
+
+  @override
+  bool get isAugmentation => throw UnimplementedError();
+
+  @override
+  bool get isExtensionTypeMember => throw UnimplementedError();
+
+  @override
+  E? thisOrAncestorMatching3<E extends Element>(
+      bool Function(Element p1) predicate) {
+    throw UnimplementedError();
+  }
+
+  @override
+  E? thisOrAncestorOfType3<E extends Element>() {
+    throw UnimplementedError();
+  }
+
+  @override
+  PropertyInducingElement? get variable2 => throw UnimplementedError();
+
+  @override
+  PropertyAccessorElement? get augmentation => throw UnimplementedError();
+
+  @override
+  String getDisplayString(
+      {bool withNullability = true, bool multiline = false}) {
+    throw UnimplementedError();
+  }
 }

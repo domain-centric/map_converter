@@ -78,12 +78,13 @@ class MapConverterBuilder implements Builder {
       var library =
           MapConverterLibraryFactory().create(idFactory, libraryElement);
 
-      log.log(Level.SEVERE, 'Library is empty!');
-      if (library != null) {
+      if (library == null) {
+        // log.log(Level.SEVERE, 'Library is empty!');
+      } else {
         AssetId outputId = idFactory.createOutputId(buildStep.inputId);
         var dartCode = code.CodeFormatter().format(library);
         buildStep.writeAsString(outputId, dartCode);
-        log.log(Level.SEVERE, 'Written: $outputId!');
+        log.log(Level.INFO, 'Written: $outputId!');
       }
     } catch (e, stackTrace) {
       log.log(
@@ -257,10 +258,8 @@ class MapToObjectFunctionFactory {
       DomainClass domainClass, MapConverterLibraryAssetIdFactory idFactory) {
     var name = domainClass.bestConstructor.name;
     var parameters = _createConstructorParameterValues(domainClass, idFactory);
-    return code.Expression.callConstructor(
-        createDomainType(domainClass),
-        name: name,
-        parameterValues: parameters);
+    return code.Expression.callConstructor(createDomainType(domainClass),
+        name: name, parameterValues: parameters);
   }
 
   code.Parameters _createFunctionParameters(DomainClass domainClass) =>
@@ -405,7 +404,8 @@ class DomainClassFactory {
   }
 
   bool _isDomainClass(Element element) {
-    return element is ClassElement &&
+    return _hasMapConverterAnnotation(element) &&
+        element is ClassElement &&
         element.isPublic &&
         !element.isAbstract &&
         element is! EnumElement &&
@@ -478,6 +478,16 @@ class DomainClassFactory {
       fieldElement.type is InterfaceType;
 
   bool _isSetInConstructor(FieldElement fieldElement) => fieldElement.isFinal;
+
+  bool _hasMapConverterAnnotation(Element element) {
+    for (var metadata in element.metadata) {
+      var constantValue = metadata.computeConstantValue();
+      if (constantValue?.type?.element?.name == "MapConverter") {
+        return true;
+      }
+    }
+    return false;
+  }
 }
 
 class BestConstructorFactory {

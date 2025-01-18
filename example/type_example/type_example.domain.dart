@@ -1,10 +1,12 @@
-import 'package:json_annotation/json_annotation.dart';
+//import 'package:json_annotation/json_annotation.dart';
+import 'package:map_converter/map_converter.dart';
 
 import '../person/person.domain.dart';
 
 /// dart run build_runner build
 
-@JsonSerializable()
+//@JsonSerializable()
+@MapConverter()
 class TypeExample {
   String myString = '';
   String? myNullableString;

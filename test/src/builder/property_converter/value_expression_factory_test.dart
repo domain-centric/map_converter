@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:dart_code/dart_code.dart' as code;
 import 'package:map_converter/src/builder/value_expression/value_expression_factory.dart';
 import 'package:recase/recase.dart';
@@ -82,8 +80,7 @@ main() {
     var propertyName = 'ageInDays';
     var type = TypeFake.num();
     test('canConvert(num)==true', () {
-      expect(
-          expressionFactory.canConvert(TypeFake.personClass().element, type),
+      expect(expressionFactory.canConvert(TypeFake.personClass().element, type),
           true);
     });
     test('canConvert(int)==false', () {
@@ -143,8 +140,7 @@ main() {
     var propertyName = 'ageInDays';
     var type = TypeFake.int();
     test('canConvert(int)==true', () {
-      expect(
-          expressionFactory.canConvert(TypeFake.personClass().element, type),
+      expect(expressionFactory.canConvert(TypeFake.personClass().element, type),
           true);
     });
     test('canConvert(double)==false', () {
@@ -204,8 +200,7 @@ main() {
     var propertyName = 'ageInDays';
     var type = TypeFake.double();
     test('canConvert(double)==true', () {
-      expect(
-          expressionFactory.canConvert(TypeFake.personClass().element, type),
+      expect(expressionFactory.canConvert(TypeFake.personClass().element, type),
           true);
     });
     test('canConvert(int)==false', () {
@@ -266,8 +261,7 @@ main() {
     var propertyName = 'name';
     var type = TypeFake.string();
     test('canConvert(String)==true', () {
-      expect(
-          expressionFactory.canConvert(TypeFake.personClass().element, type),
+      expect(expressionFactory.canConvert(TypeFake.personClass().element, type),
           true);
     });
     test('canConvert(int)==false', () {
@@ -327,8 +321,7 @@ main() {
     var propertyName = 'webSite';
     var type = TypeFake.uri();
     test('canConvert(Uri)==true', () {
-      expect(
-          expressionFactory.canConvert(TypeFake.personClass().element, type),
+      expect(expressionFactory.canConvert(TypeFake.personClass().element, type),
           true);
     });
     test('canConvert(int)==false', () {
@@ -389,8 +382,7 @@ main() {
     var propertyName = 'ageInMicroSeconds';
     var type = TypeFake.bigInt();
     test('canConvert(Uri)==true', () {
-      expect(
-          expressionFactory.canConvert(TypeFake.personClass().element, type),
+      expect(expressionFactory.canConvert(TypeFake.personClass().element, type),
           true);
     });
     test('canConvert(int)==false', () {
@@ -451,8 +443,7 @@ main() {
     var propertyName = 'dateOfBirth';
     var type = TypeFake.dateTime();
     test('canConvert(DateTime)==true', () {
-      expect(
-          expressionFactory.canConvert(TypeFake.personClass().element, type),
+      expect(expressionFactory.canConvert(TypeFake.personClass().element, type),
           true);
     });
     test('canConvert(int)==false', () {
@@ -513,8 +504,7 @@ main() {
     var propertyName = 'age';
     var type = TypeFake.duration();
     test('canConvert(Duration)==true', () {
-      expect(
-          expressionFactory.canConvert(TypeFake.personClass().element, type),
+      expect(expressionFactory.canConvert(TypeFake.personClass().element, type),
           true);
     });
     test('canConvert(int)==false', () {
@@ -575,8 +565,7 @@ main() {
     var propertyName = 'gender';
     var type = TypeFake.genderEnum();
     test('canConvert(TestEnum)==true', () {
-      expect(
-          expressionFactory.canConvert(TypeFake.personClass().element, type),
+      expect(expressionFactory.canConvert(TypeFake.personClass().element, type),
           true);
     });
     test('canConvert(int)==false', () {
@@ -641,8 +630,7 @@ main() {
     var propertyName = 'parent';
     var type = TypeFake.personClass();
     test('canConvert(Person,Person)==true', () {
-      expect(
-          expressionFactory.canConvert(TypeFake.personClass().element, type),
+      expect(expressionFactory.canConvert(TypeFake.personClass().element, type),
           true);
     });
     test('canConvert(int)==false', () {

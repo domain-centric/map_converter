@@ -1,8 +1,12 @@
+import 'package:map_converter/map_converter.dart';
+
+@MapConverter()
 class DefaultConstructorExample {
   String property1 = '';
   String? property2;
 }
 
+@MapConverter()
 class ConstructorExample {
   String property1 = '';
   String? property2;
@@ -10,6 +14,7 @@ class ConstructorExample {
   ConstructorExample();
 }
 
+@MapConverter()
 class ConstructorWithRequiredPositionalParametersExample {
   final String property1;
   String? property2;
@@ -22,6 +27,7 @@ class ConstructorWithRequiredPositionalParametersExample {
   );
 }
 
+@MapConverter()
 class ConstructorWithNamedParametersExample {
   String property1;
   final String? property2;
@@ -34,6 +40,7 @@ class ConstructorWithNamedParametersExample {
   });
 }
 
+@MapConverter()
 class ConstructorWithRequiredPositionalParametersAndNamedParametersExample {
   String property1;
   String? property2;
@@ -50,6 +57,7 @@ class ConstructorWithRequiredPositionalParametersAndNamedParametersExample {
   });
 }
 
+@MapConverter()
 class ConstructorWithOptionalParametersExample {
   final String property1;
   String? property2;
@@ -62,6 +70,7 @@ class ConstructorWithOptionalParametersExample {
   ]);
 }
 
+@MapConverter()
 class ConstructorWithRequiredPositionalParametersAndOptionalParametersExample {
   String property1;
   String? property2;
@@ -78,6 +87,7 @@ class ConstructorWithRequiredPositionalParametersAndOptionalParametersExample {
   ]);
 }
 
+@MapConverter()
 class NamedConstructorWithRequiredPositionalParametersAndNamedParametersExample {
   String property1;
   String? property2;
@@ -94,6 +104,7 @@ class NamedConstructorWithRequiredPositionalParametersAndNamedParametersExample 
   });
 }
 
+@MapConverter()
 class NamedConstructorWithRequiredPositionalParametersAndOptionalParametersExample {
   String property1;
   String? property2;

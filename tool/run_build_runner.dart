@@ -2,17 +2,16 @@ import 'dart:convert';
 import 'dart:io';
 
 main() async {
-  await runInShell('dart',
-      ['run', 'build_runner', 'clean']);
-  await runInShell('dart',
-      ['run', 'build_runner', 'build', '--delete-conflicting-outputs']);
+  await runInShell('dart', ['run', 'build_runner', 'clean']);
+  await runInShell(
+      'dart', ['run', 'build_runner', 'build', '--delete-conflicting-outputs']);
 }
 
 runInShell(String executable, List<String> arguments,
     {String? workingDirectory,
-      Map<String, String>? environment,
-      Encoding? stdoutEncoding = systemEncoding,
-      Encoding? stderrEncoding = systemEncoding}) async {
+    Map<String, String>? environment,
+    Encoding? stdoutEncoding = systemEncoding,
+    Encoding? stderrEncoding = systemEncoding}) async {
   var result = await Process.run(
     executable,
     arguments,

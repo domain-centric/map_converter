@@ -459,7 +459,8 @@ class DomainObjectExpressionFactory implements ValueExpressionFactory {
     var functionName =
         'mapTo${sourceType.getDisplayString(withNullability: false)}';
     var result = code.Expression.callMethodOrFunction(functionName,
-        libraryUri: createRelativeLibraryUri(idFactory.createOutputUriForType(sourceType)),
+        libraryUri: createRelativeLibraryUri(
+            idFactory.createOutputUriForType(sourceType)),
         parameterValues: code.ParameterValues([
           code.ParameterValue(source.asA(code.Type.ofMap(
             keyType: code.Type.ofString(),
@@ -481,7 +482,8 @@ class DomainObjectExpressionFactory implements ValueExpressionFactory {
     var sourceIsProperty =
         code.CodeFormatter().unFormatted(source).contains('.');
     var result = code.Expression.callMethodOrFunction(functionName,
-        libraryUri:  createRelativeLibraryUri(idFactory.createOutputUriForType(sourceType)),
+        libraryUri: createRelativeLibraryUri(
+            idFactory.createOutputUriForType(sourceType)),
         parameterValues: code.ParameterValues([
           code.ParameterValue(code.Expression([
             source,
