@@ -429,15 +429,17 @@ class DomainClassFactory {
 
   /// Gets all fields that represent properties from the [InterfaceElement]
   /// including those from super classes, mixins and interfaces
-  List<FieldElement> _findAllFields(InterfaceElement interfaceElement) {
+  List<FieldElement> _findAllPublicFields(InterfaceElement interfaceElement) {
     Map<String, FieldElement> fields = {};
-    for (var fieldElement in interfaceElement.fields) {
+    var publicFields =
+        interfaceElement.fields.where((element) => !element.isPrivate);
+    for (var fieldElement in publicFields) {
       if (_isPropertyField(fieldElement)) {
         fields[fieldElement.name] = fieldElement;
       }
     }
     for (var superType in interfaceElement.allSupertypes) {
-      var superTypeFields = _findAllFields(superType.element);
+      var superTypeFields = _findAllPublicFields(superType.element);
       for (var superTypeField in superTypeFields) {
         fields[superTypeField.name] = superTypeField;
       }
@@ -450,21 +452,25 @@ class DomainClassFactory {
   /// if there is a matching [ValueExpressionFactory].
   List<Property> _createProperties(ClassElement classElement) {
     var properties = <Property>[];
-    var fields = _findAllFields(classElement);
+    var fields = _findAllPublicFields(classElement);
     for (var field in fields) {
-      var propertyType = field.type as InterfaceType;
-
-      var valueExpressionFactory =
-          valueExpressionFactories.findFor(classElement, propertyType);
-      if (valueExpressionFactory == null) {
-        log.log(
-            Level.WARNING,
-            'Could not find a $ValueExpressionFactory '
-            'for type: $propertyType '
-            'used in property: ${classElement.name}.${field.name}');
-      } else {
-        var property = Property(classElement, field, valueExpressionFactory);
-        properties.add(property);
+      var propertyPath = '${classElement.name}.${field.name}';
+      try {
+        var propertyType = field.type as InterfaceType;
+        var valueExpressionFactory =
+            valueExpressionFactories.findFor(classElement, propertyType);
+        if (valueExpressionFactory == null) {
+          log.log(
+              Level.WARNING,
+              'Could not find a $ValueExpressionFactory '
+              'for type: $propertyType '
+              'used in property: $propertyPath');
+        } else {
+          var property = Property(classElement, field, valueExpressionFactory);
+          properties.add(property);
+        }
+      } on Exception catch (e) {
+        throw Exception('$propertyPath: $e');
       }
     }
     return properties;

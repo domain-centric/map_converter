@@ -2,6 +2,7 @@
 
 import 'package:_fe_analyzer_shared/src/types/shared_type.dart';
 import 'package:analyzer/dart/analysis/features.dart';
+import 'package:analyzer/source/source.dart';
 import 'package:analyzer/dart/analysis/session.dart';
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
@@ -30,6 +31,12 @@ class TypeFake implements InterfaceType {
   final String libraryUrl;
   @override
   List<DartType> typeArguments = [];
+
+  TypeFake({
+    required this.typeAsString,
+    required this.isDartCoreType,
+    required this.libraryUrl,
+  });
 
   TypeFake.mapConverter()
       : typeAsString = "MapConverter",
@@ -1260,7 +1267,7 @@ class PersonElementFake extends ClassElement {
   List<InterfaceType> get mixins => throw UnimplementedError();
 
   @override
-  String get name => throw UnimplementedError();
+  String get name => 'Person';
 
   @override
   int get nameLength => throw UnimplementedError();
@@ -1952,7 +1959,7 @@ class FieldElementFake extends FieldElement {
   bool get isLate => throw UnimplementedError();
 
   @override
-  bool get isPrivate => throw UnimplementedError();
+  bool get isPrivate => name.startsWith('_');
 
   @override
   bool get isPublic => throw UnimplementedError();

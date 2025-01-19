@@ -17,7 +17,7 @@ main() {
       print(person);
       print(PersonMap(person));
       print(jsonEncode(personToMap(person)));
-      print(YAMLWriter().write(personToMap(person)));
+      print(YamlWriter().write(personToMap(person)));
       expect(personToMap(person), PersonMap(person));
     });
 
@@ -27,7 +27,7 @@ main() {
       print(person);
       print(PersonMap(person));
       print(jsonEncode(personToMap(person)));
-      print(YAMLWriter().write(personToMap(person)));
+      print(YamlWriter().write(personToMap(person)));
       expect(personToMap(person), PersonMap(person));
     });
 

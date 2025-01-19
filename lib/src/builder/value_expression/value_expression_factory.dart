@@ -505,6 +505,9 @@ class ListExpressionFactory implements ValueExpressionFactory {
       return false;
     }
     var genericType = _genericType(typeToConvert);
+    if (genericType is! InterfaceType) {
+      return false;
+    }
     return classElement == genericType.element // prevent endless round trips
         ||
         basicValueExpressionFactories.supports(classElement, genericType);
@@ -517,7 +520,7 @@ class ListExpressionFactory implements ValueExpressionFactory {
       code.Expression source,
       InterfaceType sourceType,
       {required bool nullable}) {
-    var genericType = _genericType(sourceType);
+    var genericType = _genericType(sourceType) as InterfaceType;
 
     var valueExpressionFactory =
         basicValueExpressionFactories.findFor(classElement, genericType)!;
@@ -550,7 +553,7 @@ class ListExpressionFactory implements ValueExpressionFactory {
       code.Expression source,
       InterfaceType sourceType,
       {required bool nullable}) {
-    var genericType = _genericType(sourceType);
+    var genericType = _genericType(sourceType) as InterfaceType;
 
     var valueExpressionFactory =
         basicValueExpressionFactories.findFor(classElement, genericType)!;
@@ -587,6 +590,5 @@ class ListExpressionFactory implements ValueExpressionFactory {
       codeFormatter.unFormatted(source) !=
       codeFormatter.unFormatted(valueExpression);
 
-  InterfaceType _genericType(InterfaceType listType) =>
-      listType.typeArguments.first as InterfaceType;
+  DartType _genericType(InterfaceType listType) => listType.typeArguments.first;
 }
