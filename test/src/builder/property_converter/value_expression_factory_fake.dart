@@ -1567,10 +1567,7 @@ class DartObjectFake extends DartObject {
   DartObjectFake(this.typeFake);
 
   @override
-  DartObject? getField(String name) {
-    // TODO: implement getField
-    throw UnimplementedError();
-  }
+  DartObject? getField(String name) => DartObjectFake(typeFake);
 
   @override
   // TODO: implement hasKnownValue
@@ -1581,10 +1578,7 @@ class DartObjectFake extends DartObject {
   bool get isNull => throw UnimplementedError();
 
   @override
-  bool? toBoolValue() {
-    // TODO: implement toBoolValue
-    throw UnimplementedError();
-  }
+  bool? toBoolValue() => false;
 
   @override
   double? toDoubleValue() {
@@ -1605,10 +1599,7 @@ class DartObjectFake extends DartObject {
   }
 
   @override
-  List<DartObject>? toListValue() {
-    // TODO: implement toListValue
-    throw UnimplementedError();
-  }
+  List<DartObject>? toListValue() => [DartObjectFake(typeFake)];
 
   @override
   Map<DartObject?, DartObject?>? toMapValue() {
@@ -1962,7 +1953,7 @@ class FieldElementFake extends FieldElement {
   bool get isPrivate => name.startsWith('_');
 
   @override
-  bool get isPublic => throw UnimplementedError();
+  bool get isPublic => true;
 
   @override
   bool get isStatic => false;

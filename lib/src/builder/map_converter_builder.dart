@@ -431,10 +431,8 @@ class DomainClassFactory {
   /// including those from super classes, mixins and interfaces
   List<FieldElement> _findAllPublicFields(InterfaceElement interfaceElement) {
     Map<String, FieldElement> fields = {};
-    var publicFields =
-        interfaceElement.fields.where((element) => !element.isPrivate);
-    for (var fieldElement in publicFields) {
-      if (_isPropertyField(fieldElement)) {
+    for (var fieldElement in interfaceElement.fields) {
+      if (_isPublicPropertyField(fieldElement)) {
         fields[fieldElement.name] = fieldElement;
       }
     }
@@ -452,8 +450,9 @@ class DomainClassFactory {
   /// if there is a matching [ValueExpressionFactory].
   List<Property> _createProperties(ClassElement classElement) {
     var properties = <Property>[];
-    var fields = _findAllPublicFields(classElement);
+    var fields = _findFieldsToProcess(classElement);
     for (var field in fields) {
+      //TODO implement Property.converter
       var propertyPath = '${classElement.name}.${field.name}';
       try {
         var propertyType = field.type as InterfaceType;
@@ -476,7 +475,16 @@ class DomainClassFactory {
     return properties;
   }
 
-  bool _isPropertyField(FieldElement fieldElement) =>
+  Iterable<FieldElement> _findFieldsToProcess(ClassElement classElement) {
+    var publicFields = _findAllPublicFields(classElement);
+    var propertyNamesToIgnore = _findPropertyNamesToIgnore(classElement);
+    var fieldsToProcess = publicFields
+        .where((field) => !propertyNamesToIgnore.contains(field.name));
+    return fieldsToProcess;
+  }
+
+  bool _isPublicPropertyField(FieldElement fieldElement) =>
+      fieldElement.isPublic &&
       !fieldElement.isAbstract &&
       !fieldElement.isStatic &&
       !fieldElement.isConst &&
@@ -493,6 +501,29 @@ class DomainClassFactory {
       }
     }
     return false;
+  }
+
+  /// get property names to ignore from [MapConverter.properties] annotation
+  List<String> _findPropertyNamesToIgnore(ClassElement classElement) {
+    var propertyNamesToIgnore = <String>[];
+    for (var metadata in classElement.metadata) {
+      var constantValue = metadata.computeConstantValue();
+      if (constantValue?.type?.element?.name == "MapConverter") {
+        var properties = constantValue?.getField("properties")?.toListValue();
+        if (properties != null) {
+          for (var property in properties) {
+            var ignore = property.getField("ignore")?.toBoolValue();
+            if (ignore == true) {
+              var name = property.getField("name")?.toStringValue();
+              if (name != null) {
+                propertyNamesToIgnore.add(name);
+              }
+            }
+          }
+        }
+      }
+    }
+    return propertyNamesToIgnore;
   }
 }
 
