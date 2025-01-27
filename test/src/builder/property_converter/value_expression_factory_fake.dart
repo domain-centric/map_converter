@@ -275,7 +275,7 @@ class TypeFake implements InterfaceType {
   List<InterfaceType> get mixins => throw UnimplementedError();
 
   @override
-  String? get name => throw UnimplementedError();
+  String? get name => typeAsString;
 
   @override
   NullabilitySuffix get nullabilitySuffix => throw UnimplementedError();
@@ -1614,10 +1614,7 @@ class DartObjectFake extends DartObject {
   }
 
   @override
-  String? toStringValue() {
-    // TODO: implement toStringValue
-    throw UnimplementedError();
-  }
+  String? toStringValue() => 'Name';
 
   @override
   String? toSymbolValue() {
@@ -1626,10 +1623,7 @@ class DartObjectFake extends DartObject {
   }
 
   @override
-  DartType? toTypeValue() {
-    // TODO: implement toTypeValue
-    throw UnimplementedError();
-  }
+  DartType? toTypeValue() => DartTypeFake(typeFake);
 
   @override
   DartType? get type => DartTypeFake(typeFake);
@@ -1690,10 +1684,7 @@ class DartTypeFake extends DartType {
   DartType get extensionTypeErasure => throw UnimplementedError();
 
   @override
-  String getDisplayString({bool withNullability = true}) {
-    // TODO: implement getDisplayString
-    throw UnimplementedError();
-  }
+  String getDisplayString({bool withNullability = true}) => typeFake.name??'';
 
   @override
   // TODO: implement isBottom

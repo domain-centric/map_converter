@@ -1,6 +1,11 @@
 import 'package:map_converter/map_converter.dart';
 
-@MapConverter([Property('duration', MyCustomConverter())])
+@MapConverter([
+  Property(
+    'duration',
+    converter: MyCustomConverter(),
+  )
+])
 class CustomMappingExample {
   final Duration duration;
 

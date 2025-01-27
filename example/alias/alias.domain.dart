@@ -1,8 +1,17 @@
 import 'package:map_converter/map_converter.dart';
 
-@MapConverter()
+@MapConverter([
+  Property('email', alias: 'emailAddress'),
+  Property('phoneNumber', alias: 'contactNumber'),
+])
 class AliasExample {
-//  String email (alternative: emailAddress)
-//   String phoneNumber (alternative: contactNumber)
-// String name
+  final String email;
+  final int phoneNumber;
+  final String name;
+
+  AliasExample({
+    required this.name,
+    required this.email,
+    required this.phoneNumber,
+  });
 }
