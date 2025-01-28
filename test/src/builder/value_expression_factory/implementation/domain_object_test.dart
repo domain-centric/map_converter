@@ -1,6 +1,6 @@
 import 'package:dart_code/dart_code.dart' as code;
 import 'package:map_converter/src/builder/map_converter_builder.dart';
-import 'package:map_converter/src/builder/value_expression_factory/implementation/custom_converter.dart';
+import 'package:map_converter/src/builder/value_expression_factory/implementation/domain_object.dart';
 import 'package:test/test.dart';
 
 import '../value_expression_factory_fake.dart';
@@ -10,55 +10,26 @@ main() {
   var idFactory = MapConverterLibraryAssetIdFactoryFake();
   var personClassElement = PersonElementFake();
   const mapVariableName = 'map';
-    const instanceVariableName = 'person';
+  const instanceVariableName = 'person';
 
-  group('class: $CustomConverterExpressionFactory', () {
-    var expressionFactory = CustomConverterExpressionFactory();
-    var propertyName = 'adult';
-    var propertyType = TypeFake.bool();
-    var propertyAnnotationWithoutConverter = PropertyWithBuildInfo(
+  group("class: $DomainObjectExpressionFactory()", () {
+    var expressionFactory = DomainObjectExpressionFactory();
+    var propertyName = 'parent';
+    var type = TypeFake.personClass();
+    var propertyWithBuildInfo = PropertyWithBuildInfo(
       propertyName,
       classElement: personClassElement,
-      fieldElement: FieldElementFake(propertyName, propertyType),
+      fieldElement: FieldElementFake(propertyName, type),
     );
-    var propertyAnnotationWithConverter = PropertyWithBuildInfo(
-      propertyName,
-      classElement: personClassElement,
-      fieldElement: FieldElementFake(propertyName, propertyType),
-      converterType: DartTypeFake(TypeFake.customConverter()),
-    );
-
-    test('canConvert(null, Person ,bool)==false', () {
+    test('canConvert(Person,Person)==true', () {
       expect(
           expressionFactory.canConvert(
             null,
             TypeFake.personClass().element,
-            propertyType,
-          ),
-          false);
-    });
-
-    test('canConvert(propertyAnnotationWithoutConverter, Person ,bool)==false',
-        () {
-      expect(
-          expressionFactory.canConvert(
-            propertyAnnotationWithoutConverter,
-            TypeFake.personClass().element,
-            propertyType,
-          ),
-          false);
-    });
-
-    test('canConvert(propertyAnnotationWithConverter, Person ,bool)==true', () {
-      expect(
-          expressionFactory.canConvert(
-            propertyAnnotationWithConverter,
-            TypeFake.personClass().element,
-            propertyType,
+            type,
           ),
           true);
     });
-
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
@@ -72,46 +43,49 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
             idFactory,
-            propertyAnnotationWithConverter,
+            propertyWithBuildInfo,
             mapValueExpression(mapVariableName, propertyName),
-            propertyType,
+            type,
             nullable: false,
           )),
-          "i1.MyCustomConverter().fromPrimitive(map['adult'])");
+          "i1.mapToPerson($mapVariableName['$propertyName'] as Map<String,dynamic> )");
     });
     test('mapValueToObject nullable=true', () {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
             idFactory,
-            propertyAnnotationWithConverter,
+            propertyWithBuildInfo,
             mapValueExpression(mapVariableName, propertyName),
-            propertyType,
+            type,
             nullable: true,
           )),
-          "i1.MyCustomConverter().fromPrimitive(map['adult'])");
+          "$mapVariableName['$propertyName'] == null "
+          "? null "
+          ": i1.mapToPerson($mapVariableName['$propertyName'] as Map<String,dynamic> )");
     });
-
     test('objectToMapValue nullable=false', () {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
             idFactory,
-            propertyAnnotationWithConverter,
+            propertyWithBuildInfo,
             objectPropertyExpression(instanceVariableName, propertyName),
-            TypeFake.bool(),
+            type,
             nullable: false,
           )),
-          "i1.MyCustomConverter().toPrimitive(person.adult)");
+          "i1.personToMap($instanceVariableName.$propertyName)");
     });
     test('objectToMapValue nullable=true', () {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
             idFactory,
-            propertyAnnotationWithConverter,
+            propertyWithBuildInfo,
             objectPropertyExpression(instanceVariableName, propertyName),
-            TypeFake.bool(),
+            type,
             nullable: true,
           )),
-          "i1.MyCustomConverter().toPrimitive(person.adult)");
+          "$instanceVariableName.parent == null ? null : "
+          "i1.${instanceVariableName}ToMap"
+          "($instanceVariableName.$propertyName!)");
     });
   });
 }

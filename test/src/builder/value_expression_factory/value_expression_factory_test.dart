@@ -1,3 +1,4 @@
+import 'package:dart_code/dart_code.dart' as code;
 import 'package:map_converter/src/builder/value_expression_factory/value_expression_factory.dart';
 import 'package:test/test.dart';
 import 'package:shouldly/shouldly.dart';
@@ -36,3 +37,16 @@ void main() {
     });
   });
 }
+
+/// generic test functions
+
+objectPropertyExpression(String instanceVariableName, String propertyName) =>
+    code.Expression.ofVariable(instanceVariableName).getProperty(propertyName);
+
+mapValueExpression(String mapVariableName, String propertyName) =>
+    code.Expression.ofVariable(mapVariableName)
+        .index(code.Expression.ofString(propertyName));
+
+
+
+
