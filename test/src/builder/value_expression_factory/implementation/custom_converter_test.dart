@@ -1,5 +1,4 @@
 import 'package:dart_code/dart_code.dart' as code;
-import 'package:map_converter/src/annotation.dart';
 import 'package:map_converter/src/builder/map_converter_builder.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/custom_converter.dart';
 import 'package:test/test.dart';

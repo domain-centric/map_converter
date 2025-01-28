@@ -164,7 +164,7 @@ class UriExpressionFactory extends ValueExpressionFactory {
     InterfaceElement classElement,
     InterfaceType typeToConvert,
   ) =>
-      typeToConvert.getDisplayString(withNullability: false) == 'Uri' &&
+      typeToConvert.element.displayName == 'Uri' &&
       typeToConvert.element.library.name == 'dart.core';
 
   @override
@@ -210,7 +210,7 @@ class BigIntExpressionFactory extends ValueExpressionFactory {
     InterfaceElement classElement,
     InterfaceType typeToConvert,
   ) =>
-      typeToConvert.getDisplayString(withNullability: false) == 'BigInt' &&
+      typeToConvert.element.displayName == 'BigInt' &&
       typeToConvert.element.library.name == 'dart.core';
 
   @override
@@ -246,7 +246,7 @@ class DateTimeExpressionFactory extends ValueExpressionFactory {
     InterfaceElement classElement,
     InterfaceType typeToConvert,
   ) =>
-      typeToConvert.getDisplayString(withNullability: false) == 'DateTime' &&
+      typeToConvert.element.displayName == 'DateTime' &&
       typeToConvert.element.library.name == 'dart.core';
 
   @override
@@ -282,7 +282,7 @@ class DurationExpressionFactory extends ValueExpressionFactory {
     InterfaceElement classElement,
     InterfaceType typeToConvert,
   ) =>
-      typeToConvert.getDisplayString(withNullability: false) == 'Duration' &&
+      typeToConvert.element.displayName == 'Duration' &&
       typeToConvert.element.library.name == 'dart.core';
 
   @override
@@ -378,7 +378,7 @@ class DomainObjectExpressionFactory implements ValueExpressionFactory {
     required bool nullable,
   }) {
     var functionName =
-        'mapTo${typeToConvert.getDisplayString(withNullability: false)}';
+        'mapTo${typeToConvert.element.displayName}';
     var result = code.Expression.callMethodOrFunction(functionName,
         libraryUri: createRelativeLibraryUri(
             idFactory.createOutputUriForType(typeToConvert)),
@@ -400,7 +400,7 @@ class DomainObjectExpressionFactory implements ValueExpressionFactory {
     required bool nullable,
   }) {
     var functionName =
-        '${typeToConvert.getDisplayString(withNullability: false).camelCase}ToMap';
+        '${typeToConvert.element.displayName.camelCase}ToMap';
     var sourceIsProperty =
         code.CodeFormatter().unFormatted(source).contains('.');
     var result = code.Expression.callMethodOrFunction(functionName,

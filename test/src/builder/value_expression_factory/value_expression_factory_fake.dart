@@ -1,5 +1,5 @@
-// ignore_for_file: deprecated_member_use
 
+// ignore: depend_on_referenced_packages
 import 'package:_fe_analyzer_shared/src/types/shared_type.dart';
 import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/source/source.dart';
@@ -16,6 +16,7 @@ import 'package:analyzer/dart/element/type_visitor.dart';
 import 'package:analyzer/error/error.dart';
 import 'package:analyzer/src/dart/resolver/scope.dart';
 import 'package:analyzer/src/generated/engine.dart';
+// ignore: unnecessary_import
 import 'package:analyzer/src/generated/source.dart';
 import 'package:build/src/asset/id.dart';
 import 'package:build/src/builder/builder.dart';
@@ -1411,157 +1412,119 @@ class ElementAnnotationFake extends ElementAnnotation {
   DartObject? computeConstantValue() => DartObjectFake(typeFake);
 
   @override
-  // TODO: implement constantEvaluationErrors
   List<AnalysisError>? get constantEvaluationErrors =>
       throw UnimplementedError();
 
   @override
-  // TODO: implement context
   AnalysisContext get context => throw UnimplementedError();
 
   @override
-  // TODO: implement element
   Element? get element => throw UnimplementedError();
 
   @override
-  // TODO: implement element2
   Element2? get element2 => throw UnimplementedError();
 
   @override
-  // TODO: implement isAlwaysThrows
   bool get isAlwaysThrows => throw UnimplementedError();
 
   @override
-  // TODO: implement isConstantEvaluated
   bool get isConstantEvaluated => throw UnimplementedError();
 
   @override
-  // TODO: implement isDeprecated
   bool get isDeprecated => throw UnimplementedError();
 
   @override
-  // TODO: implement isDoNotStore
   bool get isDoNotStore => throw UnimplementedError();
 
   @override
-  // TODO: implement isDoNotSubmit
   bool get isDoNotSubmit => throw UnimplementedError();
 
   @override
-  // TODO: implement isFactory
   bool get isFactory => throw UnimplementedError();
 
   @override
-  // TODO: implement isImmutable
   bool get isImmutable => throw UnimplementedError();
 
   @override
-  // TODO: implement isInternal
   bool get isInternal => throw UnimplementedError();
 
   @override
-  // TODO: implement isIsTest
   bool get isIsTest => throw UnimplementedError();
 
   @override
-  // TODO: implement isIsTestGroup
   bool get isIsTestGroup => throw UnimplementedError();
 
   @override
-  // TODO: implement isJS
   bool get isJS => throw UnimplementedError();
 
   @override
-  // TODO: implement isLiteral
   bool get isLiteral => throw UnimplementedError();
 
   @override
-  // TODO: implement isMustBeConst
   bool get isMustBeConst => throw UnimplementedError();
 
   @override
-  // TODO: implement isMustBeOverridden
   bool get isMustBeOverridden => throw UnimplementedError();
 
   @override
-  // TODO: implement isMustCallSuper
   bool get isMustCallSuper => throw UnimplementedError();
 
   @override
-  // TODO: implement isNonVirtual
   bool get isNonVirtual => throw UnimplementedError();
 
   @override
-  // TODO: implement isOptionalTypeArgs
   bool get isOptionalTypeArgs => throw UnimplementedError();
 
   @override
-  // TODO: implement isOverride
   bool get isOverride => throw UnimplementedError();
 
   @override
-  // TODO: implement isProtected
   bool get isProtected => throw UnimplementedError();
 
   @override
-  // TODO: implement isProxy
   bool get isProxy => throw UnimplementedError();
 
   @override
-  // TODO: implement isRedeclare
   bool get isRedeclare => throw UnimplementedError();
 
   @override
-  // TODO: implement isReopen
   bool get isReopen => throw UnimplementedError();
 
   @override
-  // TODO: implement isRequired
   bool get isRequired => throw UnimplementedError();
 
   @override
-  // TODO: implement isSealed
   bool get isSealed => throw UnimplementedError();
 
   @override
-  // TODO: implement isTarget
   bool get isTarget => throw UnimplementedError();
 
   @override
-  // TODO: implement isUseResult
   bool get isUseResult => throw UnimplementedError();
 
   @override
-  // TODO: implement isVisibleForOverriding
   bool get isVisibleForOverriding => throw UnimplementedError();
 
   @override
-  // TODO: implement isVisibleForTemplate
   bool get isVisibleForTemplate => throw UnimplementedError();
 
   @override
-  // TODO: implement isVisibleForTesting
   bool get isVisibleForTesting => throw UnimplementedError();
 
   @override
-  // TODO: implement isVisibleOutsideTemplate
   bool get isVisibleOutsideTemplate => throw UnimplementedError();
 
   @override
-  // TODO: implement library
   LibraryElement? get library => throw UnimplementedError();
 
   @override
-  // TODO: implement librarySource
   Source? get librarySource => throw UnimplementedError();
 
   @override
-  // TODO: implement source
   Source? get source => throw UnimplementedError();
 
   @override
   String toSource() {
-    // TODO: implement toSource
     throw UnimplementedError();
   }
 }
@@ -1575,7 +1538,6 @@ class DartObjectFake extends DartObject {
   DartObject? getField(String name) => DartObjectFake(typeFake);
 
   @override
-  // TODO: implement hasKnownValue
   bool get hasKnownValue => throw UnimplementedError();
 
   @override
@@ -1586,19 +1548,16 @@ class DartObjectFake extends DartObject {
 
   @override
   double? toDoubleValue() {
-    // TODO: implement toDoubleValue
     throw UnimplementedError();
   }
 
   @override
   ExecutableElement? toFunctionValue() {
-    // TODO: implement toFunctionValue
     throw UnimplementedError();
   }
 
   @override
   int? toIntValue() {
-    // TODO: implement toIntValue
     throw UnimplementedError();
   }
 
@@ -1607,13 +1566,11 @@ class DartObjectFake extends DartObject {
 
   @override
   Map<DartObject?, DartObject?>? toMapValue() {
-    // TODO: implement toMapValue
     throw UnimplementedError();
   }
 
   @override
   Set<DartObject>? toSetValue() {
-    // TODO: implement toSetValue
     throw UnimplementedError();
   }
 
@@ -1622,7 +1579,6 @@ class DartObjectFake extends DartObject {
 
   @override
   String? toSymbolValue() {
-    // TODO: implement toSymbolValue
     throw UnimplementedError();
   }
 
@@ -1633,7 +1589,6 @@ class DartObjectFake extends DartObject {
   DartType? get type => DartTypeFake(typeFake);
 
   @override
-  // TODO: implement variable
   VariableElement? get variable => throw UnimplementedError();
 }
 
@@ -1644,157 +1599,122 @@ class DartTypeFake extends DartType {
 
   @override
   R accept<R>(TypeVisitor<R> visitor) {
-    // TODO: implement accept
     throw UnimplementedError();
   }
 
   @override
   R acceptWithArgument<R, A>(
       TypeVisitorWithArgument<R, A> visitor, A argument) {
-    // TODO: implement acceptWithArgument
     throw UnimplementedError();
   }
 
   @override
-  // TODO: implement alias
   InstantiatedTypeAliasElement? get alias => throw UnimplementedError();
 
   @override
   InterfaceType? asInstanceOf(InterfaceElement element) {
-    // TODO: implement asInstanceOf
     throw UnimplementedError();
   }
 
   @override
   InterfaceType? asInstanceOf2(InterfaceElement2 element) {
-    // TODO: implement asInstanceOf2
     throw UnimplementedError();
   }
 
   @override
-  // TODO: implement element
   Element? get element => InterfaceElementFake(typeFake);
 
   @override
-  // TODO: implement element2
   Element? get element2 => throw UnimplementedError();
 
   @override
-  // TODO: implement element3
   Element2? get element3 => throw UnimplementedError();
 
   @override
-  // TODO: implement extensionTypeErasure
   DartType get extensionTypeErasure => throw UnimplementedError();
 
   @override
   String getDisplayString({bool withNullability = true}) => typeFake.name ?? '';
 
   @override
-  // TODO: implement isBottom
   bool get isBottom => throw UnimplementedError();
 
   @override
-  // TODO: implement isDartAsyncFuture
   bool get isDartAsyncFuture => throw UnimplementedError();
 
   @override
-  // TODO: implement isDartAsyncFutureOr
   bool get isDartAsyncFutureOr => throw UnimplementedError();
 
   @override
-  // TODO: implement isDartAsyncStream
   bool get isDartAsyncStream => throw UnimplementedError();
 
   @override
-  // TODO: implement isDartCoreBool
   bool get isDartCoreBool => throw UnimplementedError();
 
   @override
-  // TODO: implement isDartCoreDouble
   bool get isDartCoreDouble => throw UnimplementedError();
 
   @override
-  // TODO: implement isDartCoreEnum
   bool get isDartCoreEnum => throw UnimplementedError();
 
   @override
-  // TODO: implement isDartCoreFunction
   bool get isDartCoreFunction => throw UnimplementedError();
 
   @override
-  // TODO: implement isDartCoreInt
   bool get isDartCoreInt => throw UnimplementedError();
 
   @override
-  // TODO: implement isDartCoreIterable
   bool get isDartCoreIterable => throw UnimplementedError();
 
   @override
-  // TODO: implement isDartCoreList
   bool get isDartCoreList => throw UnimplementedError();
 
   @override
-  // TODO: implement isDartCoreMap
   bool get isDartCoreMap => throw UnimplementedError();
 
   @override
-  // TODO: implement isDartCoreNull
   bool get isDartCoreNull => throw UnimplementedError();
 
   @override
-  // TODO: implement isDartCoreNum
   bool get isDartCoreNum => throw UnimplementedError();
 
   @override
-  // TODO: implement isDartCoreObject
   bool get isDartCoreObject => throw UnimplementedError();
 
   @override
-  // TODO: implement isDartCoreRecord
   bool get isDartCoreRecord => throw UnimplementedError();
 
   @override
-  // TODO: implement isDartCoreSet
   bool get isDartCoreSet => throw UnimplementedError();
 
   @override
-  // TODO: implement isDartCoreString
   bool get isDartCoreString => throw UnimplementedError();
 
   @override
-  // TODO: implement isDartCoreSymbol
   bool get isDartCoreSymbol => throw UnimplementedError();
 
   @override
-  // TODO: implement isDartCoreType
   bool get isDartCoreType => throw UnimplementedError();
 
   @override
-  // TODO: implement isDynamic
   bool get isDynamic => throw UnimplementedError();
 
   @override
   bool isStructurallyEqualTo(SharedTypeStructure<DartType> other) {
-    // TODO: implement isStructurallyEqualTo
     throw UnimplementedError();
   }
 
   @override
-  // TODO: implement isVoid
   bool get isVoid => throw UnimplementedError();
 
   @override
-  // TODO: implement name
   String? get name => throw UnimplementedError();
 
   @override
-  // TODO: implement nullabilitySuffix
   NullabilitySuffix get nullabilitySuffix => throw UnimplementedError();
 
   @override
   DartType resolveToBound(DartType objectType) {
-    // TODO: implement resolveToBound
     throw UnimplementedError();
   }
 }

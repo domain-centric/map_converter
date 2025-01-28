@@ -3,7 +3,6 @@ import 'package:analyzer/dart/element/type.dart';
 import 'package:dart_code/dart_code.dart' as code;
 import 'package:map_converter/map_converter.dart';
 import 'package:map_converter/src/builder/map_converter_builder.dart';
-import 'package:map_converter/src/builder/value_expression_factory/implementation/value_expression_factory_impl.dart';
 import 'package:map_converter/src/builder/value_expression_factory/value_expression_factory.dart';
 
 class CustomConverterExpressionFactory extends ValueExpressionFactory {
