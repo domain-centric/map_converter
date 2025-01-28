@@ -1,8 +1,8 @@
-import 'package:map_converter/src/builder/value_expression/value_expression_factory.dart';
+import 'package:map_converter/src/builder/value_expression_factory/value_expression_factory.dart';
 import 'package:test/test.dart';
 import 'package:shouldly/shouldly.dart';
 
-import '../property_converter/value_expression_factory_fake.dart';
+import 'value_expression_factory_fake.dart';
 
 void main() {
   group('createLibraryUri() function', () {

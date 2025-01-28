@@ -8,7 +8,7 @@ import 'package:collection/collection.dart';
 import 'package:dart_code/dart_code.dart' as code;
 import 'package:logging/logging.dart';
 import 'package:map_converter/map_converter.dart';
-import 'package:map_converter/src/builder/value_expression/value_expression_factory.dart';
+import 'package:map_converter/src/builder/value_expression_factory/value_expression_factory.dart';
 import 'package:recase/recase.dart';
 
 final valueExpressionFactories = ValueExpressionFactories.all();
@@ -180,8 +180,8 @@ class ObjectToMapFunctionFactory {
   ) {
     Map<code.Expression, code.Expression> map = {};
     for (var property in domainClass.properties) {
-      var propertyNameExpression = code.Expression.ofString(
-          property.alias ?? property.name);
+      var propertyNameExpression =
+          code.Expression.ofString(property.alias ?? property.name);
       var expressionFactory = property.valueExpressionFactory;
       var nullable = property.fieldElement.type.nullabilitySuffix ==
           NullabilitySuffix.question;
@@ -191,7 +191,7 @@ class ObjectToMapFunctionFactory {
           .getProperty(property.fieldElement.name);
       var propertyValue = expressionFactory.objectToMapValue(
         idFactory,
-        domainClass.element,
+        property,
         source,
         propertyType,
         nullable: nullable,
@@ -239,7 +239,7 @@ class MapToObjectFunctionFactory {
       idFactory,
     );
     for (var property in domainClass.noneConstructorProperties) {
-      var propertyName = property.alias??property.name;
+      var propertyName = property.alias ?? property.name;
       var propertyValue = propertyValueExpression(
         property,
         idFactory,
@@ -306,9 +306,11 @@ createDomainType(DomainClass domainClass) => code.Type(
       libraryUri: createLibraryUri(domainClass.element),
     );
 
-code.Expression propertyValueExpression(PropertyWithBuildInfo property,
-    MapConverterLibraryAssetIdFactory idFactory, String mapVariableName) {
-  var propertyName = property.alias?? property.name;
+code.Expression propertyValueExpression(
+    PropertyWithValueExpressionFactory property,
+    MapConverterLibraryAssetIdFactory idFactory,
+    String mapVariableName) {
+  var propertyName = property.alias ?? property.name;
   var propertyType = property.fieldElement.type as InterfaceType;
   var nullable = property.fieldElement.type.nullabilitySuffix ==
       NullabilitySuffix.question;
@@ -316,7 +318,7 @@ code.Expression propertyValueExpression(PropertyWithBuildInfo property,
       .index(code.Expression.ofString(propertyName));
   var valueExpression = property.valueExpressionFactory.mapValueToObject(
     idFactory,
-    property.classElement,
+    property,
     source,
     propertyType,
     nullable: nullable,
@@ -328,8 +330,8 @@ code.Expression propertyValueExpression(PropertyWithBuildInfo property,
 class DomainClass {
   final ClassElement element;
   final Constructor bestConstructor;
-  final List<PropertyWithBuildInfo> properties;
-  late List<PropertyWithBuildInfo> noneConstructorProperties;
+  final List<PropertyWithValueExpressionFactory> properties;
+  late List<PropertyWithValueExpressionFactory> noneConstructorProperties;
 
   DomainClass(
     this.element,
@@ -345,10 +347,10 @@ class DomainClass {
 
 class Constructor {
   late String? name;
-  final List<PropertyWithBuildInfo> requiredPositionalParameters;
-  final List<PropertyWithBuildInfo> namedParameters;
-  final List<PropertyWithBuildInfo> optionalParameters;
-  late Set<PropertyWithBuildInfo> propertiesBeingSet;
+  final List<PropertyWithValueExpressionFactory> requiredPositionalParameters;
+  final List<PropertyWithValueExpressionFactory> namedParameters;
+  final List<PropertyWithValueExpressionFactory> optionalParameters;
+  late Set<PropertyWithValueExpressionFactory> propertiesBeingSet;
 
   Constructor({
     String? name,
@@ -371,18 +373,32 @@ class Constructor {
         propertiesBeingSet = {};
 }
 
-class PropertyWithBuildInfo extends Property {
+class PropertyWithBuildInfo extends PropertyWithConverterType {
   final ClassElement classElement;
   final FieldElement fieldElement;
-  final ValueExpressionFactory valueExpressionFactory;
 
   PropertyWithBuildInfo(
     super.name, {
     super.alias,
     super.ignore,
     super.converter,
+    super.converterType,
     required this.classElement,
     required this.fieldElement,
+  });
+}
+
+class PropertyWithValueExpressionFactory extends PropertyWithBuildInfo {
+  final ValueExpressionFactory valueExpressionFactory;
+
+  PropertyWithValueExpressionFactory(
+    super.name, {
+    required super.alias,
+    required super.ignore,
+    super.converter,
+    required super.converterType,
+    required super.classElement,
+    required super.fieldElement,
     required this.valueExpressionFactory,
   });
 }
@@ -452,21 +468,21 @@ class DomainClassFactory {
   /// creates a [MAP] with [FieldElement] and [ValueExpressionFactory] for
   /// any property in a [ClassElement]
   /// if there is a matching [ValueExpressionFactory].
-  List<PropertyWithBuildInfo> _createProperties(ClassElement classElement) {
+  List<PropertyWithValueExpressionFactory> _createProperties(
+      ClassElement classElement) {
     var mapConverterAnnotation = createFromClassElement(classElement);
 
-    var properties = <PropertyWithBuildInfo>[];
+    var properties = <PropertyWithValueExpressionFactory>[];
     var fields = _findAllPublicFields(classElement);
     for (var field in fields) {
-      var propertyAnnotation = mapConverterAnnotation.properties
+      var propertyAnnotation = mapConverterAnnotation!.properties
           .firstWhereOrNull((element) => element.name == field.name);
       if (propertyAnnotation?.ignore != true) {
-        //TODO implement Property.converter
         var propertyPath = '${classElement.name}.${field.name}';
         try {
           var propertyType = field.type as InterfaceType;
-          var valueExpressionFactory =
-              valueExpressionFactories.findFor(classElement, propertyType);
+          var valueExpressionFactory = valueExpressionFactories.findFor(
+              propertyAnnotation, classElement, propertyType);
           if (valueExpressionFactory == null) {
             log.log(
                 Level.WARNING,
@@ -474,9 +490,13 @@ class DomainClassFactory {
                 'for type: $propertyType '
                 'used in property: $propertyPath');
           } else {
-            var property = PropertyWithBuildInfo(field.name,
+            var property = PropertyWithValueExpressionFactory(field.name,
                 alias: propertyAnnotation?.alias,
                 ignore: false,
+                converterType: propertyAnnotation == null
+                    ? null
+                    : (propertyAnnotation as PropertyWithConverterType)
+                        .converterType,
                 classElement: classElement,
                 fieldElement: field,
                 valueExpressionFactory: valueExpressionFactory);
@@ -545,8 +565,8 @@ class DomainClassFactory {
 class BestConstructorFactory {
   /// returns the best constructor to be used to create an DomainObject when
   /// converting a [Map] to a DomainObject
-  Constructor createFor(
-      ClassElement classElement, List<PropertyWithBuildInfo> properties) {
+  Constructor createFor(ClassElement classElement,
+      List<PropertyWithValueExpressionFactory> properties) {
     var constructors = _usefulConstructors(classElement, properties);
     _orderByNumberOfPropertiesSet(constructors);
     return constructors.first;
@@ -559,7 +579,7 @@ class BestConstructorFactory {
 
   List<Constructor> _usefulConstructors(
     ClassElement classElement,
-    List<PropertyWithBuildInfo> properties,
+    List<PropertyWithValueExpressionFactory> properties,
   ) {
     var constructors = <Constructor>[];
     for (var constructorElement in classElement.constructors) {
@@ -577,11 +597,11 @@ class BestConstructorFactory {
 
   /// returns null if the constructor has parameters that are not understood
   Constructor? _usefulConstructor(ConstructorElement constructorElement,
-      List<PropertyWithBuildInfo> properties) {
+      List<PropertyWithValueExpressionFactory> properties) {
     var name = constructorElement.name;
-    var requiredPositionalParameters = <PropertyWithBuildInfo>[];
-    var namedParameters = <PropertyWithBuildInfo>[];
-    var optionalParameters = <PropertyWithBuildInfo>[];
+    var requiredPositionalParameters = <PropertyWithValueExpressionFactory>[];
+    var namedParameters = <PropertyWithValueExpressionFactory>[];
+    var optionalParameters = <PropertyWithValueExpressionFactory>[];
     for (var parameter in constructorElement.parameters) {
       var property = _findProperty(parameter, properties);
       if (property == null && parameter.isRequired) {
@@ -606,9 +626,9 @@ class BestConstructorFactory {
     );
   }
 
-  PropertyWithBuildInfo? _findProperty(
+  PropertyWithValueExpressionFactory? _findProperty(
     ParameterElement parameter,
-    List<PropertyWithBuildInfo> properties,
+    List<PropertyWithValueExpressionFactory> properties,
   ) =>
       properties
           .firstWhereOrNull((property) => _isComparable(parameter, property));

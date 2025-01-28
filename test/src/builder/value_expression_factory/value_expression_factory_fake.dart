@@ -104,6 +104,11 @@ class TypeFake implements InterfaceType {
         libraryUrl = '',
         typeArguments = [genericType];
 
+  TypeFake.customConverter()
+      : typeAsString = 'MyCustomConverter',
+        isDartCoreType = false,
+        libraryUrl = 'person/person.dart';
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1041,7 +1046,7 @@ class PersonElementFake extends ClassElement {
   Element get declaration => throw UnimplementedError();
 
   @override
-  String get displayName => throw UnimplementedError();
+  String get displayName => thisType.element.name;
 
   @override
   String? get documentationComment => throw UnimplementedError();
@@ -1574,8 +1579,7 @@ class DartObjectFake extends DartObject {
   bool get hasKnownValue => throw UnimplementedError();
 
   @override
-  // TODO: implement isNull
-  bool get isNull => throw UnimplementedError();
+  bool get isNull => true;
 
   @override
   bool? toBoolValue() => false;
@@ -1684,7 +1688,7 @@ class DartTypeFake extends DartType {
   DartType get extensionTypeErasure => throw UnimplementedError();
 
   @override
-  String getDisplayString({bool withNullability = true}) => typeFake.name??'';
+  String getDisplayString({bool withNullability = true}) => typeFake.name ?? '';
 
   @override
   // TODO: implement isBottom

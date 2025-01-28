@@ -1,4 +1,7 @@
+import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/type.dart';
+import 'package:collection/collection.dart';
 
 /// [Annotation] for classed that need [MapCoverter] functions
 class MapConverter {
@@ -19,7 +22,7 @@ class Property {
     this.alias,
     this.converter,
     this.ignore = false,
-  }) ;
+  });
 
   const Property.ignore(
     this.name,
@@ -31,36 +34,61 @@ class Property {
 abstract class PrimitiveConverter<SOURCE, PRIMITIVE> {
   const PrimitiveConverter();
 
-  PRIMITIVE toPrimitive(SOURCE value) {
-    throw UnimplementedError();
-  }
+  PRIMITIVE toPrimitive(SOURCE value);
 
-  SOURCE fromPrimitive(PRIMITIVE value) {
-    throw UnimplementedError();
-  }
+  SOURCE fromPrimitive(PRIMITIVE value);
 }
 
-MapConverter createFromClassElement(ClassElement domainClassElement) {
-  final annotation = domainClassElement.metadata.firstWhere(
-    (element) => element.computeConstantValue()?.type?.getDisplayString() == 'MapConverter',
-    orElse: () => throw Exception('No MapConverter annotation found'),
+MapConverter? createFromClassElement(ClassElement domainClassElement) {
+  final annotation = domainClassElement.metadata.firstWhereOrNull(
+    (element) =>
+        element.computeConstantValue()?.type?.getDisplayString() ==
+        'MapConverter',
   );
+  if (annotation == null) {
+    return null;
+  }
 
-  final properties = annotation.computeConstantValue()?.getField('properties')?.toListValue()?.map((element) {
+  final properties = annotation
+      .computeConstantValue()
+      ?.getField('properties')
+      ?.toListValue()
+      ?.map((element) {
     final String name = element.getField('name')!.toStringValue() ?? '';
     final bool ignore = element.getField('ignore')!.toBoolValue() ?? false;
     final String? alias = element.getField('alias')?.toStringValue();
-    final Element? converter = element.getField('converter')?.toTypeValue()?.element;
+    final converterType = _converterType(element);
 
-    return Property(
+    return PropertyWithConverterType(
       name,
       alias: alias,
       ignore: ignore,
-      //TODO converter: converter,
+      converterType: converterType,
     );
   }).toList();
   if (properties == null) {
-      return MapConverter([]);
+    return MapConverter([]);
   }
   return MapConverter(properties);
+}
+
+DartType? _converterType(DartObject element) {
+  final DartObject? converterObject = element.getField('converter');
+  if (converterObject == null || converterObject.isNull) {
+    return null;
+  } else {
+    return converterObject.type;
+  }
+}
+
+class PropertyWithConverterType extends Property {
+  final DartType? converterType;
+
+  const PropertyWithConverterType(
+    super.name, {
+    super.alias,
+    super.ignore = false,
+    super.converter,
+    this.converterType,
+  });
 }

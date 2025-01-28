@@ -1,9 +1,11 @@
 import 'package:dart_code/dart_code.dart' as code;
-import 'package:map_converter/src/builder/value_expression/value_expression_factory.dart';
+import 'package:map_converter/src/builder/map_converter_builder.dart';
+import 'package:map_converter/src/builder/value_expression_factory/implementation/value_expression_factory_impl.dart';
 import 'package:recase/recase.dart';
 import 'package:test/test.dart';
 
-import 'value_expression_factory_fake.dart';
+import '../value_expression_factory_fake.dart';
+
 
 const mapVariableName = 'map';
 const instanceVariableName = 'person';
@@ -16,23 +18,34 @@ main() {
     var expressionFactory = BoolExpressionFactory();
     var propertyName = 'adult';
     var propertyType = TypeFake.bool();
+    var propertyWithBuildInfo = PropertyWithBuildInfo(
+      propertyName,
+      classElement: personClassElement,
+      fieldElement: FieldElementFake(propertyName, propertyType),
+    );
     test('canConvert(bool)==true', () {
       expect(
           expressionFactory.canConvert(
-              TypeFake.personClass().element, propertyType),
+            null,
+            TypeFake.personClass().element,
+            propertyType,
+          ),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TypeFake.personClass().element, TypeFake.int()),
+            null,
+            TypeFake.personClass().element,
+            TypeFake.int(),
+          ),
           false);
     });
     test('mapValueToObject nullable=false', () {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             mapValueExpression(propertyName),
             propertyType,
             nullable: false,
@@ -43,7 +56,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             mapValueExpression(propertyName),
             propertyType,
             nullable: true,
@@ -55,7 +68,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             objectPropertyExpression(propertyName),
             TypeFake.bool(),
             nullable: false,
@@ -66,7 +79,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             objectPropertyExpression(propertyName),
             TypeFake.bool(),
             nullable: true,
@@ -79,21 +92,34 @@ main() {
     var expressionFactory = NumExpressionFactory();
     var propertyName = 'ageInDays';
     var type = TypeFake.num();
+    var propertyWithBuildInfo = PropertyWithBuildInfo(
+      propertyName,
+      classElement: personClassElement,
+      fieldElement: FieldElementFake(propertyName, type),
+    );
     test('canConvert(num)==true', () {
-      expect(expressionFactory.canConvert(TypeFake.personClass().element, type),
+      expect(
+          expressionFactory.canConvert(
+            null,
+            TypeFake.personClass().element,
+            type,
+          ),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TypeFake.personClass().element, TypeFake.int()),
+            null,
+            TypeFake.personClass().element,
+            TypeFake.int(),
+          ),
           false);
     });
     test('mapValueToObject nullable=false', () {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             mapValueExpression(propertyName),
             type,
             nullable: false,
@@ -104,7 +130,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             mapValueExpression(propertyName),
             type,
             nullable: true,
@@ -115,7 +141,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             objectPropertyExpression(propertyName),
             type,
             nullable: false,
@@ -126,7 +152,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             objectPropertyExpression(propertyName),
             type,
             nullable: true,
@@ -139,21 +165,34 @@ main() {
     var expressionFactory = IntExpressionFactory();
     var propertyName = 'ageInDays';
     var type = TypeFake.int();
+    var propertyWithBuildInfo = PropertyWithBuildInfo(
+      propertyName,
+      classElement: personClassElement,
+      fieldElement: FieldElementFake(propertyName, type),
+    );
     test('canConvert(int)==true', () {
-      expect(expressionFactory.canConvert(TypeFake.personClass().element, type),
+      expect(
+          expressionFactory.canConvert(
+            null,
+            TypeFake.personClass().element,
+            type,
+          ),
           true);
     });
     test('canConvert(double)==false', () {
       expect(
           expressionFactory.canConvert(
-              TypeFake.personClass().element, TypeFake.double()),
+            null,
+            TypeFake.personClass().element,
+            TypeFake.double(),
+          ),
           false);
     });
     test('mapValueToObject nullable=false', () {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             mapValueExpression(propertyName),
             type,
             nullable: false,
@@ -164,7 +203,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             mapValueExpression(propertyName),
             type,
             nullable: true,
@@ -175,7 +214,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             objectPropertyExpression(propertyName),
             type,
             nullable: false,
@@ -186,7 +225,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             objectPropertyExpression(propertyName),
             type,
             nullable: true,
@@ -199,21 +238,34 @@ main() {
     var expressionFactory = DoubleExpressionFactory();
     var propertyName = 'ageInDays';
     var type = TypeFake.double();
+    var propertyWithBuildInfo = PropertyWithBuildInfo(
+      propertyName,
+      classElement: personClassElement,
+      fieldElement: FieldElementFake(propertyName, type),
+    );
     test('canConvert(double)==true', () {
-      expect(expressionFactory.canConvert(TypeFake.personClass().element, type),
+      expect(
+          expressionFactory.canConvert(
+            null,
+            TypeFake.personClass().element,
+            type,
+          ),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TypeFake.personClass().element, TypeFake.int()),
+            null,
+            TypeFake.personClass().element,
+            TypeFake.int(),
+          ),
           false);
     });
     test('mapValueToObject nullable=false', () {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             mapValueExpression(propertyName),
             type,
             nullable: false,
@@ -224,7 +276,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             mapValueExpression(propertyName),
             type,
             nullable: true,
@@ -236,7 +288,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             objectPropertyExpression(propertyName),
             type,
             nullable: false,
@@ -247,7 +299,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             objectPropertyExpression(propertyName),
             type,
             nullable: true,
@@ -260,21 +312,34 @@ main() {
     var expressionFactory = StringExpressionFactory();
     var propertyName = 'name';
     var type = TypeFake.string();
+    var propertyWithBuildInfo = PropertyWithBuildInfo(
+      propertyName,
+      classElement: personClassElement,
+      fieldElement: FieldElementFake(propertyName, type),
+    );
     test('canConvert(String)==true', () {
-      expect(expressionFactory.canConvert(TypeFake.personClass().element, type),
+      expect(
+          expressionFactory.canConvert(
+            null,
+            TypeFake.personClass().element,
+            type,
+          ),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TypeFake.personClass().element, TypeFake.int()),
+            null,
+            TypeFake.personClass().element,
+            TypeFake.int(),
+          ),
           false);
     });
     test('mapValueToObject nullable=false', () {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             mapValueExpression(propertyName),
             type,
             nullable: false,
@@ -285,7 +350,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             mapValueExpression(propertyName),
             type,
             nullable: true,
@@ -296,7 +361,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             objectPropertyExpression(propertyName),
             type,
             nullable: false,
@@ -307,7 +372,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             objectPropertyExpression(propertyName),
             type,
             nullable: true,
@@ -320,21 +385,34 @@ main() {
     var expressionFactory = UriExpressionFactory();
     var propertyName = 'webSite';
     var type = TypeFake.uri();
+    var propertyWithBuildInfo = PropertyWithBuildInfo(
+      propertyName,
+      classElement: personClassElement,
+      fieldElement: FieldElementFake(propertyName, type),
+    );
     test('canConvert(Uri)==true', () {
-      expect(expressionFactory.canConvert(TypeFake.personClass().element, type),
+      expect(
+          expressionFactory.canConvert(
+            null,
+            TypeFake.personClass().element,
+            type,
+          ),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TypeFake.personClass().element, TypeFake.int()),
+            null,
+            TypeFake.personClass().element,
+            TypeFake.int(),
+          ),
           false);
     });
     test('mapValueToObject nullable=false', () {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             mapValueExpression(propertyName),
             type,
             nullable: false,
@@ -345,7 +423,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             mapValueExpression(propertyName),
             type,
             nullable: true,
@@ -357,7 +435,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             objectPropertyExpression(propertyName),
             type,
             nullable: false,
@@ -368,7 +446,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             objectPropertyExpression(propertyName),
             type,
             nullable: true,
@@ -381,21 +459,34 @@ main() {
     var expressionFactory = BigIntExpressionFactory();
     var propertyName = 'ageInMicroSeconds';
     var type = TypeFake.bigInt();
+    var propertyWithBuildInfo = PropertyWithBuildInfo(
+      propertyName,
+      classElement: personClassElement,
+      fieldElement: FieldElementFake(propertyName, type),
+    );
     test('canConvert(Uri)==true', () {
-      expect(expressionFactory.canConvert(TypeFake.personClass().element, type),
+      expect(
+          expressionFactory.canConvert(
+            null,
+            TypeFake.personClass().element,
+            type,
+          ),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TypeFake.personClass().element, TypeFake.int()),
+            null,
+            TypeFake.personClass().element,
+            TypeFake.int(),
+          ),
           false);
     });
     test('mapValueToObject nullable=false', () {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             mapValueExpression(propertyName),
             type,
             nullable: false,
@@ -406,7 +497,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             mapValueExpression(propertyName),
             type,
             nullable: true,
@@ -418,7 +509,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             objectPropertyExpression(propertyName),
             type,
             nullable: false,
@@ -429,7 +520,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             objectPropertyExpression(propertyName),
             type,
             nullable: true,
@@ -442,21 +533,34 @@ main() {
     var expressionFactory = DateTimeExpressionFactory();
     var propertyName = 'dateOfBirth';
     var type = TypeFake.dateTime();
+    var propertyWithBuildInfo = PropertyWithBuildInfo(
+      propertyName,
+      classElement: personClassElement,
+      fieldElement: FieldElementFake(propertyName, type),
+    );
     test('canConvert(DateTime)==true', () {
-      expect(expressionFactory.canConvert(TypeFake.personClass().element, type),
+      expect(
+          expressionFactory.canConvert(
+            null,
+            TypeFake.personClass().element,
+            type,
+          ),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TypeFake.personClass().element, TypeFake.int()),
+            null,
+            TypeFake.personClass().element,
+            TypeFake.int(),
+          ),
           false);
     });
     test('mapValueToObject nullable=false', () {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             mapValueExpression(propertyName),
             type,
             nullable: false,
@@ -467,7 +571,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             mapValueExpression(propertyName),
             type,
             nullable: true,
@@ -479,7 +583,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             objectPropertyExpression(propertyName),
             type,
             nullable: false,
@@ -490,7 +594,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             objectPropertyExpression(propertyName),
             type,
             nullable: true,
@@ -503,21 +607,34 @@ main() {
     var expressionFactory = DurationExpressionFactory();
     var propertyName = 'age';
     var type = TypeFake.duration();
+    var propertyWithBuildInfo = PropertyWithBuildInfo(
+      propertyName,
+      classElement: personClassElement,
+      fieldElement: FieldElementFake(propertyName, type),
+    );
     test('canConvert(Duration)==true', () {
-      expect(expressionFactory.canConvert(TypeFake.personClass().element, type),
+      expect(
+          expressionFactory.canConvert(
+            null,
+            TypeFake.personClass().element,
+            type,
+          ),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TypeFake.personClass().element, TypeFake.int()),
+            null,
+            TypeFake.personClass().element,
+            TypeFake.int(),
+          ),
           false);
     });
     test('mapValueToObject nullable=false', () {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             mapValueExpression(propertyName),
             type,
             nullable: false,
@@ -528,7 +645,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             mapValueExpression(propertyName),
             type,
             nullable: true,
@@ -540,7 +657,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             objectPropertyExpression(propertyName),
             type,
             nullable: false,
@@ -551,7 +668,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             objectPropertyExpression(propertyName),
             type,
             nullable: true,
@@ -564,21 +681,34 @@ main() {
     var expressionFactory = EnumExpressionFactory();
     var propertyName = 'gender';
     var type = TypeFake.genderEnum();
+    var propertyWithBuildInfo = PropertyWithBuildInfo(
+      propertyName,
+      classElement: personClassElement,
+      fieldElement: FieldElementFake(propertyName, type),
+    );
     test('canConvert(TestEnum)==true', () {
-      expect(expressionFactory.canConvert(TypeFake.personClass().element, type),
+      expect(
+          expressionFactory.canConvert(
+            null,
+            TypeFake.personClass().element,
+            type,
+          ),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TypeFake.personClass().element, TypeFake.int()),
+            null,
+            TypeFake.personClass().element,
+            TypeFake.int(),
+          ),
           false);
     });
     test('mapValueToObject nullable=false', () {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             mapValueExpression(propertyName),
             type,
             nullable: false,
@@ -590,7 +720,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             mapValueExpression(propertyName),
             type,
             nullable: true,
@@ -605,7 +735,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             objectPropertyExpression(propertyName),
             type,
             nullable: false,
@@ -616,7 +746,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             objectPropertyExpression(propertyName),
             type,
             nullable: true,
@@ -629,21 +759,34 @@ main() {
     var expressionFactory = DomainObjectExpressionFactory();
     var propertyName = 'parent';
     var type = TypeFake.personClass();
+    var propertyWithBuildInfo = PropertyWithBuildInfo(
+      propertyName,
+      classElement: personClassElement,
+      fieldElement: FieldElementFake(propertyName, type),
+    );
     test('canConvert(Person,Person)==true', () {
-      expect(expressionFactory.canConvert(TypeFake.personClass().element, type),
+      expect(
+          expressionFactory.canConvert(
+            null,
+            TypeFake.personClass().element,
+            type,
+          ),
           true);
     });
     test('canConvert(int)==false', () {
       expect(
           expressionFactory.canConvert(
-              TypeFake.personClass().element, TypeFake.int()),
+            null,
+            TypeFake.personClass().element,
+            TypeFake.int(),
+          ),
           false);
     });
     test('mapValueToObject nullable=false', () {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             mapValueExpression(propertyName),
             type,
             nullable: false,
@@ -654,7 +797,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             mapValueExpression(propertyName),
             type,
             nullable: true,
@@ -667,7 +810,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             objectPropertyExpression(propertyName),
             type,
             nullable: false,
@@ -678,7 +821,7 @@ main() {
       expect(
           code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
             idFactory,
-            personClassElement,
+            propertyWithBuildInfo,
             objectPropertyExpression(propertyName),
             type,
             nullable: true,
@@ -696,23 +839,34 @@ main() {
       var genericType = TypeFake.bool();
       var propertyName = '${genericType.toString().camelCase}s';
       var propertyType = TypeFake.list(genericType);
+      var propertyWithBuildInfo = PropertyWithBuildInfo(
+        propertyName,
+        classElement: personClassElement,
+        fieldElement: FieldElementFake(propertyName, propertyType),
+      );
       test('canConvert(Person,$propertyType>)==true', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element, propertyType),
+              null,
+              TypeFake.personClass().element,
+              propertyType,
+            ),
             true);
       });
       test('canConvert(Person, int)==false', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element, TypeFake.int()),
+              null,
+              TypeFake.personClass().element,
+              TypeFake.int(),
+            ),
             false);
       });
       test('mapValueToObject nullable=false', () {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               mapValueExpression(propertyName),
               propertyType,
               nullable: false,
@@ -723,7 +877,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               mapValueExpression(propertyName),
               propertyType,
               nullable: true,
@@ -734,7 +888,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               objectPropertyExpression(propertyName),
               propertyType,
               nullable: false,
@@ -745,7 +899,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               objectPropertyExpression(propertyName),
               propertyType,
               nullable: true,
@@ -758,23 +912,34 @@ main() {
       var genericType = TypeFake.num();
       var propertyName = '${genericType.toString().camelCase}s';
       var propertyType = TypeFake.list(genericType);
+      var propertyWithBuildInfo = PropertyWithBuildInfo(
+        propertyName,
+        classElement: personClassElement,
+        fieldElement: FieldElementFake(propertyName, propertyType),
+      );
       test('canConvert(Person,$propertyType>)==true', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element, propertyType),
+              null,
+              TypeFake.personClass().element,
+              propertyType,
+            ),
             true);
       });
       test('canConvert(Person, int)==false', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element, TypeFake.int()),
+              null,
+              TypeFake.personClass().element,
+              TypeFake.int(),
+            ),
             false);
       });
       test('mapValueToObject nullable=false', () {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               mapValueExpression(propertyName),
               propertyType,
               nullable: false,
@@ -785,7 +950,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               mapValueExpression(propertyName),
               propertyType,
               nullable: true,
@@ -796,7 +961,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               objectPropertyExpression(propertyName),
               propertyType,
               nullable: false,
@@ -807,7 +972,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               objectPropertyExpression(propertyName),
               propertyType,
               nullable: true,
@@ -820,23 +985,34 @@ main() {
       var genericType = TypeFake.int();
       var propertyName = '${genericType.toString().camelCase}s';
       var propertyType = TypeFake.list(genericType);
+      var propertyWithBuildInfo = PropertyWithBuildInfo(
+        propertyName,
+        classElement: personClassElement,
+        fieldElement: FieldElementFake(propertyName, propertyType),
+      );
       test('canConvert(Person,$propertyType>)==true', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element, propertyType),
+              null,
+              TypeFake.personClass().element,
+              propertyType,
+            ),
             true);
       });
       test('canConvert(Person, int)==false', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element, TypeFake.int()),
+              null,
+              TypeFake.personClass().element,
+              TypeFake.int(),
+            ),
             false);
       });
       test('mapValueToObject nullable=false', () {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               mapValueExpression(propertyName),
               propertyType,
               nullable: false,
@@ -847,7 +1023,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               mapValueExpression(propertyName),
               propertyType,
               nullable: true,
@@ -858,7 +1034,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               objectPropertyExpression(propertyName),
               propertyType,
               nullable: false,
@@ -869,7 +1045,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               objectPropertyExpression(propertyName),
               propertyType,
               nullable: true,
@@ -882,23 +1058,34 @@ main() {
       var genericType = TypeFake.double();
       var propertyName = '${genericType.toString().camelCase}s';
       var propertyType = TypeFake.list(genericType);
+      var propertyWithBuildInfo = PropertyWithBuildInfo(
+        propertyName,
+        classElement: personClassElement,
+        fieldElement: FieldElementFake(propertyName, propertyType),
+      );
       test('canConvert(Person,$propertyType>)==true', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element, propertyType),
+              null,
+              TypeFake.personClass().element,
+              propertyType,
+            ),
             true);
       });
       test('canConvert(Person, int)==false', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element, TypeFake.int()),
+              null,
+              TypeFake.personClass().element,
+              TypeFake.int(),
+            ),
             false);
       });
       test('mapValueToObject nullable=false', () {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               mapValueExpression(propertyName),
               propertyType,
               nullable: false,
@@ -909,7 +1096,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               mapValueExpression(propertyName),
               propertyType,
               nullable: true,
@@ -920,7 +1107,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               objectPropertyExpression(propertyName),
               propertyType,
               nullable: false,
@@ -931,7 +1118,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               objectPropertyExpression(propertyName),
               propertyType,
               nullable: true,
@@ -944,23 +1131,34 @@ main() {
       var genericType = TypeFake.string();
       var propertyName = '${genericType.toString().camelCase}s';
       var propertyType = TypeFake.list(genericType);
+      var propertyWithBuildInfo = PropertyWithBuildInfo(
+        propertyName,
+        classElement: personClassElement,
+        fieldElement: FieldElementFake(propertyName, propertyType),
+      );
       test('canConvert(Person,$propertyType>)==true', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element, propertyType),
+              null,
+              TypeFake.personClass().element,
+              propertyType,
+            ),
             true);
       });
       test('canConvert(Person, int)==false', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element, TypeFake.int()),
+              null,
+              TypeFake.personClass().element,
+              TypeFake.int(),
+            ),
             false);
       });
       test('mapValueToObject nullable=false', () {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               mapValueExpression(propertyName),
               propertyType,
               nullable: false,
@@ -971,7 +1169,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               mapValueExpression(propertyName),
               propertyType,
               nullable: true,
@@ -982,7 +1180,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               objectPropertyExpression(propertyName),
               propertyType,
               nullable: false,
@@ -993,7 +1191,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               objectPropertyExpression(propertyName),
               propertyType,
               nullable: true,
@@ -1006,23 +1204,34 @@ main() {
       var genericType = TypeFake.uri();
       var propertyName = '${genericType.toString().camelCase}s';
       var propertyType = TypeFake.list(genericType);
+      var propertyWithBuildInfo = PropertyWithBuildInfo(
+        propertyName,
+        classElement: personClassElement,
+        fieldElement: FieldElementFake(propertyName, propertyType),
+      );
       test('canConvert(Person,$propertyType>)==true', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element, propertyType),
+              null,
+              TypeFake.personClass().element,
+              propertyType,
+            ),
             true);
       });
       test('canConvert(Person, int)==false', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element, TypeFake.int()),
+              null,
+              TypeFake.personClass().element,
+              TypeFake.int(),
+            ),
             false);
       });
       test('mapValueToObject nullable=false', () {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               mapValueExpression(propertyName),
               propertyType,
               nullable: false,
@@ -1033,7 +1242,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               mapValueExpression(propertyName),
               propertyType,
               nullable: true,
@@ -1044,7 +1253,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               objectPropertyExpression(propertyName),
               propertyType,
               nullable: false,
@@ -1055,7 +1264,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               objectPropertyExpression(propertyName),
               propertyType,
               nullable: true,
@@ -1068,23 +1277,34 @@ main() {
       var genericType = TypeFake.bigInt();
       var propertyName = '${genericType.toString().camelCase}s';
       var propertyType = TypeFake.list(genericType);
+      var propertyWithBuildInfo = PropertyWithBuildInfo(
+        propertyName,
+        classElement: personClassElement,
+        fieldElement: FieldElementFake(propertyName, propertyType),
+      );
       test('canConvert(Person,$propertyType>)==true', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element, propertyType),
+              null,
+              TypeFake.personClass().element,
+              propertyType,
+            ),
             true);
       });
       test('canConvert(Person, int)==false', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element, TypeFake.int()),
+              null,
+              TypeFake.personClass().element,
+              TypeFake.int(),
+            ),
             false);
       });
       test('mapValueToObject nullable=false', () {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               mapValueExpression(propertyName),
               propertyType,
               nullable: false,
@@ -1095,7 +1315,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               mapValueExpression(propertyName),
               propertyType,
               nullable: true,
@@ -1106,7 +1326,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               objectPropertyExpression(propertyName),
               propertyType,
               nullable: false,
@@ -1117,7 +1337,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               objectPropertyExpression(propertyName),
               propertyType,
               nullable: true,
@@ -1130,23 +1350,34 @@ main() {
       var genericType = TypeFake.dateTime();
       var propertyName = '${genericType.toString().camelCase}s';
       var propertyType = TypeFake.list(genericType);
+      var propertyWithBuildInfo = PropertyWithBuildInfo(
+        propertyName,
+        classElement: personClassElement,
+        fieldElement: FieldElementFake(propertyName, propertyType),
+      );
       test('canConvert(Person,$propertyType>)==true', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element, propertyType),
+              null,
+              TypeFake.personClass().element,
+              propertyType,
+            ),
             true);
       });
       test('canConvert(Person, int)==false', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element, TypeFake.int()),
+              null,
+              TypeFake.personClass().element,
+              TypeFake.int(),
+            ),
             false);
       });
       test('mapValueToObject nullable=false', () {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               mapValueExpression(propertyName),
               propertyType,
               nullable: false,
@@ -1157,7 +1388,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               mapValueExpression(propertyName),
               propertyType,
               nullable: true,
@@ -1168,7 +1399,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               objectPropertyExpression(propertyName),
               propertyType,
               nullable: false,
@@ -1179,7 +1410,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               objectPropertyExpression(propertyName),
               propertyType,
               nullable: true,
@@ -1192,23 +1423,34 @@ main() {
       var genericType = TypeFake.duration();
       var propertyName = '${genericType.toString().camelCase}s';
       var propertyType = TypeFake.list(genericType);
+      var propertyWithBuildInfo = PropertyWithBuildInfo(
+        propertyName,
+        classElement: personClassElement,
+        fieldElement: FieldElementFake(propertyName, propertyType),
+      );
       test('canConvert(Person,$propertyType>)==true', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element, propertyType),
+              null,
+              TypeFake.personClass().element,
+              propertyType,
+            ),
             true);
       });
       test('canConvert(Person, int)==false', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element, TypeFake.int()),
+              null,
+              TypeFake.personClass().element,
+              TypeFake.int(),
+            ),
             false);
       });
       test('mapValueToObject nullable=false', () {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               mapValueExpression(propertyName),
               propertyType,
               nullable: false,
@@ -1219,7 +1461,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               mapValueExpression(propertyName),
               propertyType,
               nullable: true,
@@ -1230,7 +1472,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               objectPropertyExpression(propertyName),
               propertyType,
               nullable: false,
@@ -1241,7 +1483,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               objectPropertyExpression(propertyName),
               propertyType,
               nullable: true,
@@ -1254,23 +1496,34 @@ main() {
       var genericType = TypeFake.genderEnum();
       var propertyName = '${genericType.toString().camelCase}s';
       var propertyType = TypeFake.list(genericType);
+      var propertyWithBuildInfo = PropertyWithBuildInfo(
+        propertyName,
+        classElement: personClassElement,
+        fieldElement: FieldElementFake(propertyName, propertyType),
+      );
       test('canConvert(Person,$propertyType>)==true', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element, propertyType),
+              null,
+              TypeFake.personClass().element,
+              propertyType,
+            ),
             true);
       });
       test('canConvert(Person, int)==false', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element, TypeFake.int()),
+              null,
+              TypeFake.personClass().element,
+              TypeFake.int(),
+            ),
             false);
       });
       test('mapValueToObject nullable=false', () {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               mapValueExpression(propertyName),
               propertyType,
               nullable: false,
@@ -1281,7 +1534,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               mapValueExpression(propertyName),
               propertyType,
               nullable: true,
@@ -1292,7 +1545,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               objectPropertyExpression(propertyName),
               propertyType,
               nullable: false,
@@ -1303,7 +1556,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               objectPropertyExpression(propertyName),
               propertyType,
               nullable: true,
@@ -1316,23 +1569,34 @@ main() {
       var genericType = TypeFake.personClass();
       var propertyName = '${genericType.toString().camelCase}s';
       var propertyType = TypeFake.list(genericType);
+      var propertyWithBuildInfo = PropertyWithBuildInfo(
+        propertyName,
+        classElement: personClassElement,
+        fieldElement: FieldElementFake(propertyName, propertyType),
+      );
       test('canConvert(Person,$propertyType>)==true', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element, propertyType),
+              null,
+              TypeFake.personClass().element,
+              propertyType,
+            ),
             true);
       });
       test('canConvert(Person, int)==false', () {
         expect(
             expressionFactory.canConvert(
-                TypeFake.personClass().element, TypeFake.int()),
+              null,
+              TypeFake.personClass().element,
+              TypeFake.int(),
+            ),
             false);
       });
       test('mapValueToObject nullable=false', () {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               mapValueExpression(propertyName),
               propertyType,
               nullable: false,
@@ -1343,7 +1607,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.mapValueToObject(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               mapValueExpression(propertyName),
               propertyType,
               nullable: true,
@@ -1354,7 +1618,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               objectPropertyExpression(propertyName),
               propertyType,
               nullable: false,
@@ -1365,7 +1629,7 @@ main() {
         expect(
             code.CodeFormatter().unFormatted(expressionFactory.objectToMapValue(
               idFactory,
-              personClassElement,
+              propertyWithBuildInfo,
               objectPropertyExpression(propertyName),
               propertyType,
               nullable: true,

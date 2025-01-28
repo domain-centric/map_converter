@@ -7,8 +7,11 @@ import '../../example/custom_converter/custom_converter.domain.dart' as i1;
 /// For more information see: https://pub.dev/packages/map_converter
 Map<String, dynamic> customMappingExampleToMap(
         i1.CustomMappingExample customMappingExample) =>
-    {'duration': customMappingExample.duration.inMicroseconds};
+    {
+      'dateTime':
+          i1.MyCustomConverter().toPrimitive(customMappingExample.dateTime)
+    };
 i1.CustomMappingExample mapToCustomMappingExample(
         Map<String, dynamic> customMappingExampleMap) =>
-    i1.CustomMappingExample(
-        Duration(microseconds: customMappingExampleMap['duration'] as int));
+    i1.CustomMappingExample(i1.MyCustomConverter()
+        .fromPrimitive(customMappingExampleMap['dateTime']));

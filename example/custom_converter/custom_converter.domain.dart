@@ -2,14 +2,14 @@ import 'package:map_converter/map_converter.dart';
 
 @MapConverter([
   Property(
-    'duration',
+    'dateTime',
     converter: MyCustomConverter(),
   )
 ])
 class CustomMappingExample {
-  final Duration duration;
+  final DateTime dateTime;
 
-  CustomMappingExample(this.duration);
+  CustomMappingExample(this.dateTime);
 }
 
 class MyCustomConverter extends PrimitiveConverter<DateTime, int> {

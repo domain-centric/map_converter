@@ -1,129 +1,26 @@
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
-import 'package:collection/collection.dart';
 import 'package:dart_code/dart_code.dart' as code;
+import 'package:map_converter/map_converter.dart';
 import 'package:map_converter/src/builder/map_converter_builder.dart';
+import 'package:map_converter/src/builder/value_expression_factory/value_expression_factory.dart';
 import 'package:recase/recase.dart';
-
-/// Creates a Dart code expressions for a generated MapConverter
-abstract class ValueExpressionFactory {
-  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert);
-
-  /// Creates a Dart code expressions for a generated MapConverter
-  /// to convert a [SimplifiedMapValue] to an object
-  code.Expression mapValueToObject(
-    MapConverterLibraryAssetIdFactory idFactory,
-    ClassElement classElement,
-
-    /// [source]: An expression of the source data, e.g.:
-    /// * personMap['propertyName'] (a [SimplifiedMapValue] within a [Map])
-    /// * e (for an element in a collection)
-    /// * k (for a key value in a [Map])
-    /// * v (for a value in a [Map])
-    code.Expression source,
-    InterfaceType sourceType, {
-    required bool nullable,
-  });
-
-  /// Creates a Dart code expressions for a generated MapConverter
-  /// to convert a [source] object to a [SimplifiedMapValue]
-  code.Expression objectToMapValue(
-    MapConverterLibraryAssetIdFactory idFactory,
-    ClassElement classElement,
-
-    /// [source]: An expression of the source data, e.g.:
-    /// * person.name (a field or property value of an object)
-    /// * e (for an element in a collection)
-    /// * k (for a key value in a [Map])
-    /// * v (for a value in a [Map])
-    code.Expression source,
-    InterfaceType sourceType, {
-    required bool nullable,
-  });
-}
-
-/// By convention, a [SimplifiedMap] map:
-/// * Has key values that are camelCased [String]
-/// * Has a limited set of values types, see [SimplifiedMapValue]
-class SimplifiedMap {
-  //only used as documentation
-}
-
-/// By convention, a [SimplifiedMapValue] should only be one of the following:
-/// * null
-/// * [bool]
-/// * [int]
-/// * [num]
-/// * [String]
-/// * [List] with only of the types above
-/// * [Map] see [SimplifiedMap]
-class SimplifiedMapValue {
-  //only used as documentation
-}
-
-/// Supported basic types from dart core library:
-/// * BigInt
-/// * bool
-/// * DateTime
-/// * double
-/// * Duration
-/// * Enum
-/// * int
-/// * Iterable
-/// * List
-/// * Map
-/// * num
-/// * Object (containing one or more properties of the other kind)
-/// * Set
-/// * String
-/// * Uri
-class ValueExpressionFactories extends DelegatingList<ValueExpressionFactory> {
-  ValueExpressionFactories.basic()
-      : super([
-          BoolExpressionFactory(),
-          NumExpressionFactory(),
-          IntExpressionFactory(),
-          DoubleExpressionFactory(),
-          StringExpressionFactory(),
-          UriExpressionFactory(),
-          BigIntExpressionFactory(),
-          DateTimeExpressionFactory(),
-          DurationExpressionFactory(),
-          EnumExpressionFactory(),
-          DomainObjectExpressionFactory(),
-        ]);
-
-  ValueExpressionFactories.collection()
-      : super([
-          ListExpressionFactory(),
-        ]);
-
-  ValueExpressionFactories.all()
-      : super([
-          ...ValueExpressionFactories.basic(),
-          ...ValueExpressionFactories.collection(),
-        ]);
-
-  ValueExpressionFactory? findFor(
-          InterfaceElement classElement, InterfaceType typeToConvert) =>
-      firstWhereOrNull((valueExpressionFactory) =>
-          valueExpressionFactory.canConvert(classElement, typeToConvert));
-
-  bool supports(InterfaceElement classElement, InterfaceType typeToConvert) =>
-      findFor(classElement, typeToConvert) != null;
-}
 
 class BoolExpressionFactory extends ValueExpressionFactory {
   @override
-  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
+  bool canConvert(
+    Property? propertyAnnotation,
+    InterfaceElement classElement,
+    InterfaceType typeToConvert,
+  ) =>
       typeToConvert.isDartCoreBool;
 
   @override
   code.Expression objectToMapValue(
     MapConverterLibraryAssetIdFactory idFactory,
-    ClassElement classElement,
+    PropertyWithBuildInfo property,
     code.Expression source,
-    InterfaceType sourceType, {
+    InterfaceType typeToConvert, {
     required bool nullable,
   }) =>
       source;
@@ -131,85 +28,100 @@ class BoolExpressionFactory extends ValueExpressionFactory {
   @override
   code.Expression mapValueToObject(
           MapConverterLibraryAssetIdFactory idFactory,
-          ClassElement classElement,
+          PropertyWithBuildInfo property,
           code.Expression source,
-          InterfaceType sourceType,
+          InterfaceType typeToConvert,
           {required bool nullable}) =>
       source.asA(code.Type.ofBool(nullable: nullable));
 }
 
 class NumExpressionFactory extends ValueExpressionFactory {
   @override
-  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
+  bool canConvert(
+    Property? propertyAnnotation,
+    InterfaceElement classElement,
+    InterfaceType typeToConvert,
+  ) =>
       typeToConvert.isDartCoreNum;
 
   @override
   code.Expression objectToMapValue(
     MapConverterLibraryAssetIdFactory idFactory,
-    ClassElement classElement,
+    PropertyWithBuildInfo property,
     code.Expression source,
-    InterfaceType sourceType, {
+    InterfaceType typeToConvert, {
     required bool nullable,
   }) =>
       source;
 
   @override
   code.Expression mapValueToObject(
-          MapConverterLibraryAssetIdFactory idFactory,
-          ClassElement classElement,
-          code.Expression source,
-          InterfaceType sourceType,
-          {required bool nullable}) =>
+    MapConverterLibraryAssetIdFactory idFactory,
+    PropertyWithBuildInfo property,
+    code.Expression source,
+    InterfaceType typeToConvert, {
+    required bool nullable,
+  }) =>
       source.asA(code.Type.ofNum(nullable: nullable));
 }
 
 class IntExpressionFactory extends ValueExpressionFactory {
   @override
-  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
+  bool canConvert(
+    Property? propertyAnnotation,
+    InterfaceElement classElement,
+    InterfaceType typeToConvert,
+  ) =>
       typeToConvert.isDartCoreInt;
 
   @override
   code.Expression objectToMapValue(
     MapConverterLibraryAssetIdFactory idFactory,
-    ClassElement classElement,
+    PropertyWithBuildInfo property,
     code.Expression source,
-    InterfaceType sourceType, {
+    InterfaceType typeToConvert, {
     required bool nullable,
   }) =>
       source;
 
   @override
   code.Expression mapValueToObject(
-          MapConverterLibraryAssetIdFactory idFactory,
-          ClassElement classElement,
-          code.Expression source,
-          InterfaceType sourceType,
-          {required bool nullable}) =>
+    MapConverterLibraryAssetIdFactory idFactory,
+    PropertyWithBuildInfo property,
+    code.Expression source,
+    InterfaceType typeToConvert, {
+    required bool nullable,
+  }) =>
       source.asA(code.Type.ofInt(nullable: nullable));
 }
 
 class DoubleExpressionFactory extends ValueExpressionFactory {
   @override
-  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
+  bool canConvert(
+    Property? propertyAnnotation,
+    InterfaceElement classElement,
+    InterfaceType typeToConvert,
+  ) =>
       typeToConvert.isDartCoreDouble;
 
   @override
   code.Expression objectToMapValue(
     MapConverterLibraryAssetIdFactory idFactory,
-    ClassElement classElement,
+    PropertyWithBuildInfo property,
     code.Expression source,
-    InterfaceType sourceType, {
+    InterfaceType typeToConvert, {
     required bool nullable,
   }) =>
       source;
 
   @override
   code.Expression mapValueToObject(
-          MapConverterLibraryAssetIdFactory idFactory,
-          ClassElement classElement,
-          code.Expression source,
-          InterfaceType sourceType,
-          {required bool nullable}) =>
+    MapConverterLibraryAssetIdFactory idFactory,
+    PropertyWithBuildInfo property,
+    code.Expression source,
+    InterfaceType typeToConvert, {
+    required bool nullable,
+  }) =>
       code.Expression.betweenParentheses(
               source.asA(code.Type.ofNum(nullable: nullable)))
           .callMethod('toDouble', ifNullReturnNull: nullable);
@@ -217,53 +129,62 @@ class DoubleExpressionFactory extends ValueExpressionFactory {
 
 class StringExpressionFactory extends ValueExpressionFactory {
   @override
-  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
+  bool canConvert(
+    Property? propertyAnnotation,
+    InterfaceElement classElement,
+    InterfaceType typeToConvert,
+  ) =>
       typeToConvert.isDartCoreString;
 
   @override
   code.Expression objectToMapValue(
     MapConverterLibraryAssetIdFactory idFactory,
-    ClassElement classElement,
+    PropertyWithBuildInfo property,
     code.Expression source,
-    InterfaceType sourceType, {
+    InterfaceType typeToConvert, {
     required bool nullable,
   }) =>
       source;
 
   @override
   code.Expression mapValueToObject(
-          MapConverterLibraryAssetIdFactory idFactory,
-          ClassElement classElement,
-          code.Expression source,
-          InterfaceType sourceType,
-          {required bool nullable}) =>
+    MapConverterLibraryAssetIdFactory idFactory,
+    PropertyWithBuildInfo property,
+    code.Expression source,
+    InterfaceType typeToConvert, {
+    required bool nullable,
+  }) =>
       source.asA(code.Type.ofString(nullable: nullable));
 }
 
 class UriExpressionFactory extends ValueExpressionFactory {
   @override
-  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) {
-    return typeToConvert.getDisplayString(withNullability: false) == 'Uri' &&
-        typeToConvert.element.library.name == 'dart.core';
-  }
+  bool canConvert(
+    Property? propertyAnnotation,
+    InterfaceElement classElement,
+    InterfaceType typeToConvert,
+  ) =>
+      typeToConvert.getDisplayString(withNullability: false) == 'Uri' &&
+      typeToConvert.element.library.name == 'dart.core';
 
   @override
   code.Expression objectToMapValue(
     MapConverterLibraryAssetIdFactory idFactory,
-    ClassElement classElement,
+    PropertyWithBuildInfo property,
     code.Expression source,
-    InterfaceType sourceType, {
+    InterfaceType typeToConvert, {
     required bool nullable,
   }) =>
       source.callMethod('toString', ifNullReturnNull: nullable);
 
   @override
   code.Expression mapValueToObject(
-      MapConverterLibraryAssetIdFactory idFactory,
-      ClassElement classElement,
-      code.Expression source,
-      InterfaceType sourceType,
-      {required bool nullable}) {
+    MapConverterLibraryAssetIdFactory idFactory,
+    PropertyWithBuildInfo property,
+    code.Expression source,
+    InterfaceType typeToConvert, {
+    required bool nullable,
+  }) {
     var result = code.Expression.ofType(code.Type.ofUri()).callMethod('parse',
         parameterValues: code.ParameterValues(
             [code.ParameterValue(source.asA(code.Type.ofString()))]));
@@ -284,27 +205,32 @@ code.Expression _wrapWithIfNullWhenNullable(
 
 class BigIntExpressionFactory extends ValueExpressionFactory {
   @override
-  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
+  bool canConvert(
+    Property? propertyAnnotation,
+    InterfaceElement classElement,
+    InterfaceType typeToConvert,
+  ) =>
       typeToConvert.getDisplayString(withNullability: false) == 'BigInt' &&
       typeToConvert.element.library.name == 'dart.core';
 
   @override
   code.Expression objectToMapValue(
     MapConverterLibraryAssetIdFactory idFactory,
-    ClassElement classElement,
+    PropertyWithBuildInfo property,
     code.Expression source,
-    InterfaceType sourceType, {
+    InterfaceType typeToConvert, {
     required bool nullable,
   }) =>
       source.callMethod('toString', ifNullReturnNull: nullable);
 
   @override
   code.Expression mapValueToObject(
-      MapConverterLibraryAssetIdFactory idFactory,
-      ClassElement classElement,
-      code.Expression source,
-      InterfaceType sourceType,
-      {required bool nullable}) {
+    MapConverterLibraryAssetIdFactory idFactory,
+    PropertyWithBuildInfo property,
+    code.Expression source,
+    InterfaceType typeToConvert, {
+    required bool nullable,
+  }) {
     var result = code.Expression.ofType(code.Type.ofBigInt()).callMethod(
         'parse',
         parameterValues: code.ParameterValues(
@@ -315,27 +241,32 @@ class BigIntExpressionFactory extends ValueExpressionFactory {
 
 class DateTimeExpressionFactory extends ValueExpressionFactory {
   @override
-  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
+  bool canConvert(
+    Property? propertyAnnotation,
+    InterfaceElement classElement,
+    InterfaceType typeToConvert,
+  ) =>
       typeToConvert.getDisplayString(withNullability: false) == 'DateTime' &&
       typeToConvert.element.library.name == 'dart.core';
 
   @override
   code.Expression objectToMapValue(
     MapConverterLibraryAssetIdFactory idFactory,
-    ClassElement classElement,
+    PropertyWithBuildInfo property,
     code.Expression source,
-    InterfaceType sourceType, {
+    InterfaceType typeToConvert, {
     required bool nullable,
   }) =>
       source.callMethod('toIso8601String', ifNullReturnNull: nullable);
 
   @override
   code.Expression mapValueToObject(
-      MapConverterLibraryAssetIdFactory idFactory,
-      ClassElement classElement,
-      code.Expression source,
-      InterfaceType sourceType,
-      {required bool nullable}) {
+    MapConverterLibraryAssetIdFactory idFactory,
+    PropertyWithBuildInfo property,
+    code.Expression source,
+    InterfaceType typeToConvert, {
+    required bool nullable,
+  }) {
     var result = code.Expression.ofType(code.Type.ofDateTime()).callMethod(
         'parse',
         parameterValues: code.ParameterValues(
@@ -346,27 +277,32 @@ class DateTimeExpressionFactory extends ValueExpressionFactory {
 
 class DurationExpressionFactory extends ValueExpressionFactory {
   @override
-  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
+  bool canConvert(
+    Property? propertyAnnotation,
+    InterfaceElement classElement,
+    InterfaceType typeToConvert,
+  ) =>
       typeToConvert.getDisplayString(withNullability: false) == 'Duration' &&
       typeToConvert.element.library.name == 'dart.core';
 
   @override
   code.Expression objectToMapValue(
     MapConverterLibraryAssetIdFactory idFactory,
-    ClassElement classElement,
+    PropertyWithBuildInfo property,
     code.Expression source,
-    InterfaceType sourceType, {
+    InterfaceType typeToConvert, {
     required bool nullable,
   }) =>
       source.getProperty('inMicroseconds', ifNullReturnNull: nullable);
 
   @override
   code.Expression mapValueToObject(
-      MapConverterLibraryAssetIdFactory idFactory,
-      ClassElement classElement,
-      code.Expression source,
-      InterfaceType sourceType,
-      {required bool nullable}) {
+    MapConverterLibraryAssetIdFactory idFactory,
+    PropertyWithBuildInfo property,
+    code.Expression source,
+    InterfaceType typeToConvert, {
+    required bool nullable,
+  }) {
     var result = code.Expression.callConstructor(code.Type.ofDuration(),
         parameterValues: code.ParameterValues([
           code.ParameterValue.named(
@@ -378,27 +314,33 @@ class DurationExpressionFactory extends ValueExpressionFactory {
 
 class EnumExpressionFactory implements ValueExpressionFactory {
   @override
-  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
+  bool canConvert(
+    Property? propertyAnnotation,
+    InterfaceElement classElement,
+    InterfaceType typeToConvert,
+  ) =>
       typeToConvert.element.toString().startsWith('enum ');
 
   @override
   code.Expression objectToMapValue(
     MapConverterLibraryAssetIdFactory idFactory,
-    ClassElement classElement,
+    PropertyWithBuildInfo property,
     code.Expression source,
-    InterfaceType sourceType, {
+    InterfaceType typeToConvert, {
     required bool nullable,
   }) =>
       source.getProperty('name', ifNullReturnNull: nullable);
 
   @override
   code.Expression mapValueToObject(
-      MapConverterLibraryAssetIdFactory idFactory,
-      ClassElement classElement,
-      code.Expression source,
-      InterfaceType sourceType,
-      {required bool nullable}) {
-    var result = code.Expression.ofType(createType(sourceType, false))
+    MapConverterLibraryAssetIdFactory idFactory,
+    PropertyWithBuildInfo property,
+    code.Expression source,
+    InterfaceType typeToConvert, {
+    required bool nullable,
+  }) {
+    var propertyType = createType(typeToConvert.element, false);
+    var result = code.Expression.ofType(propertyType)
         .getProperty('values')
         .callMethod('firstWhere',
             parameterValues: code.ParameterValues(([
@@ -412,38 +354,16 @@ class EnumExpressionFactory implements ValueExpressionFactory {
   }
 }
 
-code.Type createType(InterfaceType interfaceType, bool nullable) => code.Type(
-      interfaceType.getDisplayString(withNullability: false),
-      libraryUri: createLibraryUri(interfaceType.element),
-      nullable: nullable,
-    );
-
-String? createLibraryUri(InterfaceElement element) {
-  String? libraryUri = element.librarySource.uri.toString();
-  if (libraryUri == 'dart:core') {
-    return null;
-  }
-  if (libraryUri.startsWith('package:')) {
-    return libraryUri;
-  }
-  return createRelativeLibraryUri(libraryUri);
-}
-
-String createRelativeLibraryUri(String libraryUri) {
-  var numberOfSlashes = '/'.allMatches(libraryUri).length;
-  var foldersUpToRoot = numberOfSlashes - 1;
-  int indexFirstSlash = libraryUri.indexOf('/');
-  if (indexFirstSlash == -1) {
-    return libraryUri;
-  }
-  return '${'../' * foldersUpToRoot}${libraryUri.substring(indexFirstSlash + 1)}';
-}
 
 class DomainObjectExpressionFactory implements ValueExpressionFactory {
   final domainClassFactory = DomainClassFactory();
 
   @override
-  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) =>
+  bool canConvert(
+    Property? propertyAnnotation,
+    InterfaceElement classElement,
+    InterfaceType typeToConvert,
+  ) =>
       classElement == typeToConvert.element // prevent endless round trips
       ||
       domainClassFactory
@@ -451,16 +371,17 @@ class DomainObjectExpressionFactory implements ValueExpressionFactory {
 
   @override
   code.Expression mapValueToObject(
-      MapConverterLibraryAssetIdFactory idFactory,
-      ClassElement classElement,
-      code.Expression source,
-      InterfaceType sourceType,
-      {required bool nullable}) {
+    MapConverterLibraryAssetIdFactory idFactory,
+    PropertyWithBuildInfo property,
+    code.Expression source,
+    InterfaceType typeToConvert, {
+    required bool nullable,
+  }) {
     var functionName =
-        'mapTo${sourceType.getDisplayString(withNullability: false)}';
+        'mapTo${typeToConvert.getDisplayString(withNullability: false)}';
     var result = code.Expression.callMethodOrFunction(functionName,
         libraryUri: createRelativeLibraryUri(
-            idFactory.createOutputUriForType(sourceType)),
+            idFactory.createOutputUriForType(typeToConvert)),
         parameterValues: code.ParameterValues([
           code.ParameterValue(source.asA(code.Type.ofMap(
             keyType: code.Type.ofString(),
@@ -472,18 +393,19 @@ class DomainObjectExpressionFactory implements ValueExpressionFactory {
 
   @override
   code.Expression objectToMapValue(
-      MapConverterLibraryAssetIdFactory idFactory,
-      ClassElement classElement,
-      code.Expression source,
-      InterfaceType sourceType,
-      {required bool nullable}) {
+    MapConverterLibraryAssetIdFactory idFactory,
+    PropertyWithBuildInfo property,
+    code.Expression source,
+    InterfaceType typeToConvert, {
+    required bool nullable,
+  }) {
     var functionName =
-        '${sourceType.getDisplayString(withNullability: false).camelCase}ToMap';
+        '${typeToConvert.getDisplayString(withNullability: false).camelCase}ToMap';
     var sourceIsProperty =
         code.CodeFormatter().unFormatted(source).contains('.');
     var result = code.Expression.callMethodOrFunction(functionName,
         libraryUri: createRelativeLibraryUri(
-            idFactory.createOutputUriForType(sourceType)),
+            idFactory.createOutputUriForType(typeToConvert)),
         parameterValues: code.ParameterValues([
           code.ParameterValue(code.Expression([
             source,
@@ -500,7 +422,11 @@ class ListExpressionFactory implements ValueExpressionFactory {
   final String _listElementVariableName = 'listElement';
 
   @override
-  bool canConvert(InterfaceElement classElement, InterfaceType typeToConvert) {
+  bool canConvert(
+    Property? propertyAnnotation,
+    InterfaceElement classElement,
+    InterfaceType typeToConvert,
+  ) {
     if (!typeToConvert.isDartCoreList) {
       return false;
     }
@@ -510,23 +436,25 @@ class ListExpressionFactory implements ValueExpressionFactory {
     }
     return classElement == genericType.element // prevent endless round trips
         ||
-        basicValueExpressionFactories.supports(classElement, genericType);
+        basicValueExpressionFactories.supports(
+            propertyAnnotation, classElement, genericType);
   }
 
   @override
   code.Expression mapValueToObject(
-      MapConverterLibraryAssetIdFactory idFactory,
-      ClassElement classElement,
-      code.Expression source,
-      InterfaceType sourceType,
-      {required bool nullable}) {
-    var genericType = _genericType(sourceType) as InterfaceType;
+    MapConverterLibraryAssetIdFactory idFactory,
+    PropertyWithBuildInfo property,
+    code.Expression source,
+    InterfaceType typeToConvert, {
+    required bool nullable,
+  }) {
+    var genericType = _genericType(typeToConvert) as InterfaceType;
 
-    var valueExpressionFactory =
-        basicValueExpressionFactories.findFor(classElement, genericType)!;
+    var valueExpressionFactory = basicValueExpressionFactories.findFor(
+        property, property.classElement, genericType)!;
     var valueExpression = valueExpressionFactory.mapValueToObject(
       idFactory,
-      classElement,
+      property,
       code.Expression.ofVariable(_listElementVariableName),
       genericType,
       nullable: nullable,
@@ -549,18 +477,18 @@ class ListExpressionFactory implements ValueExpressionFactory {
   @override
   code.Expression objectToMapValue(
       MapConverterLibraryAssetIdFactory idFactory,
-      ClassElement classElement,
+      PropertyWithBuildInfo property,
       code.Expression source,
-      InterfaceType sourceType,
+      InterfaceType typeToConvert,
       {required bool nullable}) {
-    var genericType = _genericType(sourceType) as InterfaceType;
+    var genericType = _genericType(typeToConvert) as InterfaceType;
 
-    var valueExpressionFactory =
-        basicValueExpressionFactories.findFor(classElement, genericType)!;
+    var valueExpressionFactory = basicValueExpressionFactories.findFor(
+        property, property.classElement, genericType)!;
     var elementVariable = code.Expression.ofVariable(_listElementVariableName);
     var valueExpression = valueExpressionFactory.objectToMapValue(
       idFactory,
-      classElement,
+      property,
       elementVariable,
       genericType,
       nullable: nullable,
@@ -575,7 +503,7 @@ class ListExpressionFactory implements ValueExpressionFactory {
             parameterValues: code.ParameterValues([
               code.ParameterValue(code.Expression([
                 code.Code('('),
-                createType(genericType, nullable),
+                createType(genericType.element, nullable),
                 code.Code(' $_listElementVariableName) => '),
                 valueExpression,
               ]))
@@ -592,3 +520,4 @@ class ListExpressionFactory implements ValueExpressionFactory {
 
   DartType _genericType(InterfaceType listType) => listType.typeArguments.first;
 }
+
