@@ -7,10 +7,10 @@ environment:
   sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
-  analyzer: ^6.11.0
+  analyzer: ^7.2.0
   build: ^2.3.1
   collection: ^1.16.0
-  dart_code: ^0.1.10
+  dart_code: ^0.1.11
   logging: ^1.0.2
   pub_semver: ^2.1.4
   recase: ^4.0.0
@@ -20,6 +20,7 @@ dev_dependencies:
   lints: ^5.1.1
   test: ^1.21.5
   build_runner: ^2.3.3
-  json_serializable: ^6.6.2
+  json_serializable: ^6.9.3
   shouldly: ^0.5.0+1
+  json_annotation: ^4.9.0
 

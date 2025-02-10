@@ -1,4 +1,3 @@
-import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:dart_code/dart_code.dart' as code;
 import 'package:map_converter/map_converter.dart';
@@ -7,21 +6,19 @@ import 'package:map_converter/src/builder/value_expression_factory/value_express
 
 class NumExpressionFactory extends ValueExpressionFactory {
   @override
-  bool canConvert(
-    Property? propertyAnnotation,
-    InterfaceElement classElement,
+  SupportResult supports(
     InterfaceType typeToConvert,
+    Property? propertyAnnotation,
   ) =>
-      typeToConvert.isDartCoreNum;
+      SupportResult.of(typeToConvert.isDartCoreNum);
 
   @override
   code.Expression objectToMapValue(
     MapConverterLibraryAssetIdFactory idFactory,
     PropertyWithBuildInfo property,
     code.Expression source,
-    InterfaceType typeToConvert, {
-    required bool nullable,
-  }) =>
+    InterfaceType typeToConvert,
+  ) =>
       source;
 
   @override
@@ -29,8 +26,7 @@ class NumExpressionFactory extends ValueExpressionFactory {
     MapConverterLibraryAssetIdFactory idFactory,
     PropertyWithBuildInfo property,
     code.Expression source,
-    InterfaceType typeToConvert, {
-    required bool nullable,
-  }) =>
-      source.asA(code.Type.ofNum(nullable: nullable));
+    InterfaceType typeToConvert,
+  ) =>
+      source.asA(code.Type.ofNum(nullable: isNullable(typeToConvert)));
 }

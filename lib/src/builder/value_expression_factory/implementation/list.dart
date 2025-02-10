@@ -1,32 +1,26 @@
-import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:dart_code/dart_code.dart' as code;
-import 'package:map_converter/map_converter.dart';
+import 'package:map_converter/src/annotation.dart';
 import 'package:map_converter/src/builder/map_converter_builder.dart';
 import 'package:map_converter/src/builder/value_expression_factory/value_expression_factory.dart';
 
 class ListExpressionFactory implements ValueExpressionFactory {
-  final basicValueExpressionFactories = ValueExpressionFactories.basic();
   final codeFormatter = code.CodeFormatter();
   final String _listElementVariableName = 'listElement';
 
   @override
-  bool canConvert(
-    Property? propertyAnnotation,
-    InterfaceElement classElement,
-    InterfaceType typeToConvert,
-  ) {
+  SupportResult supports(
+      InterfaceType typeToConvert, Property? propertyAnnotation) {
     if (!typeToConvert.isDartCoreList) {
-      return false;
+      return NotSupported();
     }
     var genericType = _genericType(typeToConvert);
     if (genericType is! InterfaceType) {
-      return false;
+      return NotSupported();
     }
-    return classElement == genericType.element // prevent endless round trips
-        ||
-        basicValueExpressionFactories.supports(
-            propertyAnnotation, classElement, genericType);
+    var queries = {Query(genericType)};
+
+    return SupportedIfQueriesAreSupported(queries);
   }
 
   @override
@@ -34,19 +28,17 @@ class ListExpressionFactory implements ValueExpressionFactory {
     MapConverterLibraryAssetIdFactory idFactory,
     PropertyWithBuildInfo property,
     code.Expression source,
-    InterfaceType typeToConvert, {
-    required bool nullable,
-  }) {
+    InterfaceType typeToConvert,
+  ) {
+    var nullable = isNullable(typeToConvert);
     var genericType = _genericType(typeToConvert) as InterfaceType;
-
-    var valueExpressionFactory = basicValueExpressionFactories.findFor(
-        property, property.classElement, genericType)!;
+    var query = Query(genericType);
+    var valueExpressionFactory = ValueExpressionFactories().findFor(query)!;
     var valueExpression = valueExpressionFactory.mapValueToObject(
       idFactory,
       property,
       code.Expression.ofVariable(_listElementVariableName),
       genericType,
-      nullable: nullable,
     );
 
     return source
@@ -60,31 +52,34 @@ class ListExpressionFactory implements ValueExpressionFactory {
             ]))
           ]),
         )
-        .callMethod('toList');
+        .callMethod('toList')
+        .callMethod(
+          'cast',
+          genericType: createType(genericType.element, isNullable(genericType)),
+        );
   }
 
   @override
   code.Expression objectToMapValue(
-      MapConverterLibraryAssetIdFactory idFactory,
-      PropertyWithBuildInfo property,
-      code.Expression source,
-      InterfaceType typeToConvert,
-      {required bool nullable}) {
+    MapConverterLibraryAssetIdFactory idFactory,
+    PropertyWithBuildInfo property,
+    code.Expression source,
+    InterfaceType typeToConvert,
+  ) {
     var genericType = _genericType(typeToConvert) as InterfaceType;
-
-    var valueExpressionFactory = basicValueExpressionFactories.findFor(
-        property, property.classElement, genericType)!;
+    var query = Query(genericType);
+    var valueExpressionFactory = ValueExpressionFactories().findFor(query)!;
     var elementVariable = code.Expression.ofVariable(_listElementVariableName);
     var valueExpression = valueExpressionFactory.objectToMapValue(
       idFactory,
       property,
       elementVariable,
       genericType,
-      nullable: nullable,
     );
 
     var expression = source;
     if (_needsMapping(elementVariable, valueExpression)) {
+      var nullable = isNullable(typeToConvert);
       expression = expression
           .callMethod(
             'map',
@@ -92,7 +87,7 @@ class ListExpressionFactory implements ValueExpressionFactory {
             parameterValues: code.ParameterValues([
               code.ParameterValue(code.Expression([
                 code.Code('('),
-                createType(genericType.element, nullable),
+                createType(genericType.element, isNullable(genericType)),
                 code.Code(' $_listElementVariableName) => '),
                 valueExpression,
               ]))
@@ -109,4 +104,3 @@ class ListExpressionFactory implements ValueExpressionFactory {
 
   DartType _genericType(InterfaceType listType) => listType.typeArguments.first;
 }
-

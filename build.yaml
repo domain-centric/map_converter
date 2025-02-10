@@ -5,8 +5,8 @@ targets:
       map_converter|map_converter_builder:
         enabled: True
         options:
-          input: '^{{}}.domain.dart'
-          output: '{{}}_map_converter.data.dart'
+          input: '^{{}}.dart'
+          output: '{{}}_map_converter.dart'
 
 builders:
   map_converter_builder:
