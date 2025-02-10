@@ -33,8 +33,6 @@ class Example {
   Example myExample = Example();
   Example? myNullableExample;
 
-  Set<Example> myExampleSet = {};
-  Set<Example>? myNullableExampleSet;
   Iterable<Example> myExampleIterable = {};
   Iterable<Example>? myNullableExampleIterable;
 }

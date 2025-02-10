@@ -16,6 +16,7 @@ import 'package:map_converter/src/builder/value_expression_factory/implementatio
 import 'package:map_converter/src/builder/value_expression_factory/implementation/int.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/map.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/num.dart';
+import 'package:map_converter/src/builder/value_expression_factory/implementation/set.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/string.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/uri.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/list.dart';
@@ -149,6 +150,7 @@ class ValueExpressionFactories extends DelegatingList<ValueExpressionFactory> {
 
   static final _collectionValueExpressionFactories = [
     ListExpressionFactory(),
+    SetExpressionFactory(),
     MapExpressionFactory()
   ];
 

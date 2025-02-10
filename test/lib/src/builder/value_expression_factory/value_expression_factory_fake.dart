@@ -102,6 +102,12 @@ class TypeFake implements InterfaceType {
         libraryUrl = '',
         typeArguments = [genericType];
 
+  TypeFake.set(TypeFake genericType, {this.nullable = false})
+      : typeAsString = "Set",
+        isDartCoreType = true,
+        libraryUrl = '',
+        typeArguments = [genericType];
+
   TypeFake.map(TypeFake keyType, TypeFake valueType, {this.nullable = false})
       : typeAsString = "Map",
         isDartCoreType = true,
@@ -231,7 +237,7 @@ class TypeFake implements InterfaceType {
   bool get isDartCoreObject => throw UnimplementedError();
 
   @override
-  bool get isDartCoreSet => throw UnimplementedError();
+  bool get isDartCoreSet => typeAsString == 'Set';
 
   @override
   bool get isDartCoreString => typeAsString == 'String';

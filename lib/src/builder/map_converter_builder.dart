@@ -12,9 +12,7 @@ import 'package:recase/recase.dart';
 
 class MapConverterBuilder implements Builder {
   final BuilderOptions builderOptions;
-  MapConverterBuilder(this.builderOptions) {
-    print("config: ${builderOptions.config}");
-  }
+  MapConverterBuilder(this.builderOptions);
 
   /// Gets the input parameter of the options section in the build.yaml file.
   /// The input tells the [MapConverterBuilder] which files to process.
