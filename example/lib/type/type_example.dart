@@ -8,12 +8,6 @@ import '../person/person.dart';
 //@JsonSerializable()
 @MapConverter()
 class Example {
-  num myNum = 1;
-  num? myNullableNum;
-  int myInt = 1;
-  int? myNullableInt;
-  double myDouble = 1;
-  double? myNullableDouble;
   bool myBool = false;
   bool? myNullableBool;
   Gender myEnum = Gender.male;
