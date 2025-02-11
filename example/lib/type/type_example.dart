@@ -8,8 +8,6 @@ import '../person/person.dart';
 //@JsonSerializable()
 @MapConverter()
 class Example {
-  String myString = '';
-  String? myNullableString;
   num myNum = 1;
   num? myNullableNum;
   int myInt = 1;

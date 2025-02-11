@@ -9,8 +9,6 @@ import '../../../example/lib/type/type_example_map_converter.dart' as i4;
 /// Generate command: dart run build_runner build --delete-conflicting-outputs
 /// For more information see: https://pub.dev/packages/map_converter
 i1.Example mapToExample(Map<String, dynamic> exampleMap) => i1.Example()
-  ..myString = exampleMap['myString'] as String
-  ..myNullableString = exampleMap['myNullableString'] as String?
   ..myNum = exampleMap['myNum'] as num
   ..myNullableNum = exampleMap['myNullableNum'] as num?
   ..myInt = (exampleMap['myInt'] as num).toInt()
@@ -60,8 +58,6 @@ i1.Example mapToExample(Map<String, dynamic> exampleMap) => i1.Example()
           exampleMap['myNullableExample'] as Map<String, dynamic>,
         );
 Map<String, dynamic> exampleToMap(i1.Example example) => {
-      'myString': example.myString,
-      'myNullableString': example.myNullableString,
       'myNum': example.myNum,
       'myNullableNum': example.myNullableNum,
       'myInt': example.myInt,

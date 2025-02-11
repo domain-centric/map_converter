@@ -4,12 +4,12 @@ import '../person/person.dart';
 
 @MapConverter()
 class Example {
-  Set<bool> setOfBool = {};
-  Set<Gender> setOfGender = {};
-  Set<Person> setOfPerson = {};
-  Set<int?> setOfNullableInt = {};
-  Set<double>? nullableSetOfDouble = {};
-  Set<String?>? nullableSetOfNullableStrings = {};
-  //TODO Set<Set<Person>> setOfSetOfPerson = {};
+  late Set<bool> setOfBool;
+  late Set<Gender> setOfGender;
+  late Set<Person> setOfPerson;
+  late Set<int?> setOfNullableInt;
+  late Set<double>? nullableSetOfDouble;
+  late Set<String?>? nullableSetOfNullableStrings;
+  //TODO Set<Set<Person>> setOfSetOfPerson;
   //TODO Set<Set<Person?>?>? nullableSetOfNullableSetOfNullablePersonSet;
 }
