@@ -6,7 +6,7 @@ import 'package:map_converter/src/builder/value_expression_factory/value_express
 
 class SetExpressionFactory implements ValueExpressionFactory {
   final codeFormatter = code.CodeFormatter();
-  final String _listElementVariableName = 'setElement';
+  final String _elementVariableName = 'setElement';
 
   @override
   SupportResult supports(
@@ -37,7 +37,7 @@ class SetExpressionFactory implements ValueExpressionFactory {
     var valueExpression = valueExpressionFactory.mapValueToObject(
       idFactory,
       property,
-      code.Expression.ofVariable(_listElementVariableName),
+      code.Expression.ofVariable(_elementVariableName),
       genericType,
     );
 
@@ -47,7 +47,7 @@ class SetExpressionFactory implements ValueExpressionFactory {
           ifNullReturnNull: nullable,
           parameterValues: code.ParameterValues([
             code.ParameterValue(code.Expression([
-              code.Code('($_listElementVariableName) => '),
+              code.Code('($_elementVariableName) => '),
               valueExpression,
             ]))
           ]),
@@ -69,7 +69,7 @@ class SetExpressionFactory implements ValueExpressionFactory {
     var genericType = _genericType(typeToConvert) as InterfaceType;
     var query = Query(genericType);
     var valueExpressionFactory = ValueExpressionFactories().findFor(query)!;
-    var elementVariable = code.Expression.ofVariable(_listElementVariableName);
+    var elementVariable = code.Expression.ofVariable(_elementVariableName);
     var valueExpression = valueExpressionFactory.objectToMapValue(
       idFactory,
       property,
@@ -88,7 +88,7 @@ class SetExpressionFactory implements ValueExpressionFactory {
               code.ParameterValue(code.Expression([
                 code.Code('('),
                 createType(genericType.element, isNullable(genericType)),
-                code.Code(' $_listElementVariableName) => '),
+                code.Code(' $_elementVariableName) => '),
                 valueExpression,
               ]))
             ]),

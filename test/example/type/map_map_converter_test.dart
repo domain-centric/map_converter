@@ -65,7 +65,6 @@ void main() {
             .be({4.3: 'test'});
       });
     });
-// FIXME: check for fixes and todo's
 // FIXME:
     // group('Complex Key and Primitive Value', () {
     //   test('mapWithComplexKeyAndPrimitiveValue', () {

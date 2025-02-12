@@ -7,8 +7,6 @@ import '../person/person.dart';
 
 // @JsonSerializable()
 
-// TODO see #9
-
 @MapConverter()
 class Example {
   late Iterable<bool> iterableOfBool;

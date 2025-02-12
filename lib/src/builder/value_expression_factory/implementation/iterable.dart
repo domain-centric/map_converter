@@ -4,14 +4,14 @@ import 'package:map_converter/src/annotation.dart';
 import 'package:map_converter/src/builder/map_converter_builder.dart';
 import 'package:map_converter/src/builder/value_expression_factory/value_expression_factory.dart';
 
-class ListExpressionFactory implements ValueExpressionFactory {
+class IterableExpressionFactory implements ValueExpressionFactory {
   final codeFormatter = code.CodeFormatter();
-  final String _elementVariableName = 'listElement';
+  final String _elementVariableName = 'element';
 
   @override
   SupportResult supports(
       InterfaceType typeToConvert, Property? propertyAnnotation) {
-    if (!typeToConvert.isDartCoreList) {
+    if (!typeToConvert.isDartCoreIterable) {
       return NotSupported();
     }
     var genericType = _genericType(typeToConvert);
