@@ -14,54 +14,54 @@ class MapConverterBuilder implements Builder {
   final BuilderOptions builderOptions;
   MapConverterBuilder(this.builderOptions);
 
-  /// Gets the input parameter of the options section in the build.yaml file.
-  /// The input tells the [MapConverterBuilder] which files to process.
-  /// See keys of [buildExtensions]
-  ///
-  /// Example of a build.yaml:
-  /// targets:
-  ///   $default:
-  ///     builders:
-  ///       map_converter|map_converter_builder:
-  ///         enabled: True
-  ///         options:
-  ///           input: ^lib/domain/{{}}.dart
-  ///           output: lib/domain/{{}}.data.converter.map.dart
-  String get input => (builderOptions.config['input'] ?? '').trim();
+  // /// Gets the input parameter of the options section in the build.yaml file.
+  // /// The input tells the [MapConverterBuilder] which files to process.
+  // /// See keys of [buildExtensions]
+  // ///
+  // /// Example of a build.yaml:
+  // /// targets:
+  // ///   $default:
+  // ///     builders:
+  // ///       map_converter|map_converter_builder:
+  // ///         enabled: True
+  // ///         options:
+  // ///           input: ^lib/domain/{{}}.dart
+  // ///           output: lib/domain/{{}}.data.converter.map.dart
+  // String get input => (builderOptions.config['input'] ?? '').trim();
 
-  /// Gets the output parameter of the options section in the build.yaml file.
-  /// The output tells the [MapConverterBuilder] where to store the results.
-  /// See value of [buildExtensions]
-  ///
-  /// Example of a build.yaml:
-  /// targets:
-  ///   $default:
-  ///     builders:
-  ///       map_converter|map_converter_builder:
-  ///         enabled: True
-  ///         options:
-  ///           input: ^lib/domain/{{}}.dart
-  ///           output: lib/domain/{{}}.data.converter.map.dart
-  String get output => (builderOptions.config['output'] ?? '').trim();
+  // /// Gets the output parameter of the options section in the build.yaml file.
+  // /// The output tells the [MapConverterBuilder] where to store the results.
+  // /// See value of [buildExtensions]
+  // ///
+  // /// Example of a build.yaml:
+  // /// targets:
+  // ///   $default:
+  // ///     builders:
+  // ///       map_converter|map_converter_builder:
+  // ///         enabled: True
+  // ///         options:
+  // ///           input: ^lib/domain/{{}}.dart
+  // ///           output: lib/domain/{{}}.data.converter.map.dart
+  // String get output => (builderOptions.config['output'] ?? '').trim();
 
-  @override
-  Map<String, List<String>> get buildExtensions {
-    if (input.isEmpty) {
-      log.log(
-          Level.SEVERE,
-          'input option in build.yaml file is not defined. '
-          'See documentation on: https://pub.dev/packages/map_converter');
-    }
-    if (output.isEmpty) {
-      log.log(
-          Level.SEVERE,
-          'output option in build.yaml file is not defined. '
-          'See documentation on: https://pub.dev/packages/map_converter');
-    }
-    return {
-      input: [output]
-    };
-  }
+  // @override
+  // Map<String, List<String>> get buildExtensions {
+  //   if (input.isEmpty) {
+  //     log.log(
+  //         Level.SEVERE,
+  //         'input option in build.yaml file is not defined. '
+  //         'See documentation on: https://pub.dev/packages/map_converter');
+  //   }
+  //   if (output.isEmpty) {
+  //     log.log(
+  //         Level.SEVERE,
+  //         'output option in build.yaml file is not defined. '
+  //         'See documentation on: https://pub.dev/packages/map_converter');
+  //   }
+  //   return {
+  //     input: [output]
+  //   };
+  // }
   // {
   //   '^lib/domain/{{}}.dart': ['lib/data/{{}}_map_converter.dart']
   // };
@@ -89,6 +89,11 @@ class MapConverterBuilder implements Builder {
           stackTrace);
     }
   }
+
+  @override
+  Map<String, List<String>> get buildExtensions => {
+        '^{{}}.dart': ['{{}}_map_converter.dart']
+      };
 }
 
 class MapConverterLibraryAssetIdFactory {

@@ -4,23 +4,13 @@ targets:
     builders:
       map_converter|map_converter_builder:
         enabled: True
-        options:
-          input: '^{{}}.dart'
-          output: '{{}}_map_converter.dart'
 
 builders:
   map_converter_builder:
     import: 'package:map_converter/builder.dart'
     builder_factories: ['mapConverterBuilder']
     build_extensions:
-      see_option_input:
-        - see_option_output
+      '^{{}}.dart' : ['{{}}_map_converter.dart']
     build_to: source
     auto_apply: dependents
-    defaults:
-      options:
-        input: "^{{}}.dart"
-        # in same folder as source: 
-        output: "{{}}_map_converter.dart"
-        # OR in a separate folder: 
-        # output: "lib/generated/{{}}_map_converter.dart"
+    
