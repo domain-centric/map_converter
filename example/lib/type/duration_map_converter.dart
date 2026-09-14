@@ -11,6 +11,6 @@ i1.Example mapToExample(Map<String, dynamic> exampleMap) => i1.Example()
       ? null
       : Duration(microseconds: exampleMap['myNullableDuration'] as int);
 Map<String, dynamic> exampleToMap(i1.Example example) => {
-      'myDuration': example.myDuration.inMicroseconds,
-      'myNullableDuration': example.myNullableDuration?.inMicroseconds,
-    };
+  'myDuration': example.myDuration.inMicroseconds,
+  'myNullableDuration': example.myNullableDuration?.inMicroseconds,
+};

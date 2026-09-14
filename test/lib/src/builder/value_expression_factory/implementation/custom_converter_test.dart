@@ -1,4 +1,3 @@
-import 'package:dart_code/dart_code.dart' as code;
 import 'package:map_converter/src/builder/map_converter_builder.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/custom_converter.dart';
 import 'package:map_converter/src/builder/value_expression_factory/value_expression_factory.dart';
@@ -8,7 +7,7 @@ import 'package:test/test.dart';
 import '../value_expression_factory_fake.dart';
 import '../value_expression_factory_test.dart';
 
-main() {
+void main() {
   var idFactory = MapConverterLibraryAssetIdFactoryFake();
   const mapVariableName = 'map';
   const instanceVariableName = 'person';
@@ -82,48 +81,52 @@ main() {
           .beOfType<NotSupported>();
     });
     test('mapValueToObject nullable=false', () {
-      code.CodeFormatter()
-          .unFormatted(expressionFactory.mapValueToObject(
+      expressionFactory
+          .mapValueToObject(
             idFactory,
             propertyAnnotationWithConverter,
             mapValueExpression(mapVariableName, propertyName),
             TypeFake.personClass(),
-          ))
+          )
+          .toUnFormattedString()
           .should
           .be("i1.MyCustomConverter().fromPrimitive(map['adult'])");
     });
     test('mapValueToObject nullable=true', () {
       var personType = TypeFake.personClass(nullable: true);
-      code.CodeFormatter()
-          .unFormatted(expressionFactory.mapValueToObject(
+      expressionFactory
+          .mapValueToObject(
             idFactory,
             propertyAnnotationWithConverter,
             mapValueExpression(mapVariableName, propertyName),
             personType,
-          ))
+          )
+          .toUnFormattedString()
           .should
           .be("i1.MyCustomConverter()?.fromPrimitive(map['adult'])");
     });
 
     test('objectToMapValue nullable=false', () {
-      code.CodeFormatter()
-          .unFormatted(expressionFactory.objectToMapValue(
+      expressionFactory
+          .objectToMapValue(
             idFactory,
             propertyAnnotationWithConverter,
             objectPropertyExpression(instanceVariableName, propertyName),
             TypeFake.bool(),
-          ))
+          )
+          .toUnFormattedString()
           .should
           .be("i1.MyCustomConverter().toPrimitive(person.adult)");
     });
     test('objectToMapValue nullable=true', () {
-      code.CodeFormatter()
-          .unFormatted(expressionFactory.objectToMapValue(
+      expressionFactory
+          .objectToMapValue(
             idFactory,
             propertyAnnotationWithConverter,
             objectPropertyExpression(instanceVariableName, propertyName),
             TypeFake.bool(),
-          ))
+          )
+          .toUnFormattedString()
           .should
           .be("i1.MyCustomConverter().toPrimitive(person.adult)");
     });

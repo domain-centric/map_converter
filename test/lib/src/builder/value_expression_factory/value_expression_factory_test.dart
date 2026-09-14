@@ -40,9 +40,11 @@ void main() {
 
 /// generic test functions
 
-objectPropertyExpression(String instanceVariableName, String propertyName) =>
+code.Expression objectPropertyExpression(
+        String instanceVariableName, String propertyName) =>
     code.Expression.ofVariable(instanceVariableName).getProperty(propertyName);
 
-mapValueExpression(String mapVariableName, String propertyName) =>
+code.Expression mapValueExpression(
+        String mapVariableName, String propertyName) =>
     code.Expression.ofVariable(mapVariableName)
         .index(code.Expression.ofString(propertyName));

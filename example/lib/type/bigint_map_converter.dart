@@ -11,6 +11,6 @@ i1.Example mapToExample(Map<String, dynamic> exampleMap) => i1.Example()
       ? null
       : BigInt.parse(exampleMap['myNullableBigInt'] as String);
 Map<String, dynamic> exampleToMap(i1.Example example) => {
-      'myBigInt': example.myBigInt.toString(),
-      'myNullableBigInt': example.myNullableBigInt?.toString(),
-    };
+  'myBigInt': example.myBigInt.toString(),
+  'myNullableBigInt': example.myNullableBigInt?.toString(),
+};

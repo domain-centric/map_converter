@@ -141,10 +141,10 @@ packages:
     dependency: "direct main"
     description:
       name: dart_code
-      sha256: eef930f3d21cf2bc819eab4bf7a0d27fbe0fb1165d40b2ea04530b681a5531e3
+      sha256: d309dc4cc0905119d78ccb5c42318c3f0596e4675d6fe4176cb79df3851a44c0
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.12"
+    version: "0.2.3"
   dart_style:
     dependency: transitive
     description:
@@ -237,10 +237,10 @@ packages:
     dependency: "direct dev"
     description:
       name: lints
-      sha256: c35bb79562d980e9a453fc715854e1ed39e24e7d0297a880ef54e17f9874a9d7
+      sha256: "12f842a479589fea194fe5c5a3095abc7be0c1f2ddfa9a0e76aed1dbd26a87df"
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.1"
+    version: "6.1.0"
   logging:
     dependency: "direct main"
     description:

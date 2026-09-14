@@ -11,6 +11,6 @@ i1.Example mapToExample(Map<String, dynamic> exampleMap) => i1.Example()
       ? null
       : DateTime.parse(exampleMap['myNullableDateTime'] as String);
 Map<String, dynamic> exampleToMap(i1.Example example) => {
-      'myDateTime': example.myDateTime.toIso8601String(),
-      'myNullableDateTime': example.myNullableDateTime?.toIso8601String(),
-    };
+  'myDateTime': example.myDateTime.toIso8601String(),
+  'myNullableDateTime': example.myNullableDateTime?.toIso8601String(),
+};

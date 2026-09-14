@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 import '../../../example/lib/person/person.dart';
 import '../../../example/lib/person/person_map_converter.dart';
 
-main() {
+void main() {
   group('personToMap', () {
     test('MikeSmith()', () {
       var person = MikeSmith();

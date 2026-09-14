@@ -78,7 +78,7 @@ class MapConverterBuilder implements Builder {
         // log.log(Level.SEVERE, 'Library is empty!');
       } else {
         AssetId outputId = idFactory.createOutputId(buildStep.inputId);
-        var dartCode = code.CodeFormatter().format(library);
+        var dartCode = library.toFormattedString();
         buildStep.writeAsString(outputId, dartCode);
         log.log(Level.INFO, 'Written: $outputId!');
       }
@@ -174,7 +174,8 @@ class ObjectToMapFunctionFactory {
     MapConverterLibraryAssetIdFactory idFactory,
   ) {
     Map<code.Expression, code.Expression> map = {};
-    for (var property in domainClass.properties.where((p)=> p.fieldElement.name !=null)) {
+    for (var property
+        in domainClass.properties.where((p) => p.fieldElement.name != null)) {
       var propertyNameExpression =
           code.Expression.ofString(property.alias ?? property.name);
       var expressionFactory = property.valueExpressionFactory;
@@ -249,6 +250,9 @@ class MapToObjectFunctionFactory {
   code.Expression _createConstructorCall(
       DomainClass domainClass, MapConverterLibraryAssetIdFactory idFactory) {
     var name = domainClass.bestConstructor.name;
+    if (name == 'new') {
+      name = null;
+    }
     var parameters = _createConstructorParameterValues(domainClass, idFactory);
     return code.Expression.callConstructor(createDomainType(domainClass),
         name: name, parameterValues: parameters);
@@ -293,7 +297,7 @@ class MapToObjectFunctionFactory {
   }
 }
 
-createDomainType(DomainClass domainClass) => code.Type(
+code.Type createDomainType(DomainClass domainClass) => code.Type(
       domainClass.element.name!,
       libraryUri: createLibraryUri(domainClass.element),
     );
@@ -424,7 +428,7 @@ class DomainClassFactory {
         _createProperties(element as ClassElement).isNotEmpty;
   }
 
-  _isListSetMapIteratorType(InterfaceElement element) {
+  bool _isListSetMapIteratorType(InterfaceElement element) {
     String string = element.toString();
     return element.library.name == 'dart.core' &&
         (string.contains('class List<') ||
@@ -626,5 +630,6 @@ class BestConstructorFactory {
       parameter.type.element != null &&
       property.fieldElement.type.element!.name ==
           parameter.type.element!.name &&
-      property.fieldElement.type.element?.library?.uri == parameter.type.element?.library?.uri;
+      property.fieldElement.type.element?.library?.uri ==
+          parameter.type.element?.library?.uri;
 }

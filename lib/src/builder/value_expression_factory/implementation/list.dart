@@ -5,7 +5,6 @@ import 'package:map_converter/src/builder/map_converter_builder.dart';
 import 'package:map_converter/src/builder/value_expression_factory/value_expression_factory.dart';
 
 class ListExpressionFactory implements ValueExpressionFactory {
-  final codeFormatter = code.CodeFormatter();
   final String _elementVariableName = 'listElement';
 
   @override
@@ -98,9 +97,8 @@ class ListExpressionFactory implements ValueExpressionFactory {
     return expression;
   }
 
-  bool _needsMapping(source, valueExpression) =>
-      codeFormatter.unFormatted(source) !=
-      codeFormatter.unFormatted(valueExpression);
+  bool _needsMapping(code.CodeModel source, code.CodeModel valueExpression) =>
+      source.toUnFormattedString() != valueExpression.toUnFormattedString();
 
   DartType _genericType(InterfaceType listType) => listType.typeArguments.first;
 }

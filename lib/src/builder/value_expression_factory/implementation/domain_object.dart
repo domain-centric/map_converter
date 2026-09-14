@@ -49,8 +49,7 @@ class DomainObjectExpressionFactory implements ValueExpressionFactory {
   ) {
     var nullable = isNullable(typeToConvert);
     var functionName = '${typeToConvert.element.displayName.camelCase}ToMap';
-    var sourceIsProperty =
-        code.CodeFormatter().unFormatted(source).contains('.');
+    var sourceIsProperty = source.toUnFormattedString().contains('.');
     var result = code.Expression.callMethodOrFunction(functionName,
         libraryUri: createRelativeLibraryUri(
             idFactory.createOutputUriForType(typeToConvert)),

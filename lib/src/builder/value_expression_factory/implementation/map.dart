@@ -5,7 +5,6 @@ import 'package:map_converter/src/builder/map_converter_builder.dart';
 import 'package:map_converter/src/builder/value_expression_factory/value_expression_factory.dart';
 
 class MapExpressionFactory implements ValueExpressionFactory {
-  final codeFormatter = code.CodeFormatter();
   final String _keyVariableName = 'k';
   final String _valueVariableName = 'v';
 
@@ -53,7 +52,7 @@ class MapExpressionFactory implements ValueExpressionFactory {
     }
   }
 
-  _createMapValueToObjectExpression(
+  code.Expression _createMapValueToObjectExpression(
     MapConverterLibraryAssetIdFactory idFactory,
     PropertyWithBuildInfo property,
     String variableName,
@@ -67,7 +66,7 @@ class MapExpressionFactory implements ValueExpressionFactory {
       code.Expression.ofVariable(variableName),
       typeToConvert,
     );
-    var unformattedCode = code.CodeFormatter().unFormatted(expression).trim();
+    var unformattedCode = expression.toUnFormattedString().trim();
     if (unformattedCode == '$_keyVariableName as String') {
       return code.Expression.ofVariable(_keyVariableName);
     }
@@ -196,6 +195,6 @@ class MapExpressionFactory implements ValueExpressionFactory {
   DartType _keyType(InterfaceType mapType) => mapType.typeArguments.first;
   DartType _valueType(InterfaceType mapType) => mapType.typeArguments.last;
 
-  _needsConversion(expression, String mapVariableName) =>
-      codeFormatter.unFormatted(expression) != mapVariableName;
+  bool _needsConversion(code.Expression expression, String mapVariableName) =>
+      expression.toUnFormattedString() != mapVariableName;
 }

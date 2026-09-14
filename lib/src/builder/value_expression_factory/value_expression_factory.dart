@@ -46,7 +46,7 @@ class Query {
 }
 
 abstract class SupportResult {
-  static of(bool supported) {
+  static SupportResult of(bool supported) {
     if (supported) {
       return Supported();
     } else {
@@ -217,7 +217,7 @@ code.Type createType(Element element, bool nullable) => code.Type(
     );
 
 String? createLibraryUri(Element element) {
-  String libraryUri = element.library?.uri.toString() ??'';
+  String libraryUri = element.library?.uri.toString() ?? '';
   if (libraryUri == 'dart:core') {
     return null;
   }
