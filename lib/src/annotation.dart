@@ -3,7 +3,7 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:collection/collection.dart';
 
-/// [Annotation] for classed that need [MapCoverter] functions
+/// [Annotation] for classed that need [MapConverter] functions
 class MapConverter {
   final List<Property> properties;
   const MapConverter([this.properties = const []]);
@@ -14,7 +14,7 @@ class Property {
   final bool ignore;
   final String? alias;
 
-  /// A costum converter when the default converter wont do
+  /// A custom converter when the default converter wont do
   final PrimitiveConverter? converter;
 
   const Property(
@@ -40,7 +40,7 @@ abstract class PrimitiveConverter<SOURCE, PRIMITIVE> {
 }
 
 MapConverter? createFromClassElement(ClassElement domainClassElement) {
-  final annotation = domainClassElement.metadata.firstWhereOrNull(
+  final annotation = domainClassElement.metadata.annotations.firstWhereOrNull(
     (element) =>
         element.computeConstantValue()?.type?.getDisplayString() ==
         'MapConverter',
