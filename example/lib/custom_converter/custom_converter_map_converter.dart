@@ -8,5 +8,5 @@ import '../../../example/lib/custom_converter/custom_converter.dart' as i1;
 i1.Example mapToExample(Map<String, dynamic> exampleMap) =>
     i1.Example(i1.MyConverter().fromPrimitive(exampleMap['dateTime']));
 Map<String, dynamic> exampleToMap(i1.Example example) => {
-  'dateTime': i1.MyConverter().toPrimitive(example.dateTime),
-};
+      'dateTime': i1.MyConverter().toPrimitive(example.dateTime),
+    };

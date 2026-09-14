@@ -9,6 +9,6 @@ i1.Example mapToExample(Map<String, dynamic> exampleMap) => i1.Example()
   ..myDouble = (exampleMap['myDouble'] as num).toDouble()
   ..myNullableDouble = (exampleMap['myNullableDouble'] as num?)?.toDouble();
 Map<String, dynamic> exampleToMap(i1.Example example) => {
-  'myDouble': example.myDouble,
-  'myNullableDouble': example.myNullableDouble,
-};
+      'myDouble': example.myDouble,
+      'myNullableDouble': example.myNullableDouble,
+    };

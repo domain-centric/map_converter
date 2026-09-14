@@ -9,6 +9,6 @@ i1.Example mapToExample(Map<String, dynamic> exampleMap) => i1.Example()
   ..myBool = exampleMap['myBool'] as bool
   ..myNullableBool = exampleMap['myNullableBool'] as bool?;
 Map<String, dynamic> exampleToMap(i1.Example example) => {
-  'myBool': example.myBool,
-  'myNullableBool': example.myNullableBool,
-};
+      'myBool': example.myBool,
+      'myNullableBool': example.myNullableBool,
+    };

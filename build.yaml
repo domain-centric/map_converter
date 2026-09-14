@@ -17,6 +17,10 @@ builders:
         - see_option_output
     build_to: source
     auto_apply: dependents
-
-
-    # - lib/data/{{}}_map_converter.dart
+    defaults:
+      options:
+        input: "^{{}}.dart"
+        # in same folder as source: 
+        output: "{{}}_map_converter.dart"
+        # OR in a separate folder: 
+        # output: "lib/generated/{{}}_map_converter.dart"
