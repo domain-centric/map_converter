@@ -59,9 +59,11 @@ class Field<OBJECT_TYPE, MAP_VALUE_TYPE> {
   final String? alias;
 
   /// A custom converter to convert a field value to a map property value
+  /// Null will use the default converter (if supported)
   final MAP_VALUE_TYPE Function(OBJECT_TYPE)? toMapValue;
 
   /// A custom converter to convert a map property value to a field value
+  /// Null will use the default converter (if supported)
   final OBJECT_TYPE Function(MAP_VALUE_TYPE)? fromMapValue;
 
   const Field(
@@ -78,19 +80,12 @@ class Field<OBJECT_TYPE, MAP_VALUE_TYPE> {
         alias = null,
         toMapValue = null,
         fromMapValue = null;
-
-  String get name {
-    final text = toString(); // Symbol("myProperty")
-    return text.substring(8, text.length - 2);
-  }
 }
 
 DartObject? findMapConverterAnnotation(ClassElement domainClassElement) =>
     domainClassElement.metadata.annotations
         .firstWhereOrNull(
           (element) =>
-              // element.computeConstantValue()?.type?.getDisplayString() ==
-              // 'MapConverter',
               element.computeConstantValue()?.type?.element?.name ==
               'MapConverter',
         )

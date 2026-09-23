@@ -38,15 +38,15 @@ i1.Example mapToExample(Map<String, dynamic> exampleMap) => i1.Example()
           .toList()
           .cast<String?>();
 Map<String, dynamic> exampleToMap(i1.Example example) => {
-      'iterableOfBool': example.iterableOfBool,
-      'iterableOfGender': example.iterableOfGender
-          .map((i2.Gender element) => element.name)
-          .toList(),
-      'iterableOfPerson': example.iterableOfPerson
-          .map((i2.Person element) => i3.personToMap(element))
-          .toList(),
-      'iterableOfNullableInt': example.iterableOfNullableInt,
-      'nullableIterableOfDouble': example.nullableIterableOfDouble,
-      'nullableIterableOfNullableStrings':
-          example.nullableIterableOfNullableStrings,
-    };
+  'iterableOfBool': example.iterableOfBool,
+  'iterableOfGender': example.iterableOfGender
+      .map((i2.Gender element) => element.name)
+      .toList(),
+  'iterableOfPerson': example.iterableOfPerson
+      .map((i2.Person element) => i3.personToMap(element))
+      .toList(),
+  'iterableOfNullableInt': example.iterableOfNullableInt,
+  'nullableIterableOfDouble': example.nullableIterableOfDouble,
+  'nullableIterableOfNullableStrings':
+      example.nullableIterableOfNullableStrings,
+};

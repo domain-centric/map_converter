@@ -12,8 +12,8 @@ i1.Example mapToExample(Map<String, dynamic> exampleMap) => i1.Example()
       ? null
       : i2.mapToPerson(exampleMap['myNullablePerson'] as Map<String, dynamic>);
 Map<String, dynamic> exampleToMap(i1.Example example) => {
-      'myPerson': i2.personToMap(example.myPerson),
-      'myNullablePerson': example.myNullablePerson == null
-          ? null
-          : i2.personToMap(example.myNullablePerson!),
-    };
+  'myPerson': i2.personToMap(example.myPerson),
+  'myNullablePerson': example.myNullablePerson == null
+      ? null
+      : i2.personToMap(example.myNullablePerson!),
+};
