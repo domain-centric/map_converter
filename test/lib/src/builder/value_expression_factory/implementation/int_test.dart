@@ -29,7 +29,7 @@ void main() {
           .should
           .beOfType<NotSupported>();
     });
-    test('fromMapValuenullable=false', () {
+    test('fromMapValue, nullable=false', () {
       expressionFactory
           .fromMapValue(idFactory,
               mapValueExpression(mapVariableName, propertyName), TypeFake.int())
@@ -37,7 +37,7 @@ void main() {
           .should
           .be("($mapVariableName['$propertyName'] as num ).toInt()");
     });
-    test('fromMapValuenullable=true', () {
+    test('fromMapValue, nullable=true', () {
       expressionFactory
           .fromMapValue(
               idFactory,

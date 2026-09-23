@@ -13,17 +13,17 @@ void main() {
   const functionName = 'customConverterFunction';
 
   group('function createFromMapValueExpressionCustomFunction', () {
-    test('fromMapValuenullable=false', () {
-      createFromMapValueExpressionCustomFunction(
+    test('fromMapValue, nullable=false', () {
+      createCustomFromMapValueExpressionFunction(
           functionName: functionName, functionLibraryUri: '')(
         idFactory,
         mapValueExpression(mapVariableName, propertyName),
         TypeFake.personClass(),
       ).toUnFormattedString().should.be("i1.$functionName(map['adult'])");
     });
-    test('fromMapValuenullable=true', () {
+    test('fromMapValue, nullable=true', () {
       var personType = TypeFake.personClass(nullable: true);
-      createFromMapValueExpressionCustomFunction(
+      createCustomFromMapValueExpressionFunction(
           functionName: functionName, functionLibraryUri: '')(
         idFactory,
         mapValueExpression(mapVariableName, propertyName),
@@ -34,7 +34,7 @@ void main() {
 
   group('function createToMapValueExpressionCustomFunction', () {
     test('toMapValue nullable=false', () {
-      createToMapValueExpressionCustomFunction(
+      createCustomToMapValueExpressionFunction(
           functionName: functionName, functionLibraryUri: '')(
         idFactory,
         objectPropertyExpression(instanceVariableName, propertyName),
@@ -42,7 +42,7 @@ void main() {
       ).toUnFormattedString().should.be("i1.$functionName(person.adult)");
     });
     test('toMapValue nullable=true', () {
-      createToMapValueExpressionCustomFunction(
+      createCustomToMapValueExpressionFunction(
           functionName: functionName, functionLibraryUri: '')(
         idFactory,
         objectPropertyExpression(instanceVariableName, propertyName),

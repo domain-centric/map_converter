@@ -32,7 +32,7 @@ void main() {
           .should
           .beOfType<NotSupported>();
     });
-    test('fromMapValuenullable=false', () {
+    test('fromMapValue, nullable=false', () {
       expressionFactory
           .fromMapValue(
               idFactory,
@@ -42,7 +42,7 @@ void main() {
           .should
           .be("Duration(microseconds: $mapVariableName['$propertyName'] as int )");
     });
-    test('fromMapValuenullable=true', () {
+    test('fromMapValue, nullable=true', () {
       expressionFactory
           .fromMapValue(
               idFactory,

@@ -554,7 +554,7 @@ class DomainClassFactory {
       return null;
     }
     if (fromMapValueCustomFunction != null) {
-      return createFromMapValueExpressionCustomFunction(
+      return createCustomFromMapValueExpressionFunction(
           functionName: fromMapValueCustomFunction.name!,
           functionLibraryUri: createRelativeLibraryUri(
               fromMapValueCustomFunction.library.uri.toString()));
@@ -573,7 +573,7 @@ class DomainClassFactory {
       return null;
     }
     if (toMapValueExpressionFunction != null) {
-      return createToMapValueExpressionCustomFunction(
+      return createCustomToMapValueExpressionFunction(
           functionName: toMapValueExpressionFunction.name!,
           functionLibraryUri: createRelativeLibraryUri(
               toMapValueExpressionFunction.library.uri.toString()));
@@ -640,8 +640,7 @@ class DomainClassFactory {
   // }
 }
 
-FromMapValueExpressionFunction createFromMapValueExpressionCustomFunction({
-  //FIXME: simpler names
+FromMapValueExpressionFunction createCustomFromMapValueExpressionFunction({
   required String functionName,
   required String functionLibraryUri,
 }) =>
@@ -656,8 +655,7 @@ FromMapValueExpressionFunction createFromMapValueExpressionCustomFunction({
           parameterValues: code.ParameterValues([code.ParameterValue(source)]),
         );
 
-ToMapValueExpressionFunction createToMapValueExpressionCustomFunction({
-  //FIXME: simpler names
+ToMapValueExpressionFunction createCustomToMapValueExpressionFunction({
   required String functionName,
   required String functionLibraryUri,
 }) =>

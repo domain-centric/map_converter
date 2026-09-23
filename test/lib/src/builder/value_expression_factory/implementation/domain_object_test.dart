@@ -33,7 +33,7 @@ void main() {
           .should
           .beOfType<NotSupported>();
     });
-    test('fromMapValuenullable=false', () {
+    test('fromMapValue, nullable=false', () {
       expressionFactory
           .fromMapValue(
             idFactory,
@@ -44,7 +44,7 @@ void main() {
           .should
           .be("i1.mapToPerson($mapVariableName['$propertyName'] as Map<String,dynamic> )");
     });
-    test('fromMapValuenullable=true', () {
+    test('fromMapValue, nullable=true', () {
       expressionFactory
           .fromMapValue(
             idFactory,

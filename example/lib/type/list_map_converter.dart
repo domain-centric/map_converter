@@ -133,56 +133,56 @@ i1.Example mapToExample(Map<String, dynamic> exampleMap) => i1.Example()
       .toList()
       .cast<i2.Person?>();
 Map<String, dynamic> exampleToMap(i1.Example example) => {
-  'boolList': example.boolList,
-  'boolListWithNullableBools': example.boolListWithNullableBools,
-  'nullableBoolList': example.nullableBoolList,
-  'nullableBoolListWithNullableBools':
-      example.nullableBoolListWithNullableBools,
-  'numList': example.numList,
-  'nullableNumList': example.nullableNumList,
-  'intList': example.intList,
-  'nullableIntList': example.nullableIntList,
-  'doubleList': example.doubleList,
-  'nullableDoubleList': example.nullableDoubleList,
-  'stringList': example.stringList,
-  'nullableStringList': example.nullableStringList,
-  'uriList': example.uriList
-      .map((Uri listElement) => listElement.toString())
-      .toList(),
-  'nullableUriList': example.nullableUriList
-      ?.map((Uri? listElement) => listElement?.toString())
-      .toList(),
-  'bigIntList': example.bigIntList
-      .map((BigInt listElement) => listElement.toString())
-      .toList(),
-  'nullableBigIntList': example.nullableBigIntList
-      ?.map((BigInt? listElement) => listElement?.toString())
-      .toList(),
-  'dateTimeList': example.dateTimeList
-      .map((DateTime listElement) => listElement.toIso8601String())
-      .toList(),
-  'nullableDateTimeList': example.nullableDateTimeList
-      ?.map((DateTime? listElement) => listElement?.toIso8601String())
-      .toList(),
-  'durationList': example.durationList
-      .map((Duration listElement) => listElement.inMicroseconds)
-      .toList(),
-  'nullableDurationList': example.nullableDurationList
-      ?.map((Duration? listElement) => listElement?.inMicroseconds)
-      .toList(),
-  'genderList': example.genderList
-      .map((i2.Gender listElement) => listElement.name)
-      .toList(),
-  'nullableGenderList': example.nullableGenderList
-      ?.map((i2.Gender? listElement) => listElement?.name)
-      .toList(),
-  'personList': example.personList
-      .map((i2.Person listElement) => i3.personToMap(listElement))
-      .toList(),
-  'nullablePersonList': example.nullablePersonList
-      ?.map(
-        (i2.Person? listElement) =>
-            listElement == null ? null : i3.personToMap(listElement),
-      )
-      .toList(),
-};
+      'boolList': example.boolList,
+      'boolListWithNullableBools': example.boolListWithNullableBools,
+      'nullableBoolList': example.nullableBoolList,
+      'nullableBoolListWithNullableBools':
+          example.nullableBoolListWithNullableBools,
+      'numList': example.numList,
+      'nullableNumList': example.nullableNumList,
+      'intList': example.intList,
+      'nullableIntList': example.nullableIntList,
+      'doubleList': example.doubleList,
+      'nullableDoubleList': example.nullableDoubleList,
+      'stringList': example.stringList,
+      'nullableStringList': example.nullableStringList,
+      'uriList': example.uriList
+          .map((Uri listElement) => listElement.toString())
+          .toList(),
+      'nullableUriList': example.nullableUriList
+          ?.map((Uri? listElement) => listElement?.toString())
+          .toList(),
+      'bigIntList': example.bigIntList
+          .map((BigInt listElement) => listElement.toString())
+          .toList(),
+      'nullableBigIntList': example.nullableBigIntList
+          ?.map((BigInt? listElement) => listElement?.toString())
+          .toList(),
+      'dateTimeList': example.dateTimeList
+          .map((DateTime listElement) => listElement.toIso8601String())
+          .toList(),
+      'nullableDateTimeList': example.nullableDateTimeList
+          ?.map((DateTime? listElement) => listElement?.toIso8601String())
+          .toList(),
+      'durationList': example.durationList
+          .map((Duration listElement) => listElement.inMicroseconds)
+          .toList(),
+      'nullableDurationList': example.nullableDurationList
+          ?.map((Duration? listElement) => listElement?.inMicroseconds)
+          .toList(),
+      'genderList': example.genderList
+          .map((i2.Gender listElement) => listElement.name)
+          .toList(),
+      'nullableGenderList': example.nullableGenderList
+          ?.map((i2.Gender? listElement) => listElement?.name)
+          .toList(),
+      'personList': example.personList
+          .map((i2.Person listElement) => i3.personToMap(listElement))
+          .toList(),
+      'nullablePersonList': example.nullablePersonList
+          ?.map(
+            (i2.Person? listElement) =>
+                listElement == null ? null : i3.personToMap(listElement),
+          )
+          .toList(),
+    };

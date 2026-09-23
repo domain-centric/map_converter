@@ -38,7 +38,7 @@ void main() {
             .should
             .beOfType<NotSupported>();
       });
-      test('fromMapValuenullable=false', () {
+      test('fromMapValue, nullable=false', () {
         expressionFactory
             .fromMapValue(
               idFactory,
@@ -49,7 +49,7 @@ void main() {
             .should
             .be("$mapVariableName['$propertyName'].map((listElement) => listElement as $genericType ).toList().cast<i1.bool>()");
       });
-      test('fromMapValuenullable=true', () {
+      test('fromMapValue, nullable=true', () {
         expressionFactory
             .fromMapValue(
               idFactory,
@@ -107,7 +107,7 @@ void main() {
             .should
             .beOfType<NotSupported>();
       });
-      test('fromMapValuenullable=false', () {
+      test('fromMapValue, nullable=false', () {
         expressionFactory
             .fromMapValue(
               idFactory,
@@ -118,7 +118,7 @@ void main() {
             .should
             .be("map['nums'].map((listElement) => listElement as num ).toList().cast<i1.num>()");
       });
-      test('fromMapValuenullable=true', () {
+      test('fromMapValue, nullable=true', () {
         expressionFactory
             .fromMapValue(
               idFactory,
@@ -176,7 +176,7 @@ void main() {
             .should
             .beOfType<NotSupported>();
       });
-      test('fromMapValuenullable=false', () {
+      test('fromMapValue, nullable=false', () {
         expressionFactory
             .fromMapValue(
               idFactory,
@@ -187,7 +187,7 @@ void main() {
             .should
             .be("$mapVariableName['$propertyName'].map((listElement) => (listElement as num ).toInt()).toList().cast<i1.int>()");
       });
-      test('fromMapValuenullable=true', () {
+      test('fromMapValue, nullable=true', () {
         expressionFactory
             .fromMapValue(
               idFactory,
@@ -247,7 +247,7 @@ void main() {
             .should
             .beOfType<NotSupported>();
       });
-      test('fromMapValuenullable=false', () {
+      test('fromMapValue, nullable=false', () {
         expressionFactory
             .fromMapValue(
               idFactory,
@@ -258,7 +258,7 @@ void main() {
             .should
             .be("$mapVariableName['$propertyName'].map((listElement) => (listElement as num ).toDouble()).toList().cast<i1.double>()");
       });
-      test('fromMapValuenullable=true', () {
+      test('fromMapValue, nullable=true', () {
         expressionFactory
             .fromMapValue(
               idFactory,
@@ -318,7 +318,7 @@ void main() {
             .should
             .beOfType<NotSupported>();
       });
-      test('fromMapValuenullable=false', () {
+      test('fromMapValue, nullable=false', () {
         expressionFactory
             .fromMapValue(
               idFactory,
@@ -329,7 +329,7 @@ void main() {
             .should
             .be("$mapVariableName['$propertyName'].map((listElement) => listElement as $genericType ).toList().cast<i1.String>()");
       });
-      test('fromMapValuenullable=true', () {
+      test('fromMapValue, nullable=true', () {
         expressionFactory
             .fromMapValue(
               idFactory,
@@ -387,7 +387,7 @@ void main() {
             .should
             .beOfType<NotSupported>();
       });
-      test('fromMapValuenullable=false', () {
+      test('fromMapValue, nullable=false', () {
         expressionFactory
             .fromMapValue(
               idFactory,
@@ -398,7 +398,7 @@ void main() {
             .should
             .be("$mapVariableName['$propertyName'].map((listElement) => Uri.parse(listElement as String )).toList().cast<i1.Uri>()");
       });
-      test('fromMapValuenullable=true', () {
+      test('fromMapValue, nullable=true', () {
         expressionFactory
             .fromMapValue(
               idFactory,
@@ -458,7 +458,7 @@ void main() {
             .should
             .beOfType<NotSupported>();
       });
-      test('fromMapValuenullable=false', () {
+      test('fromMapValue, nullable=false', () {
         expressionFactory
             .fromMapValue(
               idFactory,
@@ -469,7 +469,7 @@ void main() {
             .should
             .be("map['bigInts'].map((listElement) => BigInt.parse(listElement as String )).toList().cast<i1.BigInt>()");
       });
-      test('fromMapValuenullable=true', () {
+      test('fromMapValue, nullable=true', () {
         expressionFactory
             .fromMapValue(
               idFactory,
@@ -529,7 +529,7 @@ void main() {
             .should
             .beOfType<NotSupported>();
       });
-      test('fromMapValuenullable=false', () {
+      test('fromMapValue, nullable=false', () {
         expressionFactory
             .fromMapValue(
               idFactory,
@@ -540,7 +540,7 @@ void main() {
             .should
             .be("map['dateTimes'].map((listElement) => DateTime.parse(listElement as String )).toList().cast<i1.DateTime>()");
       });
-      test('fromMapValuenullable=true', () {
+      test('fromMapValue, nullable=true', () {
         expressionFactory
             .fromMapValue(
               idFactory,
@@ -600,7 +600,7 @@ void main() {
             .should
             .beOfType<NotSupported>();
       });
-      test('fromMapValuenullable=false', () {
+      test('fromMapValue, nullable=false', () {
         expressionFactory
             .fromMapValue(
               idFactory,
@@ -611,7 +611,7 @@ void main() {
             .should
             .be("map['durations'].map((listElement) => Duration(microseconds: listElement as int )).toList().cast<i1.Duration>()");
       });
-      test('fromMapValuenullable=true', () {
+      test('fromMapValue, nullable=true', () {
         expressionFactory
             .fromMapValue(
               idFactory,
@@ -671,7 +671,7 @@ void main() {
             .should
             .beOfType<NotSupported>();
       });
-      test('fromMapValuenullable=false', () {
+      test('fromMapValue, nullable=false', () {
         expressionFactory
             .fromMapValue(
               idFactory,
@@ -682,7 +682,7 @@ void main() {
             .should
             .be("map['genders'].map((listElement) => i1.Gender.values.firstWhere((enumValue) => enumValue.name==listElement)).toList().cast<i1.Gender>()");
       });
-      test('fromMapValuenullable=true', () {
+      test('fromMapValue, nullable=true', () {
         expressionFactory
             .fromMapValue(
               idFactory,
@@ -742,7 +742,7 @@ void main() {
             .should
             .beOfType<NotSupported>();
       });
-      test('fromMapValuenullable=false', () {
+      test('fromMapValue, nullable=false', () {
         expressionFactory
             .fromMapValue(
               idFactory,
@@ -753,7 +753,7 @@ void main() {
             .should
             .be("$mapVariableName['$propertyName'].map((listElement) => i1.mapToPerson(listElement as Map<String,dynamic> )).toList().cast<i2.Person>()");
       });
-      test('fromMapValuenullable=true', () {
+      test('fromMapValue, nullable=true', () {
         expressionFactory
             .fromMapValue(
               idFactory,

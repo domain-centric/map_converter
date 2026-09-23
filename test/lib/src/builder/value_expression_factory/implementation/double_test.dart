@@ -32,7 +32,7 @@ void main() {
           .should
           .beOfType<NotSupported>();
     });
-    test('fromMapValuenullable=false', () {
+    test('fromMapValue, nullable=false', () {
       expressionFactory
           .fromMapValue(
             idFactory,
@@ -43,7 +43,7 @@ void main() {
           .should
           .be("($mapVariableName['$propertyName'] as num ).toDouble()");
     });
-    test('fromMapValuenullable=true', () {
+    test('fromMapValue, nullable=true', () {
       expressionFactory
           .fromMapValue(
             idFactory,
