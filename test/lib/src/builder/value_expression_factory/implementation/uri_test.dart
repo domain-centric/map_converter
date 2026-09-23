@@ -15,10 +15,7 @@ void main() {
     var expressionFactory = UriExpressionFactory();
     var propertyName = 'webSite';
     test('supports(Uri) should return Supported', () {
-      expressionFactory
-          .supports(TypeFake.uri())
-          .should
-          .beOfType<Supported>();
+      expressionFactory.supports(TypeFake.uri()).should.beOfType<Supported>();
     });
     test('supports(Uri?) should return Supported', () {
       expressionFactory

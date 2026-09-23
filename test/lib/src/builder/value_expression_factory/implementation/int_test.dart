@@ -15,10 +15,7 @@ void main() {
     var expressionFactory = IntExpressionFactory();
     var propertyName = 'ageInDays';
     test('supports(int) should return Supported', () {
-      expressionFactory
-          .supports(TypeFake.int())
-          .should
-          .beOfType<Supported>();
+      expressionFactory.supports(TypeFake.int()).should.beOfType<Supported>();
     });
     test('supports(int?) should return Supported', () {
       expressionFactory
@@ -34,7 +31,7 @@ void main() {
     });
     test('mapValueToObject nullable=false', () {
       expressionFactory
-          .mapValueToObjectFunction(idFactory, 
+          .mapValueToObjectFunction(idFactory,
               mapValueExpression(mapVariableName, propertyName), TypeFake.int())
           .toUnFormattedString()
           .should
@@ -44,7 +41,6 @@ void main() {
       expressionFactory
           .mapValueToObjectFunction(
               idFactory,
-              
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.int(nullable: true))
           .toUnFormattedString()
@@ -55,7 +51,6 @@ void main() {
       expressionFactory
           .objectToMapValueFunction(
               idFactory,
-              
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.int())
           .toUnFormattedString()
@@ -66,7 +61,6 @@ void main() {
       expressionFactory
           .objectToMapValueFunction(
               idFactory,
-              
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.int(nullable: true))
           .toUnFormattedString()

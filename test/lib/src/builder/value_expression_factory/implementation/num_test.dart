@@ -15,10 +15,7 @@ void main() {
     var expressionFactory = NumExpressionFactory();
     var propertyName = 'ageInDays';
     test('supports(num) should return Supported', () {
-      expressionFactory
-          .supports(TypeFake.num())
-          .should
-          .beOfType<Supported>();
+      expressionFactory.supports(TypeFake.num()).should.beOfType<Supported>();
     });
     test('supports(num?) should return Supported', () {
       expressionFactory
@@ -36,7 +33,6 @@ void main() {
       expressionFactory
           .mapValueToObjectFunction(
             idFactory,
-            
             mapValueExpression(mapVariableName, propertyName),
             TypeFake.num(),
           )
@@ -48,7 +44,6 @@ void main() {
       expressionFactory
           .mapValueToObjectFunction(
             idFactory,
-            
             mapValueExpression(mapVariableName, propertyName),
             TypeFake.num(nullable: true),
           )
@@ -60,7 +55,6 @@ void main() {
       expressionFactory
           .objectToMapValueFunction(
             idFactory,
-            
             objectPropertyExpression(instanceVariableName, propertyName),
             TypeFake.num(),
           )
@@ -72,7 +66,6 @@ void main() {
       expressionFactory
           .objectToMapValueFunction(
             idFactory,
-            
             objectPropertyExpression(instanceVariableName, propertyName),
             TypeFake.num(nullable: true),
           )

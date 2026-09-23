@@ -9,6 +9,6 @@ i1.Example mapToExample(Map<String, dynamic> exampleMap) => i1.Example()
   ..myString = exampleMap['myString'] as String
   ..myNullableString = exampleMap['myNullableString'] as String?;
 Map<String, dynamic> exampleToMap(i1.Example example) => {
-  'myString': example.myString,
-  'myNullableString': example.myNullableString,
-};
+      'myString': example.myString,
+      'myNullableString': example.myNullableString,
+    };

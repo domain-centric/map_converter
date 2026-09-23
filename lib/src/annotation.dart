@@ -85,14 +85,13 @@ class Field<OBJECT_TYPE, PRIMITIVE_TYPE> {
   }
 }
 
-
 DartObject? findMapConverterAnnotation(ClassElement domainClassElement) =>
     domainClassElement.metadata.annotations
         .firstWhereOrNull(
           (element) =>
-              element.computeConstantValue()?.type?.getDisplayString() ==
+              // element.computeConstantValue()?.type?.getDisplayString() ==
+              // 'MapConverter',
+              element.computeConstantValue()?.type?.element?.name ==
               'MapConverter',
         )
         ?.computeConstantValue();
-
-

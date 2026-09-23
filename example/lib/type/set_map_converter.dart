@@ -37,14 +37,14 @@ i1.Example mapToExample(Map<String, dynamic> exampleMap) => i1.Example()
       .toSet()
       .cast<String?>();
 Map<String, dynamic> exampleToMap(i1.Example example) => {
-  'setOfBool': example.setOfBool,
-  'setOfGender': example.setOfGender
-      .map((i2.Gender setElement) => setElement.name)
-      .toSet(),
-  'setOfPerson': example.setOfPerson
-      .map((i2.Person setElement) => i3.personToMap(setElement))
-      .toSet(),
-  'setOfNullableInt': example.setOfNullableInt,
-  'nullableSetOfDouble': example.nullableSetOfDouble,
-  'nullableSetOfNullableStrings': example.nullableSetOfNullableStrings,
-};
+      'setOfBool': example.setOfBool,
+      'setOfGender': example.setOfGender
+          .map((i2.Gender setElement) => setElement.name)
+          .toSet(),
+      'setOfPerson': example.setOfPerson
+          .map((i2.Person setElement) => i3.personToMap(setElement))
+          .toSet(),
+      'setOfNullableInt': example.setOfNullableInt,
+      'nullableSetOfDouble': example.nullableSetOfDouble,
+      'nullableSetOfNullableStrings': example.nullableSetOfNullableStrings,
+    };

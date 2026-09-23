@@ -501,12 +501,7 @@ class DomainClassFactory {
     var fields = _findAllPublicFields(classElement);
     var fieldAnnotations = _findFieldAnnotations(mapConverterAnnotation);
     for (var field in fields) {
-      var fieldAnnotation = fieldAnnotations?.firstWhereOrNull((dartObject) =>
-          dartObject
-              .getField('symbol')
-              ?.toStringValue()
-              ?.contains(field.name!) ==
-          true);
+      var fieldAnnotation = findFieldAnnotation(fieldAnnotations, field);
       var ignore = fieldAnnotation?.getField('ignore')?.toBoolValue() ?? false;
       if (!ignore) {
         var fieldPath = '${classElement.name}.${field.name}';
@@ -548,11 +543,17 @@ class DomainClassFactory {
     return fieldMetaData;
   }
 
+  DartObject? findFieldAnnotation(
+      List<DartObject>? fieldAnnotations, FieldElement field) {
+    return fieldAnnotations?.firstWhereOrNull((dartObject) =>
+        (dartObject.getField('symbol')?.toSymbolValue()) == field.name);
+  }
+
   MapValueToObjectExpressionFunction? createMapValueToObjectExpressionFunction(
       DartObject? fieldAnnotation,
       ValueExpressionFactory? valueExpressionFactory) {
     var mapValueToObjectCustomFunction =
-        fieldAnnotation?.getField('toPrimitiveConverter')?.toFunctionValue();
+        fieldAnnotation?.getField('fromPrimitiveConverter')?.toFunctionValue();
     if (mapValueToObjectCustomFunction == null &&
         valueExpressionFactory == null) {
       return null;
@@ -560,8 +561,8 @@ class DomainClassFactory {
     if (mapValueToObjectCustomFunction != null) {
       return createMapValueToObjectExpressionCustomFunction(
           functionName: mapValueToObjectCustomFunction.name!,
-          functionLibraryUri:
-              mapValueToObjectCustomFunction.library.uri.toString());
+          functionLibraryUri: createRelativeLibraryUri(
+              mapValueToObjectCustomFunction.library.uri.toString()));
     } else {
       return valueExpressionFactory!.mapValueToObjectFunction;
     }
@@ -571,7 +572,7 @@ class DomainClassFactory {
       DartObject? fieldAnnotation,
       ValueExpressionFactory? valueExpressionFactory) {
     var objectToMapValueExpressionFunction =
-        fieldAnnotation?.getField('fromPrimitiveConverter')?.toFunctionValue();
+        fieldAnnotation?.getField('toPrimitiveConverter')?.toFunctionValue();
     if (objectToMapValueExpressionFunction == null &&
         valueExpressionFactory == null) {
       return null;
@@ -579,26 +580,15 @@ class DomainClassFactory {
     if (objectToMapValueExpressionFunction != null) {
       return createObjectToMapValueExpressionCustomFunction(
           functionName: objectToMapValueExpressionFunction.name!,
-          functionLibraryUri:
-              objectToMapValueExpressionFunction.library.uri.toString());
+          functionLibraryUri: createRelativeLibraryUri(
+              objectToMapValueExpressionFunction.library.uri.toString()));
     } else {
       return valueExpressionFactory!.objectToMapValueFunction;
     }
   }
 
-  List<DartObject>? _findFieldAnnotations(DartObject? mapConverterAnnotation) {
-    if (mapConverterAnnotation == null) {
-      return null;
-    }
-    return mapConverterAnnotation.getField('fields')?.toListValue();
-  }
-  // Iterable<element> _findFieldsToProcess(ClassElement classElement) {
-  //   var publicFields = _findAllPublicFields(classElement);
-  //   var propertyNamesToIgnore = _findPropertyNamesToIgnore(classElement);
-  //   var fieldsToProcess = publicFields
-  //       .where((field) => !propertyNamesToIgnore.contains(field.name));
-  //   return fieldsToProcess;
-  // }
+  List<DartObject>? _findFieldAnnotations(DartObject? mapConverterAnnotation) =>
+      mapConverterAnnotation?.getField('fields')?.toListValue();
 
   bool _isPublicPropertyField(FieldElement element) =>
       element.isPublic &&

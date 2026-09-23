@@ -76,7 +76,6 @@ abstract class ValueExpressionFactory {
     InterfaceType typeToConvert,
   );
 
-  
   MapValueToObjectExpressionFunction get mapValueToObjectFunction;
 
   ObjectToMapValueExpressionFunction get objectToMapValueFunction;
@@ -146,8 +145,7 @@ class ValueExpressionFactories extends DelegatingList<ValueExpressionFactory> {
     }
 
     for (var valueExpressionFactory in this) {
-      var result = valueExpressionFactory.supports(
-          typeToConvert);
+      var result = valueExpressionFactory.supports(typeToConvert);
       if (result is Supported) {
         _knownMatches[typeToConvert] = valueExpressionFactory;
         return valueExpressionFactory;
@@ -171,7 +169,8 @@ class ValueExpressionFactories extends DelegatingList<ValueExpressionFactory> {
       queryThatMustBeSupported
           .every((query) => supports(query, typesBeingSearched));
 
-  bool supports(InterfaceType typeToConvert, [Set<InterfaceType> typesBeingSearched = const {}]) =>
+  bool supports(InterfaceType typeToConvert,
+          [Set<InterfaceType> typesBeingSearched = const {}]) =>
       findFor(typeToConvert, typesBeingSearched) != null;
 }
 

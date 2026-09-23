@@ -53,7 +53,7 @@ typedef NodePathsFinder<T extends NodePath> = List<T> Function(Node node);
     discriminatorKey: 'type', includeSubClasses: [ArrayType, DataType])
 //abstract interface class BaseType {}
 class BaseType {
-  String name='';
+  String name = '';
 }
 
 /// All built‑in types supported by Sysmac Studio.
@@ -174,7 +174,8 @@ class ArrayRanges extends DelegatingList<ArrayRange> {
 }
 
 /// Wraps a [BaseType] in an [ArrayType] with the given [arrayRanges]
-class ArrayType {//implements BasicType, BaseTypeOwner {
+class ArrayType {
+  //implements BasicType, BaseTypeOwner {
   @override
   BaseType baseType;
   final ArrayRanges arrayRanges;
@@ -216,7 +217,7 @@ abstract interface class DataTypeBase extends Node<DataTypeBase>
 /// A [DataType] is a custom data type that is made of [BaseType]s
 abstract interface class DataType extends DataTypeBase {}
 
-@MapConverter(generateOptions: GenerateOptions.toMap + GenerateOptions.schema) 
+@MapConverter(generateOptions: GenerateOptions.toMap + GenerateOptions.schema)
 class Variable extends Node<DataTypeBase> implements BaseTypeOwner {
   @override
   final String name;

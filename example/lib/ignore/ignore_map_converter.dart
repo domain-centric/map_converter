@@ -5,10 +5,6 @@ import '../../../example/lib/ignore/ignore.dart' as i1;
 /// Input: map_converter/example/lib/ignore/ignore.dart
 /// Generate command: dart run build_runner build --delete-conflicting-outputs
 /// For more information see: https://pub.dev/packages/map_converter
-i1.Example mapToExample(Map<String, dynamic> exampleMap) => i1.Example()
-  ..keep = exampleMap['keep'] as bool
-  ..skip = exampleMap['skip'] as String;
-Map<String, dynamic> exampleToMap(i1.Example example) => {
-  'keep': example.keep,
-  'skip': example.skip,
-};
+i1.Example mapToExample(Map<String, dynamic> exampleMap) =>
+    i1.Example()..keep = exampleMap['keep'] as bool;
+Map<String, dynamic> exampleToMap(i1.Example example) => {'keep': example.keep};

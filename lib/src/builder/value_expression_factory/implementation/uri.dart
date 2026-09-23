@@ -13,23 +13,24 @@ class UriExpressionFactory extends ValueExpressionFactory {
 
   @override
   MapValueToObjectExpressionFunction get mapValueToObjectFunction => (
-    MapConverterLibraryAssetIdFactory idFactory,
-    code.Expression source,
-    InterfaceType typeToConvert,
-  ) {
-    var result = code.Expression.ofType(code.Type.ofUri()).callMethod('parse',
-        parameterValues: code.ParameterValues(
-            [code.ParameterValue(source.asA(code.Type.ofString()))]));
-    return wrapWithIfNullWhenNullable(
-        isNullable(typeToConvert), source, result);
-  };
+        MapConverterLibraryAssetIdFactory idFactory,
+        code.Expression source,
+        InterfaceType typeToConvert,
+      ) {
+        var result = code.Expression.ofType(code.Type.ofUri()).callMethod(
+            'parse',
+            parameterValues: code.ParameterValues(
+                [code.ParameterValue(source.asA(code.Type.ofString()))]));
+        return wrapWithIfNullWhenNullable(
+            isNullable(typeToConvert), source, result);
+      };
 
   @override
   ObjectToMapValueExpressionFunction get objectToMapValueFunction => (
-    MapConverterLibraryAssetIdFactory idFactory,
-    code.Expression source,
-    InterfaceType typeToConvert,
-  ) =>
-      source.callMethod('toString',
-          ifNullReturnNull: isNullable(typeToConvert));
+        MapConverterLibraryAssetIdFactory idFactory,
+        code.Expression source,
+        InterfaceType typeToConvert,
+      ) =>
+          source.callMethod('toString',
+              ifNullReturnNull: isNullable(typeToConvert));
 }

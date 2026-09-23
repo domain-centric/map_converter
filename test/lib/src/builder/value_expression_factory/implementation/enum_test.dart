@@ -48,7 +48,6 @@ void main() {
       expressionFactory
           .mapValueToObjectFunction(
             idFactory,
-            
             mapValueExpression(mapVariableName, propertyName),
             TypeFake.genderEnum(nullable: true),
           )
@@ -64,7 +63,6 @@ void main() {
       expressionFactory
           .objectToMapValueFunction(
             idFactory,
-            
             objectPropertyExpression(instanceVariableName, propertyName),
             TypeFake.genderEnum(),
           )
@@ -76,7 +74,6 @@ void main() {
       expressionFactory
           .objectToMapValueFunction(
             idFactory,
-            
             objectPropertyExpression(instanceVariableName, propertyName),
             TypeFake.genderEnum(nullable: true),
           )

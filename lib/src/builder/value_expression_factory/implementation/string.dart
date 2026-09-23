@@ -12,17 +12,17 @@ class StringExpressionFactory extends ValueExpressionFactory {
 
   @override
   MapValueToObjectExpressionFunction get mapValueToObjectFunction => (
-    MapConverterLibraryAssetIdFactory idFactory,
-    code.Expression source,
-    InterfaceType typeToConvert,
-  ) =>
-      source.asA(code.Type.ofString(nullable: isNullable(typeToConvert)));
+        MapConverterLibraryAssetIdFactory idFactory,
+        code.Expression source,
+        InterfaceType typeToConvert,
+      ) =>
+          source.asA(code.Type.ofString(nullable: isNullable(typeToConvert)));
 
   @override
   ObjectToMapValueExpressionFunction get objectToMapValueFunction => (
-    MapConverterLibraryAssetIdFactory idFactory,
-    code.Expression source,
-    InterfaceType typeToConvert,
-  ) =>
-      source;
+        MapConverterLibraryAssetIdFactory idFactory,
+        code.Expression source,
+        InterfaceType typeToConvert,
+      ) =>
+          source;
 }

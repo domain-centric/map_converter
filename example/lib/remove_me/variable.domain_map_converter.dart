@@ -10,33 +10,34 @@ import '../../../example/lib/remove_me/variable.domain_map_converter.dart'
 i1.BaseType mapToBaseType(Map<String, dynamic> baseTypeMap) =>
     i1.BaseType()..name = baseTypeMap['name'] as String;
 Map<String, dynamic> baseTypeToMap(i1.BaseType baseType) => {
-  'name': baseType.name,
-};
+      'name': baseType.name,
+    };
 i1.Variable mapToVariable(Map<String, dynamic> variableMap) => i1.Variable(
-  name: variableMap['name'] as String,
-  comment: variableMap['comment'] as String,
-  networkPublish: i1.NetworkPublish.values.firstWhere(
-    (enumValue) => enumValue.name == variableMap['networkPublish'],
-  ),
-  baseType: i2.mapToBaseType(variableMap['baseType'] as Map<String, dynamic>),
-  hardwareAddress: variableMap['hardwareAddress'] as String?,
-  direction: variableMap['direction'] == null
-      ? null
-      : i1.VariableDirection.values.firstWhere(
-          (enumValue) => enumValue.name == variableMap['direction'],
-        ),
-  isRetained: variableMap['isRetained'] as bool,
-  isConstant: variableMap['isConstant'] as bool,
-  initialValue: variableMap['initialValue'] as String?,
-);
+      name: variableMap['name'] as String,
+      comment: variableMap['comment'] as String,
+      networkPublish: i1.NetworkPublish.values.firstWhere(
+        (enumValue) => enumValue.name == variableMap['networkPublish'],
+      ),
+      baseType:
+          i2.mapToBaseType(variableMap['baseType'] as Map<String, dynamic>),
+      hardwareAddress: variableMap['hardwareAddress'] as String?,
+      direction: variableMap['direction'] == null
+          ? null
+          : i1.VariableDirection.values.firstWhere(
+              (enumValue) => enumValue.name == variableMap['direction'],
+            ),
+      isRetained: variableMap['isRetained'] as bool,
+      isConstant: variableMap['isConstant'] as bool,
+      initialValue: variableMap['initialValue'] as String?,
+    );
 Map<String, dynamic> variableToMap(i1.Variable variable) => {
-  'name': variable.name,
-  'comment': variable.comment,
-  'networkPublish': variable.networkPublish.name,
-  'baseType': i2.baseTypeToMap(variable.baseType),
-  'hardwareAddress': variable.hardwareAddress,
-  'direction': variable.direction?.name,
-  'isRetained': variable.isRetained,
-  'isConstant': variable.isConstant,
-  'initialValue': variable.initialValue,
-};
+      'name': variable.name,
+      'comment': variable.comment,
+      'networkPublish': variable.networkPublish.name,
+      'baseType': i2.baseTypeToMap(variable.baseType),
+      'hardwareAddress': variable.hardwareAddress,
+      'direction': variable.direction?.name,
+      'isRetained': variable.isRetained,
+      'isConstant': variable.isConstant,
+      'initialValue': variable.initialValue,
+    };
