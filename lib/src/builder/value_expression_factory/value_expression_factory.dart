@@ -76,9 +76,9 @@ abstract class ValueExpressionFactory {
     InterfaceType typeToConvert,
   );
 
-  MapValueToObjectExpressionFunction get mapValueToObjectFunction;
+  FromMapValueExpressionFunction get fromMapValue;
 
-  ObjectToMapValueExpressionFunction get objectToMapValueFunction;
+  ToMapValueExpressionFunction get toMapValue;
 }
 
 /// By convention, a [PrimitiveMap] map:

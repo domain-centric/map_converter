@@ -33,9 +33,9 @@ void main() {
           .should
           .beOfType<NotSupported>();
     });
-    test('mapValueToObject nullable=false', () {
+    test('fromMapValuenullable=false', () {
       expressionFactory
-          .mapValueToObjectFunction(
+          .fromMapValue(
             idFactory,
             mapValueExpression(mapVariableName, propertyName),
             TypeFake.personClass(),
@@ -44,9 +44,9 @@ void main() {
           .should
           .be("i1.mapToPerson($mapVariableName['$propertyName'] as Map<String,dynamic> )");
     });
-    test('mapValueToObject nullable=true', () {
+    test('fromMapValuenullable=true', () {
       expressionFactory
-          .mapValueToObjectFunction(
+          .fromMapValue(
             idFactory,
             mapValueExpression(mapVariableName, propertyName),
             TypeFake.personClass(nullable: true),
@@ -57,9 +57,9 @@ void main() {
               "? null "
               ": i1.mapToPerson($mapVariableName['$propertyName'] as Map<String,dynamic> )");
     });
-    test('objectToMapValue nullable=false', () {
+    test('toMapValue nullable=false', () {
       expressionFactory
-          .objectToMapValueFunction(
+          .toMapValue(
             idFactory,
             objectPropertyExpression(instanceVariableName, propertyName),
             TypeFake.personClass(),
@@ -68,9 +68,9 @@ void main() {
           .should
           .be("i1.personToMap($instanceVariableName.$propertyName)");
     });
-    test('objectToMapValue nullable=true', () {
+    test('toMapValue nullable=true', () {
       expressionFactory
-          .objectToMapValueFunction(
+          .toMapValue(
             idFactory,
             objectPropertyExpression(instanceVariableName, propertyName),
             TypeFake.personClass(nullable: true),

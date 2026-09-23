@@ -18,7 +18,7 @@ class DomainObjectExpressionFactory implements ValueExpressionFactory {
   }
 
   @override
-  MapValueToObjectExpressionFunction get mapValueToObjectFunction => (
+  FromMapValueExpressionFunction get fromMapValue => (
         MapConverterLibraryAssetIdFactory idFactory,
         code.Expression source,
         InterfaceType typeToConvert,
@@ -38,7 +38,7 @@ class DomainObjectExpressionFactory implements ValueExpressionFactory {
       };
 
   @override
-  ObjectToMapValueExpressionFunction get objectToMapValueFunction => (
+  ToMapValueExpressionFunction get toMapValue => (
         MapConverterLibraryAssetIdFactory idFactory,
         code.Expression source,
         InterfaceType typeToConvert,

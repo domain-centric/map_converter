@@ -53,22 +53,22 @@ class GenerateOptions {
 typedef Converter<RETURN_VALUE, SOURCE_VALUE> = RETURN_VALUE Function(
     SOURCE_VALUE);
 
-class Field<OBJECT_TYPE, PRIMITIVE_TYPE> {
+class Field<OBJECT_TYPE, MAP_VALUE_TYPE> {
   final Symbol symbol;
   final bool ignore;
   final String? alias;
 
   /// A custom converter to convert a field value to a map property value
-  final PRIMITIVE_TYPE Function(OBJECT_TYPE)? toPrimitiveConverter;
+  final MAP_VALUE_TYPE Function(OBJECT_TYPE)? toMapValue;
 
   /// A custom converter to convert a map property value to a field value
-  final OBJECT_TYPE Function(PRIMITIVE_TYPE)? fromPrimitiveConverter;
+  final OBJECT_TYPE Function(MAP_VALUE_TYPE)? fromMapValue;
 
   const Field(
     this.symbol, {
     this.alias,
-    this.toPrimitiveConverter,
-    this.fromPrimitiveConverter,
+    this.toMapValue,
+    this.fromMapValue,
     this.ignore = false,
   });
 
@@ -76,8 +76,8 @@ class Field<OBJECT_TYPE, PRIMITIVE_TYPE> {
     this.symbol,
   )   : ignore = true,
         alias = null,
-        toPrimitiveConverter = null,
-        fromPrimitiveConverter = null;
+        toMapValue = null,
+        fromMapValue = null;
 
   String get name {
     final text = toString(); // Symbol("myProperty")

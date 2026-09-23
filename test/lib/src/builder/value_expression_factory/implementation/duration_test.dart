@@ -32,9 +32,9 @@ void main() {
           .should
           .beOfType<NotSupported>();
     });
-    test('mapValueToObject nullable=false', () {
+    test('fromMapValuenullable=false', () {
       expressionFactory
-          .mapValueToObjectFunction(
+          .fromMapValue(
               idFactory,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.duration())
@@ -42,9 +42,9 @@ void main() {
           .should
           .be("Duration(microseconds: $mapVariableName['$propertyName'] as int )");
     });
-    test('mapValueToObject nullable=true', () {
+    test('fromMapValuenullable=true', () {
       expressionFactory
-          .mapValueToObjectFunction(
+          .fromMapValue(
               idFactory,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.duration(nullable: true))
@@ -53,9 +53,9 @@ void main() {
           .be("$mapVariableName['$propertyName'] == null ? null : Duration(microseconds: $mapVariableName['$propertyName'] as int )");
     });
 
-    test('objectToMapValue nullable=false', () {
+    test('toMapValue nullable=false', () {
       expressionFactory
-          .objectToMapValueFunction(
+          .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.duration())
@@ -63,9 +63,9 @@ void main() {
           .should
           .be("$instanceVariableName.$propertyName.inMicroseconds");
     });
-    test('objectToMapValue nullable=true', () {
+    test('toMapValue nullable=true', () {
       expressionFactory
-          .objectToMapValueFunction(
+          .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.duration(nullable: true))

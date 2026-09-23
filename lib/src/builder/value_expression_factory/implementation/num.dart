@@ -11,7 +11,7 @@ class NumExpressionFactory extends ValueExpressionFactory {
       SupportResult.of(typeToConvert.isDartCoreNum);
 
   @override
-  MapValueToObjectExpressionFunction get mapValueToObjectFunction => (
+  FromMapValueExpressionFunction get fromMapValue => (
         MapConverterLibraryAssetIdFactory idFactory,
         code.Expression source,
         InterfaceType typeToConvert,
@@ -19,7 +19,7 @@ class NumExpressionFactory extends ValueExpressionFactory {
           source.asA(code.Type.ofNum(nullable: isNullable(typeToConvert)));
 
   @override
-  ObjectToMapValueExpressionFunction get objectToMapValueFunction => (
+  ToMapValueExpressionFunction get toMapValue => (
         MapConverterLibraryAssetIdFactory idFactory,
         code.Expression source,
         InterfaceType typeToConvert,

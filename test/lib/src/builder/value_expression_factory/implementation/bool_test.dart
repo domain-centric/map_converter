@@ -38,9 +38,9 @@ void main() {
           .should
           .beOfType<NotSupported>();
     });
-    test('mapValueToObject nullable=false', () {
+    test('fromMapValuenullable=false', () {
       expressionFactory
-          .mapValueToObjectFunction(
+          .fromMapValue(
             idFactory,
             mapValueExpression(mapVariableName, propertyName),
             TypeFake.bool(),
@@ -49,9 +49,9 @@ void main() {
           .should
           .be("$mapVariableName['$propertyName'] as bool ");
     });
-    test('mapValueToObject nullable=true', () {
+    test('fromMapValuenullable=true', () {
       expressionFactory
-          .mapValueToObjectFunction(
+          .fromMapValue(
             idFactory,
             mapValueExpression(mapVariableName, propertyName),
             TypeFake.bool(nullable: true),
@@ -61,9 +61,9 @@ void main() {
           .be("$mapVariableName['$propertyName'] as bool? ");
     });
 
-    test('objectToMapValue nullable=false', () {
+    test('toMapValue nullable=false', () {
       expressionFactory
-          .mapValueToObjectFunction(
+          .fromMapValue(
             idFactory,
             objectPropertyExpression(instanceVariableName, propertyName),
             TypeFake.bool(),
@@ -72,9 +72,9 @@ void main() {
           .should
           .be("$instanceVariableName.$propertyName as bool ");
     });
-    test('objectToMapValue nullable=true', () {
+    test('toMapValue nullable=true', () {
       expressionFactory
-          .objectToMapValueFunction(
+          .toMapValue(
             idFactory,
             objectPropertyExpression(instanceVariableName, propertyName),
             TypeFake.bool(nullable: true),

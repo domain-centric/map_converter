@@ -26,7 +26,7 @@ class IterableExpressionFactory implements ValueExpressionFactory {
   DartType _genericType(InterfaceType listType) => listType.typeArguments.first;
 
   @override
-  MapValueToObjectExpressionFunction get mapValueToObjectFunction => (
+  FromMapValueExpressionFunction get fromMapValue => (
         MapConverterLibraryAssetIdFactory idFactory,
         code.Expression source,
         InterfaceType typeToConvert,
@@ -35,7 +35,7 @@ class IterableExpressionFactory implements ValueExpressionFactory {
         var genericType = _genericType(typeToConvert) as InterfaceType;
         var valueExpressionFactory =
             ValueExpressionFactories().findFor(genericType)!;
-        var valueExpression = valueExpressionFactory.mapValueToObjectFunction(
+        var valueExpression = valueExpressionFactory.fromMapValue(
           idFactory,
           code.Expression.ofVariable(_elementVariableName),
           genericType,
@@ -61,7 +61,7 @@ class IterableExpressionFactory implements ValueExpressionFactory {
       };
 
   @override
-  ObjectToMapValueExpressionFunction get objectToMapValueFunction => (
+  ToMapValueExpressionFunction get toMapValue => (
         MapConverterLibraryAssetIdFactory idFactory,
         code.Expression source,
         InterfaceType typeToConvert,
@@ -70,7 +70,7 @@ class IterableExpressionFactory implements ValueExpressionFactory {
         var valueExpressionFactory =
             ValueExpressionFactories().findFor(genericType)!;
         var elementVariable = code.Expression.ofVariable(_elementVariableName);
-        var valueExpression = valueExpressionFactory.objectToMapValueFunction(
+        var valueExpression = valueExpressionFactory.toMapValue(
           idFactory,
           elementVariable,
           genericType,

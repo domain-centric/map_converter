@@ -181,15 +181,14 @@ class ObjectToMapFunctionFactory {
   ) {
     Map<code.Expression, code.Expression> map = {};
     for (var field in domainClass.fields.where((f) =>
-        f.element.name != null &&
-        f.objectToMapValueExpressionFunction != null)) {
+        f.element.name != null && f.toMapValueExpressionFunction != null)) {
       var fieldName =
           code.Expression.ofString(field.alias ?? field.element.name!);
       var fieldType = field.element.type as InterfaceType;
       var instanceVariableName = domainClass.element.name!.camelCase;
       var source = code.Expression.ofVariable(instanceVariableName)
           .getProperty(field.element.name!);
-      var fieldValueExpression = field.objectToMapValueExpressionFunction!(
+      var fieldValueExpression = field.toMapValueExpressionFunction!(
         idFactory,
         source,
         fieldType,
@@ -313,7 +312,7 @@ code.Expression propertyValueExpression(FieldMetadata field,
   var fieldType = field.element.type as InterfaceType;
   var source = code.Expression.ofVariable(mapVariableName)
       .index(code.Expression.ofString(fieldName));
-  var valueExpression = field.mapValueToObjectExpressionFunction!(
+  var valueExpression = field.fromMapValueExpressionFunction!(
     idFactory,
     source,
     fieldType,
@@ -370,16 +369,16 @@ class Constructor {
 class FieldMetadata {
   final FieldElement element;
   final String? alias;
-  final ObjectToMapValueExpressionFunction? objectToMapValueExpressionFunction;
-  final MapValueToObjectExpressionFunction? mapValueToObjectExpressionFunction;
+  final ToMapValueExpressionFunction? toMapValueExpressionFunction;
+  final FromMapValueExpressionFunction? fromMapValueExpressionFunction;
 
   FieldMetadata(this.element,
       {this.alias,
-      required this.objectToMapValueExpressionFunction,
-      required this.mapValueToObjectExpressionFunction});
+      required this.toMapValueExpressionFunction,
+      required this.fromMapValueExpressionFunction});
 }
 
-typedef ObjectToMapValueExpressionFunction =
+typedef ToMapValueExpressionFunction =
 
     /// Creates a Dart code expressions for a generated MapConverter
     /// to convert a [source] object to a [PrimitiveType]
@@ -397,7 +396,7 @@ typedef ObjectToMapValueExpressionFunction =
   InterfaceType typeToConvert,
 );
 
-typedef MapValueToObjectExpressionFunction =
+typedef FromMapValueExpressionFunction =
 
     /// Creates a Dart code expressions for a generated MapConverter
     /// to convert a [PrimitiveType] to an object
@@ -510,15 +509,14 @@ class DomainClassFactory {
           var valueExpressionFactory =
               ValueExpressionFactories().findFor(fieldType);
           var alias = fieldAnnotation?.getField('alias')?.toStringValue();
-          var mapValueToObjectExpressionFunction =
-              createMapValueToObjectExpressionFunction(
+          var fromMapValueExpressionFunction =
+              createFromMapValueExpressionFunction(
                   fieldAnnotation, valueExpressionFactory);
-          var objectToMapValueExpressionFunction =
-              createObjectToMapValueExpressionFunction(
-                  fieldAnnotation, valueExpressionFactory);
+          var toMapValueExpressionFunction = createToMapValueExpressionFunction(
+              fieldAnnotation, valueExpressionFactory);
 
-          if (mapValueToObjectExpressionFunction == null &&
-              objectToMapValueExpressionFunction == null) {
+          if (fromMapValueExpressionFunction == null &&
+              toMapValueExpressionFunction == null) {
             log.log(
                 Level.WARNING,
                 'Property: $fieldPath '
@@ -528,10 +526,8 @@ class DomainClassFactory {
             var fieldExpressionFactory = FieldMetadata(
               field,
               alias: alias,
-              mapValueToObjectExpressionFunction:
-                  mapValueToObjectExpressionFunction,
-              objectToMapValueExpressionFunction:
-                  objectToMapValueExpressionFunction,
+              fromMapValueExpressionFunction: fromMapValueExpressionFunction,
+              toMapValueExpressionFunction: toMapValueExpressionFunction,
             );
             fieldMetaData.add(fieldExpressionFactory);
           }
@@ -549,41 +545,40 @@ class DomainClassFactory {
         (dartObject.getField('symbol')?.toSymbolValue()) == field.name);
   }
 
-  MapValueToObjectExpressionFunction? createMapValueToObjectExpressionFunction(
+  FromMapValueExpressionFunction? createFromMapValueExpressionFunction(
       DartObject? fieldAnnotation,
       ValueExpressionFactory? valueExpressionFactory) {
-    var mapValueToObjectCustomFunction =
-        fieldAnnotation?.getField('fromPrimitiveConverter')?.toFunctionValue();
-    if (mapValueToObjectCustomFunction == null &&
-        valueExpressionFactory == null) {
+    var fromMapValueCustomFunction =
+        fieldAnnotation?.getField('fromMapValue')?.toFunctionValue();
+    if (fromMapValueCustomFunction == null && valueExpressionFactory == null) {
       return null;
     }
-    if (mapValueToObjectCustomFunction != null) {
-      return createMapValueToObjectExpressionCustomFunction(
-          functionName: mapValueToObjectCustomFunction.name!,
+    if (fromMapValueCustomFunction != null) {
+      return createFromMapValueExpressionCustomFunction(
+          functionName: fromMapValueCustomFunction.name!,
           functionLibraryUri: createRelativeLibraryUri(
-              mapValueToObjectCustomFunction.library.uri.toString()));
+              fromMapValueCustomFunction.library.uri.toString()));
     } else {
-      return valueExpressionFactory!.mapValueToObjectFunction;
+      return valueExpressionFactory!.fromMapValue;
     }
   }
 
-  ObjectToMapValueExpressionFunction? createObjectToMapValueExpressionFunction(
+  ToMapValueExpressionFunction? createToMapValueExpressionFunction(
       DartObject? fieldAnnotation,
       ValueExpressionFactory? valueExpressionFactory) {
-    var objectToMapValueExpressionFunction =
-        fieldAnnotation?.getField('toPrimitiveConverter')?.toFunctionValue();
-    if (objectToMapValueExpressionFunction == null &&
+    var toMapValueExpressionFunction =
+        fieldAnnotation?.getField('toMapValue')?.toFunctionValue();
+    if (toMapValueExpressionFunction == null &&
         valueExpressionFactory == null) {
       return null;
     }
-    if (objectToMapValueExpressionFunction != null) {
-      return createObjectToMapValueExpressionCustomFunction(
-          functionName: objectToMapValueExpressionFunction.name!,
+    if (toMapValueExpressionFunction != null) {
+      return createToMapValueExpressionCustomFunction(
+          functionName: toMapValueExpressionFunction.name!,
           functionLibraryUri: createRelativeLibraryUri(
-              objectToMapValueExpressionFunction.library.uri.toString()));
+              toMapValueExpressionFunction.library.uri.toString()));
     } else {
-      return valueExpressionFactory!.objectToMapValueFunction;
+      return valueExpressionFactory!.toMapValue;
     }
   }
 
@@ -645,41 +640,37 @@ class DomainClassFactory {
   // }
 }
 
-MapValueToObjectExpressionFunction
-    createMapValueToObjectExpressionCustomFunction({
+FromMapValueExpressionFunction createFromMapValueExpressionCustomFunction({
   //FIXME: simpler names
   required String functionName,
   required String functionLibraryUri,
 }) =>
-        (
-          MapConverterLibraryAssetIdFactory idFactory,
-          code.Expression source,
-          InterfaceType typeToConvert,
-        ) =>
-            code.Expression.callMethodOrFunction(
-              functionName,
-              libraryUri: functionLibraryUri,
-              parameterValues:
-                  code.ParameterValues([code.ParameterValue(source)]),
-            );
+    (
+      MapConverterLibraryAssetIdFactory idFactory,
+      code.Expression source,
+      InterfaceType typeToConvert,
+    ) =>
+        code.Expression.callMethodOrFunction(
+          functionName,
+          libraryUri: functionLibraryUri,
+          parameterValues: code.ParameterValues([code.ParameterValue(source)]),
+        );
 
-ObjectToMapValueExpressionFunction
-    createObjectToMapValueExpressionCustomFunction({
+ToMapValueExpressionFunction createToMapValueExpressionCustomFunction({
   //FIXME: simpler names
   required String functionName,
   required String functionLibraryUri,
 }) =>
-        (
-          MapConverterLibraryAssetIdFactory idFactory,
-          code.Expression source,
-          InterfaceType typeToConvert,
-        ) =>
-            code.Expression.callMethodOrFunction(
-              functionName,
-              libraryUri: functionLibraryUri,
-              parameterValues:
-                  code.ParameterValues([code.ParameterValue(source)]),
-            );
+    (
+      MapConverterLibraryAssetIdFactory idFactory,
+      code.Expression source,
+      InterfaceType typeToConvert,
+    ) =>
+        code.Expression.callMethodOrFunction(
+          functionName,
+          libraryUri: functionLibraryUri,
+          parameterValues: code.ParameterValues([code.ParameterValue(source)]),
+        );
 
 class BestConstructorFactory {
   /// returns the best constructor to be used to create an DomainObject when

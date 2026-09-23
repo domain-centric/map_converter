@@ -11,7 +11,7 @@ class StringExpressionFactory extends ValueExpressionFactory {
       SupportResult.of(typeToConvert.isDartCoreString);
 
   @override
-  MapValueToObjectExpressionFunction get mapValueToObjectFunction => (
+  FromMapValueExpressionFunction get fromMapValue => (
         MapConverterLibraryAssetIdFactory idFactory,
         code.Expression source,
         InterfaceType typeToConvert,
@@ -19,7 +19,7 @@ class StringExpressionFactory extends ValueExpressionFactory {
           source.asA(code.Type.ofString(nullable: isNullable(typeToConvert)));
 
   @override
-  ObjectToMapValueExpressionFunction get objectToMapValueFunction => (
+  ToMapValueExpressionFunction get toMapValue => (
         MapConverterLibraryAssetIdFactory idFactory,
         code.Expression source,
         InterfaceType typeToConvert,

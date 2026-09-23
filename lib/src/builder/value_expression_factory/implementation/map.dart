@@ -21,13 +21,13 @@ class MapExpressionFactory implements ValueExpressionFactory {
     return SupportedIfTypesAreSupported(typesThatMustBeSupported);
   }
 
-  code.Expression _createMapValueToObjectExpression(
+  code.Expression _createFromMapValueExpression(
     MapConverterLibraryAssetIdFactory idFactory,
     String variableName,
     InterfaceType typeToConvert,
   ) {
     var expressionFactory = ValueExpressionFactories().findFor(typeToConvert)!;
-    var expression = expressionFactory.mapValueToObjectFunction(
+    var expression = expressionFactory.fromMapValue(
       idFactory,
       code.Expression.ofVariable(variableName),
       typeToConvert,
@@ -85,13 +85,13 @@ class MapExpressionFactory implements ValueExpressionFactory {
             ])),
           ]));
 
-  code.Expression _createObjectToMapValueExpression(
+  code.Expression _createToMapValueExpression(
     MapConverterLibraryAssetIdFactory idFactory,
     String variableName,
     InterfaceType typeToConvert,
   ) {
     var expressionFactory = ValueExpressionFactories().findFor(typeToConvert);
-    return expressionFactory!.objectToMapValueFunction(
+    return expressionFactory!.toMapValue(
       idFactory,
       code.Expression.ofVariable(variableName),
       typeToConvert,
@@ -135,20 +135,20 @@ class MapExpressionFactory implements ValueExpressionFactory {
       expression.toUnFormattedString() != mapVariableName;
 
   @override
-  MapValueToObjectExpressionFunction get mapValueToObjectFunction => (
+  FromMapValueExpressionFunction get fromMapValue => (
         MapConverterLibraryAssetIdFactory idFactory,
         code.Expression source,
         InterfaceType typeToConvert,
       ) {
         var nullable = isNullable(typeToConvert);
         var keyType = _keyType(typeToConvert) as InterfaceType;
-        var keyExpression = _createMapValueToObjectExpression(
-            idFactory, _keyVariableName, keyType);
+        var keyExpression =
+            _createFromMapValueExpression(idFactory, _keyVariableName, keyType);
         var keyNeedsConversion =
             _needsConversion(keyExpression, _keyVariableName);
 
         var valueType = _valueType(typeToConvert) as InterfaceType;
-        var valueExpression = _createMapValueToObjectExpression(
+        var valueExpression = _createFromMapValueExpression(
             idFactory, _valueVariableName, valueType);
         var valueNeedsConversion =
             _needsConversion(valueExpression, _valueVariableName);
@@ -164,19 +164,19 @@ class MapExpressionFactory implements ValueExpressionFactory {
       };
 
   @override
-  ObjectToMapValueExpressionFunction get objectToMapValueFunction => (
+  ToMapValueExpressionFunction get toMapValue => (
         MapConverterLibraryAssetIdFactory idFactory,
         code.Expression source,
         InterfaceType typeToConvert,
       ) {
         var keyType = _keyType(typeToConvert) as InterfaceType;
-        var keyExpression = _createObjectToMapValueExpression(
-            idFactory, _keyVariableName, keyType);
+        var keyExpression =
+            _createToMapValueExpression(idFactory, _keyVariableName, keyType);
         var keyNeedsConversion =
             _needsConversion(keyExpression, _keyVariableName);
 
         var valueType = _valueType(typeToConvert) as InterfaceType;
-        var valueExpression = _createObjectToMapValueExpression(
+        var valueExpression = _createToMapValueExpression(
             idFactory, _valueVariableName, valueType);
         var valueNeedsConversion =
             _needsConversion(valueExpression, _valueVariableName);

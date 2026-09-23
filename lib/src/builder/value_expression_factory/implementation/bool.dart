@@ -11,7 +11,7 @@ class BoolExpressionFactory extends ValueExpressionFactory {
       SupportResult.of(typeToConvert.isDartCoreBool);
 
   @override
-  MapValueToObjectExpressionFunction get mapValueToObjectFunction => (
+  FromMapValueExpressionFunction get fromMapValue => (
         MapConverterLibraryAssetIdFactory idFactory,
         code.Expression source,
         InterfaceType typeToConvert,
@@ -19,7 +19,7 @@ class BoolExpressionFactory extends ValueExpressionFactory {
           source.asA(code.Type.ofBool(nullable: isNullable(typeToConvert)));
 
   @override
-  ObjectToMapValueExpressionFunction get objectToMapValueFunction => (
+  ToMapValueExpressionFunction get toMapValue => (
         MapConverterLibraryAssetIdFactory idFactory,
         code.Expression source,
         InterfaceType typeToConvert,

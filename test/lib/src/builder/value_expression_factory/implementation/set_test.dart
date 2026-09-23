@@ -38,9 +38,9 @@ void main() {
             .should
             .beOfType<NotSupported>();
       });
-      test('mapValueToObject nullable=false', () {
+      test('fromMapValuenullable=false', () {
         expressionFactory
-            .mapValueToObjectFunction(
+            .fromMapValue(
               idFactory,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.set(genericType),
@@ -49,9 +49,9 @@ void main() {
             .should
             .be("$mapVariableName['$propertyName'].map((setElement) => setElement as $genericType ).toSet().cast<i1.bool>()");
       });
-      test('mapValueToObject nullable=true', () {
+      test('fromMapValuenullable=true', () {
         expressionFactory
-            .mapValueToObjectFunction(
+            .fromMapValue(
               idFactory,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.set(genericType, nullable: true),
@@ -60,9 +60,9 @@ void main() {
             .should
             .be("map['bools']?.map((setElement) => setElement as bool ).toSet().cast<i1.bool>()");
       });
-      test('objectToMapValue nullable=false', () {
+      test('toMapValue nullable=false', () {
         expressionFactory
-            .objectToMapValueFunction(
+            .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.set(genericType),
@@ -71,9 +71,9 @@ void main() {
             .should
             .be("$instanceVariableName.$propertyName");
       });
-      test('objectToMapValue nullable=true', () {
+      test('toMapValue nullable=true', () {
         expressionFactory
-            .objectToMapValueFunction(
+            .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.set(genericType, nullable: true),
@@ -107,9 +107,9 @@ void main() {
             .should
             .beOfType<NotSupported>();
       });
-      test('mapValueToObject nullable=false', () {
+      test('fromMapValuenullable=false', () {
         expressionFactory
-            .mapValueToObjectFunction(
+            .fromMapValue(
               idFactory,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.set(genericType),
@@ -118,9 +118,9 @@ void main() {
             .should
             .be("$mapVariableName['$propertyName'].map((setElement) => setElement as $genericType ).toSet().cast<i1.num>()");
       });
-      test('mapValueToObject nullable=true', () {
+      test('fromMapValuenullable=true', () {
         expressionFactory
-            .mapValueToObjectFunction(
+            .fromMapValue(
               idFactory,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.set(genericType, nullable: true),
@@ -129,9 +129,9 @@ void main() {
             .should
             .be("map['nums']?.map((setElement) => setElement as num ).toSet().cast<i1.num>()");
       });
-      test('objectToMapValue nullable=false', () {
+      test('toMapValue nullable=false', () {
         expressionFactory
-            .objectToMapValueFunction(
+            .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.set(genericType),
@@ -140,9 +140,9 @@ void main() {
             .should
             .be("$instanceVariableName.$propertyName");
       });
-      test('objectToMapValue nullable=true', () {
+      test('toMapValue nullable=true', () {
         expressionFactory
-            .objectToMapValueFunction(
+            .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.set(genericType, nullable: true),
@@ -176,9 +176,9 @@ void main() {
             .should
             .beOfType<NotSupported>();
       });
-      test('mapValueToObject nullable=false', () {
+      test('fromMapValuenullable=false', () {
         expressionFactory
-            .mapValueToObjectFunction(
+            .fromMapValue(
               idFactory,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.set(genericType),
@@ -187,9 +187,9 @@ void main() {
             .should
             .be("$mapVariableName['$propertyName'].map((setElement) => (setElement as num ).toInt()).toSet().cast<i1.int>()");
       });
-      test('mapValueToObject nullable=true', () {
+      test('fromMapValuenullable=true', () {
         expressionFactory
-            .mapValueToObjectFunction(
+            .fromMapValue(
               idFactory,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.set(genericType, nullable: true),
@@ -198,9 +198,9 @@ void main() {
             .should
             .be("map['ints']?.map((setElement) => (setElement as num ).toInt()).toSet().cast<i1.int>()");
       });
-      test('objectToMapValue nullable=false', () {
+      test('toMapValue nullable=false', () {
         expressionFactory
-            .objectToMapValueFunction(
+            .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.set(genericType),
@@ -209,9 +209,9 @@ void main() {
             .should
             .be("$instanceVariableName.$propertyName");
       });
-      test('objectToMapValue nullable=true', () {
+      test('toMapValue nullable=true', () {
         expressionFactory
-            .objectToMapValueFunction(
+            .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.set(genericType, nullable: true),
@@ -246,9 +246,9 @@ void main() {
             .should
             .beOfType<NotSupported>();
       });
-      test('mapValueToObject nullable=false', () {
+      test('fromMapValuenullable=false', () {
         expressionFactory
-            .mapValueToObjectFunction(
+            .fromMapValue(
               idFactory,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.set(genericType),
@@ -257,9 +257,9 @@ void main() {
             .should
             .be("$mapVariableName['$propertyName'].map((setElement) => (setElement as num ).toDouble()).toSet().cast<i1.double>()");
       });
-      test('mapValueToObject nullable=true', () {
+      test('fromMapValuenullable=true', () {
         expressionFactory
-            .mapValueToObjectFunction(
+            .fromMapValue(
               idFactory,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.set(genericType, nullable: true),
@@ -268,9 +268,9 @@ void main() {
             .should
             .be("map['doubles']?.map((setElement) => (setElement as num ).toDouble()).toSet().cast<i1.double>()");
       });
-      test('objectToMapValue nullable=false', () {
+      test('toMapValue nullable=false', () {
         expressionFactory
-            .objectToMapValueFunction(
+            .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.set(genericType),
@@ -279,9 +279,9 @@ void main() {
             .should
             .be("$instanceVariableName.$propertyName");
       });
-      test('objectToMapValue nullable=true', () {
+      test('toMapValue nullable=true', () {
         expressionFactory
-            .objectToMapValueFunction(
+            .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.set(genericType, nullable: true),
@@ -316,9 +316,9 @@ void main() {
             .should
             .beOfType<NotSupported>();
       });
-      test('mapValueToObject nullable=false', () {
+      test('fromMapValuenullable=false', () {
         expressionFactory
-            .mapValueToObjectFunction(
+            .fromMapValue(
               idFactory,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.set(genericType),
@@ -327,9 +327,9 @@ void main() {
             .should
             .be("$mapVariableName['$propertyName'].map((setElement) => setElement as $genericType ).toSet().cast<i1.String>()");
       });
-      test('mapValueToObject nullable=true', () {
+      test('fromMapValuenullable=true', () {
         expressionFactory
-            .mapValueToObjectFunction(
+            .fromMapValue(
               idFactory,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.set(genericType, nullable: true),
@@ -338,9 +338,9 @@ void main() {
             .should
             .be("map['strings']?.map((setElement) => setElement as String ).toSet().cast<i1.String>()");
       });
-      test('objectToMapValue nullable=false', () {
+      test('toMapValue nullable=false', () {
         expressionFactory
-            .objectToMapValueFunction(
+            .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.set(genericType),
@@ -349,9 +349,9 @@ void main() {
             .should
             .be("$instanceVariableName.$propertyName");
       });
-      test('objectToMapValue nullable=true', () {
+      test('toMapValue nullable=true', () {
         expressionFactory
-            .objectToMapValueFunction(
+            .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.set(genericType, nullable: true),
@@ -385,9 +385,9 @@ void main() {
             .should
             .beOfType<NotSupported>();
       });
-      test('mapValueToObject nullable=false', () {
+      test('fromMapValuenullable=false', () {
         expressionFactory
-            .mapValueToObjectFunction(
+            .fromMapValue(
               idFactory,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.set(genericType),
@@ -396,9 +396,9 @@ void main() {
             .should
             .be("$mapVariableName['$propertyName'].map((setElement) => Uri.parse(setElement as String )).toSet().cast<i1.Uri>()");
       });
-      test('mapValueToObject nullable=true', () {
+      test('fromMapValuenullable=true', () {
         expressionFactory
-            .mapValueToObjectFunction(
+            .fromMapValue(
               idFactory,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.set(genericType, nullable: true),
@@ -407,9 +407,9 @@ void main() {
             .should
             .be("map['uris']?.map((setElement) => Uri.parse(setElement as String )).toSet().cast<i1.Uri>()");
       });
-      test('objectToMapValue nullable=false', () {
+      test('toMapValue nullable=false', () {
         expressionFactory
-            .objectToMapValueFunction(
+            .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.set(genericType),
@@ -418,9 +418,9 @@ void main() {
             .should
             .be("$instanceVariableName.$propertyName.map((i1.Uri setElement) => setElement.toString()).toSet()");
       });
-      test('objectToMapValue nullable=true', () {
+      test('toMapValue nullable=true', () {
         expressionFactory
-            .objectToMapValueFunction(
+            .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.set(genericType, nullable: true),
@@ -455,9 +455,9 @@ void main() {
             .should
             .beOfType<NotSupported>();
       });
-      test('mapValueToObject nullable=false', () {
+      test('fromMapValuenullable=false', () {
         expressionFactory
-            .mapValueToObjectFunction(
+            .fromMapValue(
               idFactory,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.set(genericType),
@@ -466,9 +466,9 @@ void main() {
             .should
             .be("map['bigInts'].map((setElement) => BigInt.parse(setElement as String )).toSet().cast<i1.BigInt>()");
       });
-      test('mapValueToObject nullable=true', () {
+      test('fromMapValuenullable=true', () {
         expressionFactory
-            .mapValueToObjectFunction(
+            .fromMapValue(
               idFactory,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.set(genericType, nullable: true),
@@ -477,9 +477,9 @@ void main() {
             .should
             .be("map['bigInts']?.map((setElement) => BigInt.parse(setElement as String )).toSet().cast<i1.BigInt>()");
       });
-      test('objectToMapValue nullable=false', () {
+      test('toMapValue nullable=false', () {
         expressionFactory
-            .objectToMapValueFunction(
+            .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.set(genericType),
@@ -488,9 +488,9 @@ void main() {
             .should
             .be("$instanceVariableName.$propertyName.map((i1.BigInt setElement) => setElement.toString()).toSet()");
       });
-      test('objectToMapValue nullable=true', () {
+      test('toMapValue nullable=true', () {
         expressionFactory
-            .objectToMapValueFunction(
+            .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.set(genericType, nullable: true),
@@ -526,9 +526,9 @@ void main() {
             .should
             .beOfType<NotSupported>();
       });
-      test('mapValueToObject nullable=false', () {
+      test('fromMapValuenullable=false', () {
         expressionFactory
-            .mapValueToObjectFunction(
+            .fromMapValue(
               idFactory,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.set(genericType),
@@ -537,9 +537,9 @@ void main() {
             .should
             .be("map['dateTimes'].map((setElement) => DateTime.parse(setElement as String )).toSet().cast<i1.DateTime>()");
       });
-      test('mapValueToObject nullable=true', () {
+      test('fromMapValuenullable=true', () {
         expressionFactory
-            .mapValueToObjectFunction(
+            .fromMapValue(
               idFactory,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.set(genericType, nullable: true),
@@ -548,9 +548,9 @@ void main() {
             .should
             .be("map['dateTimes']?.map((setElement) => DateTime.parse(setElement as String )).toSet().cast<i1.DateTime>()");
       });
-      test('objectToMapValue nullable=false', () {
+      test('toMapValue nullable=false', () {
         expressionFactory
-            .objectToMapValueFunction(
+            .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.set(genericType),
@@ -559,9 +559,9 @@ void main() {
             .should
             .be("$instanceVariableName.$propertyName.map((i1.DateTime setElement) => setElement.toIso8601String()).toSet()");
       });
-      test('objectToMapValue nullable=true', () {
+      test('toMapValue nullable=true', () {
         expressionFactory
-            .objectToMapValueFunction(
+            .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.set(genericType, nullable: true),
@@ -597,9 +597,9 @@ void main() {
             .should
             .beOfType<NotSupported>();
       });
-      test('mapValueToObject nullable=false', () {
+      test('fromMapValuenullable=false', () {
         expressionFactory
-            .mapValueToObjectFunction(
+            .fromMapValue(
               idFactory,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.set(genericType),
@@ -608,9 +608,9 @@ void main() {
             .should
             .be("map['durations'].map((setElement) => Duration(microseconds: setElement as int )).toSet().cast<i1.Duration>()");
       });
-      test('mapValueToObject nullable=true', () {
+      test('fromMapValuenullable=true', () {
         expressionFactory
-            .mapValueToObjectFunction(
+            .fromMapValue(
               idFactory,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.set(genericType, nullable: true),
@@ -619,9 +619,9 @@ void main() {
             .should
             .be("map['durations']?.map((setElement) => Duration(microseconds: setElement as int )).toSet().cast<i1.Duration>()");
       });
-      test('objectToMapValue nullable=false', () {
+      test('toMapValue nullable=false', () {
         expressionFactory
-            .objectToMapValueFunction(
+            .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.set(genericType),
@@ -630,9 +630,9 @@ void main() {
             .should
             .be("$instanceVariableName.$propertyName.map((i1.Duration setElement) => setElement.inMicroseconds).toSet()");
       });
-      test('objectToMapValue nullable=true', () {
+      test('toMapValue nullable=true', () {
         expressionFactory
-            .objectToMapValueFunction(
+            .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.set(genericType, nullable: true),
@@ -668,9 +668,9 @@ void main() {
             .should
             .beOfType<NotSupported>();
       });
-      test('mapValueToObject nullable=false', () {
+      test('fromMapValuenullable=false', () {
         expressionFactory
-            .mapValueToObjectFunction(
+            .fromMapValue(
               idFactory,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.set(genericType),
@@ -679,9 +679,9 @@ void main() {
             .should
             .be("map['genders'].map((setElement) => i1.Gender.values.firstWhere((enumValue) => enumValue.name==setElement)).toSet().cast<i1.Gender>()");
       });
-      test('mapValueToObject nullable=true', () {
+      test('fromMapValuenullable=true', () {
         expressionFactory
-            .mapValueToObjectFunction(
+            .fromMapValue(
               idFactory,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.set(genericType, nullable: true),
@@ -690,9 +690,9 @@ void main() {
             .should
             .be("map['genders']?.map((setElement) => i1.Gender.values.firstWhere((enumValue) => enumValue.name==setElement)).toSet().cast<i1.Gender>()");
       });
-      test('objectToMapValue nullable=false', () {
+      test('toMapValue nullable=false', () {
         expressionFactory
-            .objectToMapValueFunction(
+            .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.set(genericType),
@@ -701,9 +701,9 @@ void main() {
             .should
             .be("$instanceVariableName.$propertyName.map((i1.Gender setElement) => setElement.name).toSet()");
       });
-      test('objectToMapValue nullable=true', () {
+      test('toMapValue nullable=true', () {
         expressionFactory
-            .objectToMapValueFunction(
+            .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.set(genericType, nullable: true),
@@ -738,9 +738,9 @@ void main() {
             .should
             .beOfType<NotSupported>();
       });
-      test('mapValueToObject nullable=false', () {
+      test('fromMapValuenullable=false', () {
         expressionFactory
-            .mapValueToObjectFunction(
+            .fromMapValue(
               idFactory,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.set(genericType),
@@ -749,9 +749,9 @@ void main() {
             .should
             .be("$mapVariableName['$propertyName'].map((setElement) => i1.mapToPerson(setElement as Map<String,dynamic> )).toSet().cast<i2.Person>()");
       });
-      test('mapValueToObject nullable=true', () {
+      test('fromMapValuenullable=true', () {
         expressionFactory
-            .mapValueToObjectFunction(
+            .fromMapValue(
               idFactory,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.set(genericType, nullable: true),
@@ -760,9 +760,9 @@ void main() {
             .should
             .be("map['persons']?.map((setElement) => i1.mapToPerson(setElement as Map<String,dynamic> )).toSet().cast<i2.Person>()");
       });
-      test('objectToMapValue nullable=false', () {
+      test('toMapValue nullable=false', () {
         expressionFactory
-            .objectToMapValueFunction(
+            .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.set(genericType),
@@ -771,9 +771,9 @@ void main() {
             .should
             .be("$instanceVariableName.$propertyName.map((i1.Person setElement) => i2.personToMap(setElement)).toSet()");
       });
-      test('objectToMapValue nullable=true', () {
+      test('toMapValue nullable=true', () {
         expressionFactory
-            .objectToMapValueFunction(
+            .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.set(genericType, nullable: true),

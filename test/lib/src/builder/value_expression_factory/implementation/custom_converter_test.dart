@@ -12,18 +12,18 @@ void main() {
   const propertyName = 'adult';
   const functionName = 'customConverterFunction';
 
-  group('function createMapValueToObjectExpressionCustomFunction', () {
-    test('mapValueToObject nullable=false', () {
-      createMapValueToObjectExpressionCustomFunction(
+  group('function createFromMapValueExpressionCustomFunction', () {
+    test('fromMapValuenullable=false', () {
+      createFromMapValueExpressionCustomFunction(
           functionName: functionName, functionLibraryUri: '')(
         idFactory,
         mapValueExpression(mapVariableName, propertyName),
         TypeFake.personClass(),
       ).toUnFormattedString().should.be("i1.$functionName(map['adult'])");
     });
-    test('mapValueToObject nullable=true', () {
+    test('fromMapValuenullable=true', () {
       var personType = TypeFake.personClass(nullable: true);
-      createMapValueToObjectExpressionCustomFunction(
+      createFromMapValueExpressionCustomFunction(
           functionName: functionName, functionLibraryUri: '')(
         idFactory,
         mapValueExpression(mapVariableName, propertyName),
@@ -32,17 +32,17 @@ void main() {
     });
   });
 
-  group('function createObjectToMapValueExpressionCustomFunction', () {
-    test('objectToMapValue nullable=false', () {
-      createObjectToMapValueExpressionCustomFunction(
+  group('function createToMapValueExpressionCustomFunction', () {
+    test('toMapValue nullable=false', () {
+      createToMapValueExpressionCustomFunction(
           functionName: functionName, functionLibraryUri: '')(
         idFactory,
         objectPropertyExpression(instanceVariableName, propertyName),
         TypeFake.bool(),
       ).toUnFormattedString().should.be("i1.$functionName(person.adult)");
     });
-    test('objectToMapValue nullable=true', () {
-      createObjectToMapValueExpressionCustomFunction(
+    test('toMapValue nullable=true', () {
+      createToMapValueExpressionCustomFunction(
           functionName: functionName, functionLibraryUri: '')(
         idFactory,
         objectPropertyExpression(instanceVariableName, propertyName),

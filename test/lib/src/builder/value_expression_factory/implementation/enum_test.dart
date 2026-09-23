@@ -32,9 +32,9 @@ void main() {
           .should
           .beOfType<NotSupported>();
     });
-    test('.mapValueToObjectFunction nullable=false', () {
+    test('.fromMapValue nullable=false', () {
       expressionFactory
-          .mapValueToObjectFunction(
+          .fromMapValue(
             idFactory,
             mapValueExpression(mapVariableName, propertyName),
             TypeFake.genderEnum(),
@@ -44,9 +44,9 @@ void main() {
           .be("i1.Gender.values.firstWhere((enumValue) "
               "=> enumValue.name==$mapVariableName['$propertyName'])");
     });
-    test('.mapValueToObjectFunction nullable=true', () {
+    test('.fromMapValue nullable=true', () {
       expressionFactory
-          .mapValueToObjectFunction(
+          .fromMapValue(
             idFactory,
             mapValueExpression(mapVariableName, propertyName),
             TypeFake.genderEnum(nullable: true),
@@ -59,9 +59,9 @@ void main() {
               "=> enumValue.name==$mapVariableName['$propertyName'])");
     });
 
-    test('objectToMapValue nullable=false', () {
+    test('toMapValue nullable=false', () {
       expressionFactory
-          .objectToMapValueFunction(
+          .toMapValue(
             idFactory,
             objectPropertyExpression(instanceVariableName, propertyName),
             TypeFake.genderEnum(),
@@ -70,9 +70,9 @@ void main() {
           .should
           .be('$instanceVariableName.$propertyName.name');
     });
-    test('objectToMapValue nullable=true', () {
+    test('toMapValue nullable=true', () {
       expressionFactory
-          .objectToMapValueFunction(
+          .toMapValue(
             idFactory,
             objectPropertyExpression(instanceVariableName, propertyName),
             TypeFake.genderEnum(nullable: true),

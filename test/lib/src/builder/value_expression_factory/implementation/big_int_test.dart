@@ -38,9 +38,9 @@ void main() {
           .should
           .beOfType<NotSupported>();
     });
-    test('mapValueToObject(BigInt)', () {
+    test('fromMapValue(BigInt)', () {
       expressionFactory
-          .mapValueToObjectFunction(
+          .fromMapValue(
             idFactory,
             mapValueExpression(mapVariableName, propertyName),
             TypeFake.bigInt(),
@@ -49,9 +49,9 @@ void main() {
           .should
           .be("BigInt.parse($mapVariableName['$propertyName'] as String )");
     });
-    test('mapValueToObject(BigInt?)', () {
+    test('fromMapValue(BigInt?)', () {
       expressionFactory
-          .mapValueToObjectFunction(
+          .fromMapValue(
             idFactory,
             mapValueExpression(mapVariableName, propertyName),
             TypeFake.bigInt(nullable: true),
@@ -61,9 +61,9 @@ void main() {
           .be("$mapVariableName['$propertyName'] == null ? null : BigInt.parse($mapVariableName['$propertyName'] as String )");
     });
 
-    test('objectToMapValue(BigInt)', () {
+    test('toMapValue(BigInt)', () {
       expressionFactory
-          .objectToMapValueFunction(
+          .toMapValue(
             idFactory,
             objectPropertyExpression(instanceVariableName, propertyName),
             TypeFake.bigInt(),
@@ -72,9 +72,9 @@ void main() {
           .should
           .be("$instanceVariableName.$propertyName.toString()");
     });
-    test('objectToMapValue(BigInt?)', () {
+    test('toMapValue(BigInt?)', () {
       expressionFactory
-          .objectToMapValueFunction(
+          .toMapValue(
             idFactory,
             objectPropertyExpression(instanceVariableName, propertyName),
             TypeFake.bigInt(nullable: true),

@@ -2,8 +2,7 @@ import 'package:map_converter/map_converter.dart';
 
 @MapConverter(fields: [
   Field<DateTime, int>(#dateTime,
-      toPrimitiveConverter: dateTimeToPrimitive,
-      fromPrimitiveConverter: dateTimeFromPrimitive)
+      toMapValue: dateTimeToMapValue, fromMapValue: dateTimeFromMapValue)
 ])
 class Example {
   final DateTime dateTime;
@@ -11,7 +10,7 @@ class Example {
   Example(this.dateTime);
 }
 
-int dateTimeToPrimitive(DateTime value) => value.millisecondsSinceEpoch;
+int dateTimeToMapValue(DateTime dateTime) => dateTime.millisecondsSinceEpoch;
 
-DateTime dateTimeFromPrimitive(int value) =>
-    DateTime.fromMillisecondsSinceEpoch(value);
+DateTime dateTimeFromMapValue(int millisecondsSinceEpoch) =>
+    DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);

@@ -40,9 +40,9 @@ void main() {
             .should
             .beOfType<NotSupported>();
       });
-      test('mapValueToObject nullable=false', () {
+      test('fromMapValuenullable=false', () {
         expressionFactory
-            .mapValueToObjectFunction(
+            .fromMapValue(
               idFactory,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.map(keyType, valueType),
@@ -51,9 +51,9 @@ void main() {
             .should
             .be("(myMap['myProperty'] as Map ).map((k,v)=>MapEntry((k as num ).toInt(),v as String ))");
       });
-      test('mapValueToObject nullable=true', () {
+      test('fromMapValuenullable=true', () {
         expressionFactory
-            .mapValueToObjectFunction(
+            .fromMapValue(
               idFactory,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.map(keyType, valueType, nullable: true),
@@ -62,9 +62,9 @@ void main() {
             .should
             .be("(myMap['myProperty'] as Map? )?.map((k,v)=>MapEntry((k as num ).toInt(),v as String ))");
       });
-      test('objectToMapValue nullable=false', () {
+      test('toMapValue nullable=false', () {
         expressionFactory
-            .objectToMapValueFunction(
+            .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.map(keyType, valueType),
@@ -73,9 +73,9 @@ void main() {
             .should
             .be("person.myProperty");
       });
-      test('objectToMapValue nullable=true', () {
+      test('toMapValue nullable=true', () {
         expressionFactory
-            .objectToMapValueFunction(
+            .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.map(keyType, valueType, nullable: true),

@@ -11,7 +11,7 @@ class DoubleExpressionFactory extends ValueExpressionFactory {
       SupportResult.of(typeToConvert.isDartCoreDouble);
 
   @override
-  MapValueToObjectExpressionFunction get mapValueToObjectFunction => (
+  FromMapValueExpressionFunction get fromMapValue => (
         MapConverterLibraryAssetIdFactory idFactory,
         code.Expression source,
         InterfaceType typeToConvert,
@@ -23,7 +23,7 @@ class DoubleExpressionFactory extends ValueExpressionFactory {
       };
 
   @override
-  ObjectToMapValueExpressionFunction get objectToMapValueFunction => (
+  ToMapValueExpressionFunction get toMapValue => (
         MapConverterLibraryAssetIdFactory idFactory,
         code.Expression source,
         InterfaceType typeToConvert,

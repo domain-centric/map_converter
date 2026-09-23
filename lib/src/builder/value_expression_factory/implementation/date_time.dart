@@ -12,7 +12,7 @@ class DateTimeExpressionFactory extends ValueExpressionFactory {
           typeToConvert.element.library.name == 'dart.core');
 
   @override
-  MapValueToObjectExpressionFunction get mapValueToObjectFunction => (
+  FromMapValueExpressionFunction get fromMapValue => (
         MapConverterLibraryAssetIdFactory idFactory,
         code.Expression source,
         InterfaceType typeToConvert,
@@ -26,7 +26,7 @@ class DateTimeExpressionFactory extends ValueExpressionFactory {
       };
 
   @override
-  ObjectToMapValueExpressionFunction get objectToMapValueFunction => (
+  ToMapValueExpressionFunction get toMapValue => (
         MapConverterLibraryAssetIdFactory idFactory,
         code.Expression source,
         InterfaceType typeToConvert,

@@ -29,9 +29,9 @@ void main() {
           .should
           .beOfType<NotSupported>();
     });
-    test('mapValueToObject nullable=false', () {
+    test('fromMapValuenullable=false', () {
       expressionFactory
-          .mapValueToObjectFunction(
+          .fromMapValue(
             idFactory,
             mapValueExpression(mapVariableName, propertyName),
             TypeFake.uri(),
@@ -40,9 +40,9 @@ void main() {
           .should
           .be("Uri.parse($mapVariableName['$propertyName'] as String )");
     });
-    test('mapValueToObject nullable=true', () {
+    test('fromMapValuenullable=true', () {
       expressionFactory
-          .mapValueToObjectFunction(
+          .fromMapValue(
             idFactory,
             mapValueExpression(mapVariableName, propertyName),
             TypeFake.uri(nullable: true),
@@ -52,9 +52,9 @@ void main() {
           .be("$mapVariableName['$propertyName'] == null ? null : Uri.parse($mapVariableName['$propertyName'] as String )");
     });
 
-    test('objectToMapValue nullable=false', () {
+    test('toMapValue nullable=false', () {
       expressionFactory
-          .objectToMapValueFunction(
+          .toMapValue(
             idFactory,
             objectPropertyExpression(instanceVariableName, propertyName),
             TypeFake.uri(),
@@ -63,9 +63,9 @@ void main() {
           .should
           .be("$instanceVariableName.$propertyName.toString()");
     });
-    test('objectToMapValue nullable=true', () {
+    test('toMapValue nullable=true', () {
       expressionFactory
-          .objectToMapValueFunction(
+          .toMapValue(
               idFactory,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.uri(nullable: true))

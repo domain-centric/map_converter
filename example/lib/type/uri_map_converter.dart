@@ -11,6 +11,6 @@ i1.Example mapToExample(Map<String, dynamic> exampleMap) => i1.Example()
       ? null
       : Uri.parse(exampleMap['myNullableUri'] as String);
 Map<String, dynamic> exampleToMap(i1.Example example) => {
-      'myUri': example.myUri.toString(),
-      'myNullableUri': example.myNullableUri?.toString(),
-    };
+  'myUri': example.myUri.toString(),
+  'myNullableUri': example.myNullableUri?.toString(),
+};
