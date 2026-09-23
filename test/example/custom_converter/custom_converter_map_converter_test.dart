@@ -5,18 +5,18 @@ import '../../../example/lib/custom_converter/custom_converter.dart';
 import '../../../example/lib/custom_converter/custom_converter_map_converter.dart';
 
 void main() {
-  group('exampleToMap(example) function', () {
+  group('exampleMapper.toMap(example) function', () {
     var example = Example(DateTime.fromMillisecondsSinceEpoch(10));
-    var resultMap = exampleToMap(example);
+    var resultMap = const ExampleMapper().toMap(example);
 
     test("should.containKeyWithValue('dateTime', 10)", () {
       resultMap.should.containKeyWithValue('dateTime', 10);
     });
   });
 
-  group('mapToExample(exampleMap) function', () {
+  group('exampleMapper.fromMap(exampleMap) function', () {
     var exampleMap = {'dateTime': 10};
-    var resultObject = mapToExample(exampleMap);
+    var resultObject = const ExampleMapper().fromMap(exampleMap);
 
     test("resultObject.should.beOfType<CustomMappingExample>()", () {
       resultObject.should.beOfType<Example>();

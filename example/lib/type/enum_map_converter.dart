@@ -6,16 +6,19 @@ import '../../../example/lib/person/person.dart' as i2;
 /// Input: map_converter/example/lib/type/enum.dart
 /// Generate command: dart run build_runner build --delete-conflicting-outputs
 /// For more information see: https://pub.dev/packages/map_converter
-i1.Example mapToExample(Map<String, dynamic> exampleMap) => i1.Example()
-  ..myEnum = i2.Gender.values.firstWhere(
-    (enumValue) => enumValue.name == exampleMap['myEnum'],
-  )
-  ..myNullableEnum = exampleMap['myNullableEnum'] == null
-      ? null
-      : i2.Gender.values.firstWhere(
-          (enumValue) => enumValue.name == exampleMap['myNullableEnum'],
-        );
-Map<String, dynamic> exampleToMap(i1.Example example) => {
-  'myEnum': example.myEnum.name,
-  'myNullableEnum': example.myNullableEnum?.name,
-};
+class ExampleMapper {
+  const ExampleMapper();
+  i1.Example fromMap(Map<String, dynamic> exampleMap) => i1.Example()
+    ..myEnum = i2.Gender.values.firstWhere(
+      (enumValue) => enumValue.name == exampleMap['myEnum'],
+    )
+    ..myNullableEnum = exampleMap['myNullableEnum'] == null
+        ? null
+        : i2.Gender.values.firstWhere(
+            (enumValue) => enumValue.name == exampleMap['myNullableEnum'],
+          );
+  Map<String, dynamic> toMap(i1.Example example) => {
+        'myEnum': example.myEnum.name,
+        'myNullableEnum': example.myNullableEnum?.name,
+      };
+}

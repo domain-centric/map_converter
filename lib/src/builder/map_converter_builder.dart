@@ -15,58 +15,6 @@ class MapConverterBuilder implements Builder {
   final BuilderOptions builderOptions;
   MapConverterBuilder(this.builderOptions);
 
-  // /// Gets the input parameter of the options section in the build.yaml file.
-  // /// The input tells the [MapConverterBuilder] which files to process.
-  // /// See keys of [buildExtensions]
-  // ///
-  // /// Example of a build.yaml:
-  // /// targets:
-  // ///   $default:
-  // ///     builders:
-  // ///       map_converter|map_converter_builder:
-  // ///         enabled: True
-  // ///         options:
-  // ///           input: ^lib/domain/{{}}.dart
-  // ///           output: lib/domain/{{}}.data.converter.map.dart
-  // String get input => (builderOptions.config['input'] ?? '').trim();
-
-  // /// Gets the output parameter of the options section in the build.yaml file.
-  // /// The output tells the [MapConverterBuilder] where to store the results.
-  // /// See value of [buildExtensions]
-  // ///
-  // /// Example of a build.yaml:
-  // /// targets:
-  // ///   $default:
-  // ///     builders:
-  // ///       map_converter|map_converter_builder:
-  // ///         enabled: True
-  // ///         options:
-  // ///           input: ^lib/domain/{{}}.dart
-  // ///           output: lib/domain/{{}}.data.converter.map.dart
-  // String get output => (builderOptions.config['output'] ?? '').trim();
-
-  // @override
-  // Map<String, List<String>> get buildExtensions {
-  //   if (input.isEmpty) {
-  //     log.log(
-  //         Level.SEVERE,
-  //         'input option in build.yaml file is not defined. '
-  //         'See documentation on: https://pub.dev/packages/map_converter');
-  //   }
-  //   if (output.isEmpty) {
-  //     log.log(
-  //         Level.SEVERE,
-  //         'output option in build.yaml file is not defined. '
-  //         'See documentation on: https://pub.dev/packages/map_converter');
-  //   }
-  //   return {
-  //     input: [output]
-  //   };
-  // }
-  // {
-  //   '^lib/domain/{{}}.dart': ['lib/data/{{}}_map_converter.dart']
-  // };
-
   @override
   Future<FutureOr<void>> build(BuildStep buildStep) async {
     try {
@@ -128,24 +76,16 @@ class MapConverterLibraryFactory {
     } else {
       return code.Library(
         docComments: _createDocComments(libraryElement),
-        functions: _createFunctions(domainClasses, idFactory),
+        classes: _createMapperClasses(domainClasses, idFactory),
       );
     }
   }
 
-  List<code.DartFunction> _createFunctions(
-    List<DomainClass> domainClasses,
-    MapConverterLibraryAssetIdFactory idFactory,
-  ) {
-    var functions = <code.DartFunction>[];
-    for (var domainClass in domainClasses) {
-      functions
-          .add(MapToObjectFunctionFactory().create(domainClass, idFactory));
-      functions
-          .add(ObjectToMapFunctionFactory().create(domainClass, idFactory));
-    }
-    return functions;
-  }
+  List<code.Class> _createMapperClasses(List<DomainClass> domainClasses,
+          MapConverterLibraryAssetIdFactory idFactory) =>
+      domainClasses
+          .map((domainClass) => MapperClass(domainClass, idFactory))
+          .toList();
 
   List<code.DocComment> _createDocComments(LibraryElement libraryElement) => [
         code.DocComment.fromList([
@@ -159,23 +99,35 @@ class MapConverterLibraryFactory {
       ];
 }
 
-class ObjectToMapFunctionFactory {
-  code.DartFunction create(
+class MapperClass extends code.Class {
+  MapperClass(
+      DomainClass domainClass, MapConverterLibraryAssetIdFactory idFactory)
+      : super(_name(domainClass), constructors: [
+          _constructor(domainClass)
+        ], methods: [
+          FromMapValueMethod(domainClass, idFactory),
+          ToMapValueMethod(domainClass, idFactory)
+        ]);
+
+  static String _name(DomainClass domainClass) =>
+      '${domainClass.element.name!}Mapper';
+
+  static code.Constructor _constructor(DomainClass domainClass) =>
+      code.Constructor(code.Type(_name(domainClass)), constant: true);
+}
+
+class ToMapValueMethod extends code.Method {
+  ToMapValueMethod(
     DomainClass domainClass,
     MapConverterLibraryAssetIdFactory idFactory,
-  ) {
-    return code.DartFunction.withName(
-      _createName(domainClass),
-      _createBody(domainClass, idFactory),
-      parameters: _createParameters(domainClass),
-      returnType: _createReturnType(),
-    );
-  }
+  ) : super(
+          'toMap',
+          _createBody(domainClass, idFactory),
+          parameters: _createParameters(domainClass),
+          returnType: _createReturnType(),
+        );
 
-  String _createName(DomainClass domainClass) =>
-      '${domainClass.element.displayName.camelCase}ToMap';
-
-  code.CodeNode _createBody(
+  static code.CodeNode _createBody(
     DomainClass domainClass,
     MapConverterLibraryAssetIdFactory idFactory,
   ) {
@@ -198,7 +150,7 @@ class ObjectToMapFunctionFactory {
     return code.Expression.ofMap(map);
   }
 
-  code.Parameters _createParameters(DomainClass domainClass) =>
+  static code.Parameters _createParameters(DomainClass domainClass) =>
       code.Parameters([
         code.Parameter.required(
           domainClass.element.name!.camelCase,
@@ -206,27 +158,22 @@ class ObjectToMapFunctionFactory {
         ),
       ]);
 
-  code.Type _createReturnType() => code.Type.ofMap(
+  static code.Type _createReturnType() => code.Type.ofMap(
       keyType: code.Type.ofString(), valueType: code.Type.ofDynamic());
 }
 
-class MapToObjectFunctionFactory {
-  code.DartFunction create(
+class FromMapValueMethod extends code.Method {
+  FromMapValueMethod(
     DomainClass domainClass,
     MapConverterLibraryAssetIdFactory idFactory,
-  ) {
-    return code.DartFunction.withName(
-      _createName(domainClass),
-      _createBody(domainClass, idFactory),
-      parameters: _createFunctionParameters(domainClass),
-      returnType: createDomainType(domainClass),
-    );
-  }
+  ) : super(
+          'fromMap',
+          _createBody(domainClass, idFactory),
+          parameters: _createFunctionParameters(domainClass),
+          returnType: createDomainType(domainClass),
+        );
 
-  String _createName(DomainClass domainClass) =>
-      'mapTo${domainClass.element.displayName}';
-
-  code.CodeNode _createBody(
+  static code.CodeNode _createBody(
     DomainClass domainClass,
     MapConverterLibraryAssetIdFactory idFactory,
   ) {
@@ -251,7 +198,7 @@ class MapToObjectFunctionFactory {
     return constructorCall;
   }
 
-  code.Expression _createConstructorCall(
+  static code.Expression _createConstructorCall(
       DomainClass domainClass, MapConverterLibraryAssetIdFactory idFactory) {
     var name = domainClass.bestConstructor.name;
     if (name == 'new') {
@@ -262,7 +209,7 @@ class MapToObjectFunctionFactory {
         name: name, parameterValues: parameters);
   }
 
-  code.Parameters _createFunctionParameters(DomainClass domainClass) =>
+  static code.Parameters _createFunctionParameters(DomainClass domainClass) =>
       code.Parameters([
         code.Parameter.required(
           _domainMapVariableName(domainClass),
@@ -271,10 +218,10 @@ class MapToObjectFunctionFactory {
         ),
       ]);
 
-  String _domainMapVariableName(DomainClass domainClass) =>
+  static String _domainMapVariableName(DomainClass domainClass) =>
       '${domainClass.element.name!.camelCase}Map';
 
-  code.ParameterValues _createConstructorParameterValues(
+  static code.ParameterValues _createConstructorParameterValues(
     DomainClass domainClass,
     MapConverterLibraryAssetIdFactory idFactory,
   ) {
@@ -615,29 +562,6 @@ class DomainClassFactory {
         fieldsWithSetter.contains(field));
     return fieldsThatAreNotSet;
   }
-
-  // /// get property names to ignore from [MapConverter.properties] annotation
-  // List<String> _findPropertyNamesToIgnore(ClassElement classElement) {
-  //   var propertyNamesToIgnore = <String>[];
-  //   for (var metadata in classElement.metadata) {
-  //     var constantValue = metadata.computeConstantValue();
-  //     if (constantValue?.type?.element?.name == "MapConverter") {
-  //       var properties = constantValue?.getField("properties")?.toListValue();
-  //       if (properties != null) {
-  //         for (var property in properties) {
-  //           var ignore = property.getField("ignore")?.toBoolValue();
-  //           if (ignore == true) {
-  //             var name = property.getField("name")?.toStringValue();
-  //             if (name != null) {
-  //               propertyNamesToIgnore.add(name);
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  //   return propertyNamesToIgnore;
-  // }
 }
 
 FromMapValueExpressionFunction createCustomFromMapValueExpressionFunction({

@@ -6,19 +6,20 @@ import '../../../example/lib/type/iterable_map_converter.dart';
 import '../../../example/lib/person/person.dart';
 
 void main() {
+  final personMapper = const PersonMapper();
   final john = Person('John',
       dateOfBirth: DateTime(2000, 1, 1),
       children: [],
       hobby: 'gaming',
       gender: Gender.male);
-  final johnMap = personToMap(john);
+  final johnMap = personMapper.toMap(john);
   final sara = Person('Sara',
       dateOfBirth: DateTime(2003, 2, 3),
       children: [],
       hobby: 'reading',
       gender: Gender.female);
-  final saraMap = personToMap(sara);
-  group('mapToExample', () {
+  final saraMap = personMapper.toMap(sara);
+  group('exampleMapper.fromMap', () {
     final exampleMap = {
       'iterableOfBool': [true, false],
       'iterableOfGender': {'male', 'female'},
@@ -31,7 +32,7 @@ void main() {
       'nullableIterableOfNullableStrings': ['a', null, 'c']
     };
 
-    final example = mapToExample(exampleMap);
+    final example = const ExampleMapper().fromMap(exampleMap);
 
     test('iterableOfBool should be correct', () {
       example.iterableOfBool.should.be({true, false});
@@ -53,7 +54,7 @@ void main() {
     });
   });
 
-  group('exampleToMap', () {
+  group('exampleMapper.toMap', () {
     final example = Example()
       ..iterableOfBool = {true, false}
       ..iterableOfGender = {Gender.male, Gender.female}
@@ -65,7 +66,7 @@ void main() {
       ..nullableIterableOfDouble = {1.1, 2.2, 3.3}
       ..nullableIterableOfNullableStrings = {'a', null, 'c'};
 
-    final exampleMap = exampleToMap(example);
+    final exampleMap = const ExampleMapper().toMap(example);
 
     test('iterableOfBool should be correct', () {
       (exampleMap['iterableOfBool'] as Iterable).should.be({true, false});

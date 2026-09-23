@@ -9,7 +9,8 @@ import '../../../example/lib/type/map.dart';
 import '../../../example/lib/type/map_map_converter.dart';
 
 void main() {
-  group('mapToExample should convert map to Example object correctly', () {
+  group('exampleMapper.fromMap should convert map to Example object correctly',
+      () {
     final johnMap = {
       'name': 'John',
       'dateOfBirth': DateTime(2003, 03, 01).toIso8601String(),
@@ -47,7 +48,7 @@ void main() {
       }
     };
 
-    final example = mapToExample(exampleMap);
+    final example = const ExampleMapper().fromMap(exampleMap);
 
     group('Primitive Key and Primitive Value', () {
       test('mapWithPrimitiveKeyAndPrimitiveValue', () {
@@ -116,7 +117,8 @@ void main() {
     });
   });
 
-  group('exampleToMap should convert Example object to map correctly', () {
+  group('exampleMapper.toMap should convert Example object to map correctly',
+      () {
     final john = Person('John', dateOfBirth: DateTime(2003, 03, 01));
     final alice = Person('Alice', dateOfBirth: DateTime(2002, 02, 03));
 
@@ -139,7 +141,7 @@ void main() {
         13: {14: Gender.female}
       };
 
-    final exampleMap = exampleToMap(example);
+    final exampleMap = const ExampleMapper().toMap(example);
 
     group('Primitive Key and Primitive Value', () {
       test('mapWithPrimitiveKeyAndPrimitiveValue', () {
@@ -165,7 +167,7 @@ void main() {
     //       ..mapWithComplexKeyAndPrimitiveValue = {
     //         Person('John', dateOfBirth: DateTime(2003, 02, 25, 12, 34)): 5
     //       };
-    //     final exampleMap = exampleToMap(example);
+    //     final exampleMap = exampleMapper.toMap(example);
     //     exampleMap['mapWithComplexKeyAndPrimitiveValue']
     //         .keys
     //         .first['name']
@@ -180,7 +182,7 @@ void main() {
     //   test('mapWithComplexNullableKeyAndPrimitiveValue', () {
     //     final example = Example()
     //       ..mapWithComplexNullableKeyAndPrimitiveValue = {null: 6};
-    //     final exampleMap = exampleToMap(example);
+    //     final exampleMap = exampleMapper.toMap(example);
     //     exampleMap['mapWithComplexNullableKeyAndPrimitiveValue']
     //         .keys
     //         .first

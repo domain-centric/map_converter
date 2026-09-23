@@ -8,21 +8,22 @@ import '../../../example/lib/person/person_map_converter.dart';
 
 void main() {
   group('personToMap', () {
+    final personMapper = const PersonMapper();
     test('MikeSmith()', () {
       var person = MikeSmith();
-      var personMap = personToMap(person);
+      var personMap = personMapper.toMap(person);
       personMap.should.be(PersonMap(person));
     });
 
     test('JaneSmith()', () {
       var person = JaneSmith();
-      var personMap = personToMap(person);
+      var personMap = personMapper.toMap(person);
       personMap.should.be(PersonMap(person));
     });
 
     test('BobSmith()', () {
       var person = BobSmith();
-      var personMap = personToMap(person);
+      var personMap = personMapper.toMap(person);
       personMap.should.be(PersonMap(person));
     });
   });
@@ -61,8 +62,9 @@ class PersonMap extends DelegatingMap<String, dynamic> {
       : super({
           'name': person.name,
           'dateOfBirth': person.dateOfBirth.toIso8601String(),
-          'children':
-              person.children.map((person) => personToMap(person)).toList(),
+          'children': person.children
+              .map((person) => PersonMapper().toMap(person))
+              .toList(),
           'hobby': person.hobby,
           'gender': person.gender.name
         });

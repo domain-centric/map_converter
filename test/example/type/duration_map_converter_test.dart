@@ -6,10 +6,11 @@ import '../../../example/lib/type/duration_map_converter.dart';
 
 final durationValue = Duration(hours: 2);
 void main() {
-  group('mapToExample', () {
+  final exampleMapper = const ExampleMapper();
+  group('exampleMapper.fromMap', () {
     test('myDuration should be correct', () {
       final exampleMap = {'myDuration': durationValue.inMicroseconds};
-      final example = mapToExample(exampleMap);
+      final example = exampleMapper.fromMap(exampleMap);
       example.myDuration.should.be(durationValue);
     });
     test('myNullableDuration should be correct', () {
@@ -17,7 +18,7 @@ void main() {
         'myDuration': durationValue.inMicroseconds,
         'myNullableDuration': durationValue.inMicroseconds,
       };
-      final example = mapToExample(exampleMap);
+      final example = exampleMapper.fromMap(exampleMap);
       example.myNullableDuration.should.be(durationValue);
     });
     test('myNullableDuration with null should be correct', () {
@@ -25,24 +26,24 @@ void main() {
         'myDuration': durationValue.inMicroseconds,
         'myNullableDuration': null,
       };
-      final example = mapToExample(exampleMap);
+      final example = exampleMapper.fromMap(exampleMap);
       example.myNullableDuration.should.beNull();
     });
   });
 
-  group('exampleToMap', () {
+  group('exampleMapper.toMap', () {
     test('myDuration should be correct', () {
       final example = Example()
         ..myDuration = durationValue
         ..myNullableDuration = null;
-      final exampleMap = exampleToMap(example);
+      final exampleMap = exampleMapper.toMap(example);
       (exampleMap['myDuration'] as int).should.be(durationValue.inMicroseconds);
     });
     test('myNullableDuration should be correct', () {
       final example = Example()
         ..myDuration = durationValue
         ..myNullableDuration = durationValue;
-      final exampleMap = exampleToMap(example);
+      final exampleMap = exampleMapper.toMap(example);
       (exampleMap['myNullableDuration'] as int?)
           .should
           .be(durationValue.inMicroseconds);
@@ -51,7 +52,7 @@ void main() {
       final example = Example()
         ..myDuration = durationValue
         ..myNullableDuration = null;
-      final exampleMap = exampleToMap(example);
+      final exampleMap = exampleMapper.toMap(example);
       (exampleMap['myNullableDuration'] as int?).should.beNull();
     });
   });

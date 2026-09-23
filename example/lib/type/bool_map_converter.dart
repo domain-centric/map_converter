@@ -5,10 +5,13 @@ import '../../../example/lib/type/bool.dart' as i1;
 /// Input: map_converter/example/lib/type/bool.dart
 /// Generate command: dart run build_runner build --delete-conflicting-outputs
 /// For more information see: https://pub.dev/packages/map_converter
-i1.Example mapToExample(Map<String, dynamic> exampleMap) => i1.Example()
-  ..myBool = exampleMap['myBool'] as bool
-  ..myNullableBool = exampleMap['myNullableBool'] as bool?;
-Map<String, dynamic> exampleToMap(i1.Example example) => {
-  'myBool': example.myBool,
-  'myNullableBool': example.myNullableBool,
-};
+class ExampleMapper {
+  const ExampleMapper();
+  i1.Example fromMap(Map<String, dynamic> exampleMap) => i1.Example()
+    ..myBool = exampleMap['myBool'] as bool
+    ..myNullableBool = exampleMap['myNullableBool'] as bool?;
+  Map<String, dynamic> toMap(i1.Example example) => {
+        'myBool': example.myBool,
+        'myNullableBool': example.myNullableBool,
+      };
+}

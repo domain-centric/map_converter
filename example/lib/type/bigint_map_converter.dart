@@ -5,12 +5,15 @@ import '../../../example/lib/type/bigint.dart' as i1;
 /// Input: map_converter/example/lib/type/bigint.dart
 /// Generate command: dart run build_runner build --delete-conflicting-outputs
 /// For more information see: https://pub.dev/packages/map_converter
-i1.Example mapToExample(Map<String, dynamic> exampleMap) => i1.Example()
-  ..myBigInt = BigInt.parse(exampleMap['myBigInt'] as String)
-  ..myNullableBigInt = exampleMap['myNullableBigInt'] == null
-      ? null
-      : BigInt.parse(exampleMap['myNullableBigInt'] as String);
-Map<String, dynamic> exampleToMap(i1.Example example) => {
-  'myBigInt': example.myBigInt.toString(),
-  'myNullableBigInt': example.myNullableBigInt?.toString(),
-};
+class ExampleMapper {
+  const ExampleMapper();
+  i1.Example fromMap(Map<String, dynamic> exampleMap) => i1.Example()
+    ..myBigInt = BigInt.parse(exampleMap['myBigInt'] as String)
+    ..myNullableBigInt = exampleMap['myNullableBigInt'] == null
+        ? null
+        : BigInt.parse(exampleMap['myNullableBigInt'] as String);
+  Map<String, dynamic> toMap(i1.Example example) => {
+        'myBigInt': example.myBigInt.toString(),
+        'myNullableBigInt': example.myNullableBigInt?.toString(),
+      };
+}

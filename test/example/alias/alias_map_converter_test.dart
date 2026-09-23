@@ -5,10 +5,10 @@ import '../../../example/lib/alias/alias.dart';
 import '../../../example/lib/alias/alias_map_converter.dart';
 
 void main() {
-  group('exampleToMap(example) function', () {
+  group('exampleMapper.toMap(example) function', () {
     var example = Example(
         name: 'James', email: 'james@gmail.com', phoneNumber: 1234567890);
-    var aliasExampleMap = exampleToMap(example);
+    var aliasExampleMap = const ExampleMapper().toMap(example);
 
     test("should.containKeyWithValue('name', 'James')", () {
       aliasExampleMap.should.containKeyWithValue('name', 'James');
@@ -24,13 +24,13 @@ void main() {
     });
   });
 
-  group('mapToExample(exampleMap) function', () {
+  group('exampleMapper.fromMap(exampleMap) function', () {
     var exampleMap = {
       'name': 'James',
       'emailAddress': 'james@gmail.com',
       'contactNumber': 1234567890
     };
-    var aliasExample = mapToExample(exampleMap);
+    var aliasExample = const ExampleMapper().fromMap(exampleMap);
 
     test("aliasExample.name.should.be('James')", () {
       aliasExample.name.should.be('James');

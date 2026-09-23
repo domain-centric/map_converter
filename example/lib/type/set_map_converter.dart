@@ -7,44 +7,54 @@ import '../../../example/lib/person/person_map_converter.dart' as i3;
 /// Input: map_converter/example/lib/type/set.dart
 /// Generate command: dart run build_runner build --delete-conflicting-outputs
 /// For more information see: https://pub.dev/packages/map_converter
-i1.Example mapToExample(Map<String, dynamic> exampleMap) => i1.Example()
-  ..setOfBool = exampleMap['setOfBool']
-      .map((setElement) => setElement as bool)
-      .toSet()
-      .cast<bool>()
-  ..setOfGender = exampleMap['setOfGender']
-      .map(
-        (setElement) => i2.Gender.values.firstWhere(
-          (enumValue) => enumValue.name == setElement,
-        ),
-      )
-      .toSet()
-      .cast<i2.Gender>()
-  ..setOfPerson = exampleMap['setOfPerson']
-      .map((setElement) => i3.mapToPerson(setElement as Map<String, dynamic>))
-      .toSet()
-      .cast<i2.Person>()
-  ..setOfNullableInt = exampleMap['setOfNullableInt']
-      .map((setElement) => (setElement as num?)?.toInt())
-      .toSet()
-      .cast<int?>()
-  ..nullableSetOfDouble = exampleMap['nullableSetOfDouble']
-      ?.map((setElement) => (setElement as num).toDouble())
-      .toSet()
-      .cast<double>()
-  ..nullableSetOfNullableStrings = exampleMap['nullableSetOfNullableStrings']
-      ?.map((setElement) => setElement as String?)
-      .toSet()
-      .cast<String?>();
-Map<String, dynamic> exampleToMap(i1.Example example) => {
-  'setOfBool': example.setOfBool,
-  'setOfGender': example.setOfGender
-      .map((i2.Gender setElement) => setElement.name)
-      .toSet(),
-  'setOfPerson': example.setOfPerson
-      .map((i2.Person setElement) => i3.personToMap(setElement))
-      .toSet(),
-  'setOfNullableInt': example.setOfNullableInt,
-  'nullableSetOfDouble': example.nullableSetOfDouble,
-  'nullableSetOfNullableStrings': example.nullableSetOfNullableStrings,
-};
+class ExampleMapper {
+  const ExampleMapper();
+  i1.Example fromMap(Map<String, dynamic> exampleMap) => i1.Example()
+    ..setOfBool = exampleMap['setOfBool']
+        .map((setElement) => setElement as bool)
+        .toSet()
+        .cast<bool>()
+    ..setOfGender = exampleMap['setOfGender']
+        .map(
+          (setElement) => i2.Gender.values.firstWhere(
+            (enumValue) => enumValue.name == setElement,
+          ),
+        )
+        .toSet()
+        .cast<i2.Gender>()
+    ..setOfPerson = exampleMap['setOfPerson']
+        .map(
+          (setElement) => const i3.PersonMapper().fromMap(
+            setElement as Map<String, dynamic>,
+          ),
+        )
+        .toSet()
+        .cast<i2.Person>()
+    ..setOfNullableInt = exampleMap['setOfNullableInt']
+        .map((setElement) => (setElement as num?)?.toInt())
+        .toSet()
+        .cast<int?>()
+    ..nullableSetOfDouble = exampleMap['nullableSetOfDouble']
+        ?.map((setElement) => (setElement as num).toDouble())
+        .toSet()
+        .cast<double>()
+    ..nullableSetOfNullableStrings = exampleMap['nullableSetOfNullableStrings']
+        ?.map((setElement) => setElement as String?)
+        .toSet()
+        .cast<String?>();
+  Map<String, dynamic> toMap(i1.Example example) => {
+        'setOfBool': example.setOfBool,
+        'setOfGender': example.setOfGender
+            .map((i2.Gender setElement) => setElement.name)
+            .toSet(),
+        'setOfPerson': example.setOfPerson
+            .map(
+              (i2.Person setElement) =>
+                  const i3.PersonMapper().toMap(setElement),
+            )
+            .toSet(),
+        'setOfNullableInt': example.setOfNullableInt,
+        'nullableSetOfDouble': example.nullableSetOfDouble,
+        'nullableSetOfNullableStrings': example.nullableSetOfNullableStrings,
+      };
+}

@@ -5,11 +5,11 @@ import '../../../example/lib/ignore/ignore.dart';
 import '../../../example/lib/ignore/ignore_map_converter.dart';
 
 void main() {
-  group('exampleToMap(example) function', () {
+  group('exampleMapper.toMap(example) function', () {
     var example = Example()
       ..keep = false
       ..skip = 'do not convert';
-    var ignoreMap = exampleToMap(example);
+    var ignoreMap = const ExampleMapper().toMap(example);
 
     test("should.containKeyWithValue('keep', false)", () {
       ignoreMap.should.containKeyWithValue('keep', false);
@@ -20,9 +20,9 @@ void main() {
     });
   });
 
-  group('mapToExample(exampleMap) function', () {
+  group('exampleMapper.fromMap(exampleMap) function', () {
     var exampleMap = {'keep': false, 'skip': 'do not convert'};
-    var ignore = mapToExample(exampleMap);
+    var ignore = const ExampleMapper().fromMap(exampleMap);
 
     test("ignore.keep.should.be( false)", () {
       ignore.keep.should.be(false);

@@ -6,10 +6,11 @@ import '../../../example/lib/type/bigint_map_converter.dart';
 
 final bigIntValue = BigInt.from(0x7FFFFFFFFFFFFFFF);
 void main() {
-  group('mapToExample', () {
+  final exampleMapper = const ExampleMapper();
+  group('exampleMapper.fromMap', () {
     test('myBigInt should be correct', () {
       final exampleMap = {'myBigInt': bigIntValue.toString()};
-      final example = mapToExample(exampleMap);
+      final example = exampleMapper.fromMap(exampleMap);
       example.myBigInt.should.be(bigIntValue);
     });
     test('myNullableBigInt should be correct', () {
@@ -17,7 +18,7 @@ void main() {
         'myBigInt': bigIntValue.toString(),
         'myNullableBigInt': bigIntValue.toString(),
       };
-      final example = mapToExample(exampleMap);
+      final example = exampleMapper.fromMap(exampleMap);
       example.myNullableBigInt.should.be(bigIntValue);
     });
     test('myNullableBigInt with null should be correct', () {
@@ -25,24 +26,24 @@ void main() {
         'myBigInt': bigIntValue.toString(),
         'myNullableBigInt': null,
       };
-      final example = mapToExample(exampleMap);
+      final example = exampleMapper.fromMap(exampleMap);
       example.myNullableBigInt.should.beNull();
     });
   });
 
-  group('exampleToMap', () {
+  group('exampleMapper.toMap', () {
     test('myBigInt should be correct', () {
       final example = Example()
         ..myBigInt = bigIntValue
         ..myNullableBigInt = null;
-      final exampleMap = exampleToMap(example);
+      final exampleMap = exampleMapper.toMap(example);
       (exampleMap['myBigInt'] as String).should.be(bigIntValue.toString());
     });
     test('myNullableBigInt should be correct', () {
       final example = Example()
         ..myBigInt = bigIntValue
         ..myNullableBigInt = bigIntValue;
-      final exampleMap = exampleToMap(example);
+      final exampleMap = exampleMapper.toMap(example);
       (exampleMap['myNullableBigInt'] as String?)
           .should
           .be(bigIntValue.toString());
@@ -51,7 +52,7 @@ void main() {
       final example = Example()
         ..myBigInt = bigIntValue
         ..myNullableBigInt = null;
-      final exampleMap = exampleToMap(example);
+      final exampleMap = exampleMapper.toMap(example);
       (exampleMap['myNullableBigInt'] as String?).should.beNull();
     });
   });

@@ -6,10 +6,11 @@ import '../../../example/lib/type/date_time_map_converter.dart';
 
 final dateTimeValue = DateTime.now();
 void main() {
-  group('mapToExample', () {
+  final exampleMapper = const ExampleMapper();
+  group('exampleMapper.fromMap', () {
     test('myDateTime should be correct', () {
       final exampleMap = {'myDateTime': dateTimeValue.toIso8601String()};
-      final example = mapToExample(exampleMap);
+      final example = exampleMapper.fromMap(exampleMap);
       example.myDateTime.should.be(dateTimeValue);
     });
     test('myNullableDateTime should be correct', () {
@@ -17,7 +18,7 @@ void main() {
         'myDateTime': dateTimeValue.toIso8601String(),
         'myNullableDateTime': dateTimeValue.toIso8601String(),
       };
-      final example = mapToExample(exampleMap);
+      final example = exampleMapper.fromMap(exampleMap);
       example.myNullableDateTime.should.be(dateTimeValue);
     });
     test('myNullableDateTime with null should be correct', () {
@@ -25,17 +26,17 @@ void main() {
         'myDateTime': dateTimeValue.toIso8601String(),
         'myNullableDateTime': null,
       };
-      final example = mapToExample(exampleMap);
+      final example = exampleMapper.fromMap(exampleMap);
       example.myNullableDateTime.should.beNull();
     });
   });
 
-  group('exampleToMap', () {
+  group('exampleMapper.toMap', () {
     test('myDateTime should be correct', () {
       final example = Example()
         ..myDateTime = dateTimeValue
         ..myNullableDateTime = null;
-      final exampleMap = exampleToMap(example);
+      final exampleMap = exampleMapper.toMap(example);
       (exampleMap['myDateTime'] as String)
           .should
           .be(dateTimeValue.toIso8601String());
@@ -44,7 +45,7 @@ void main() {
       final example = Example()
         ..myDateTime = dateTimeValue
         ..myNullableDateTime = dateTimeValue;
-      final exampleMap = exampleToMap(example);
+      final exampleMap = exampleMapper.toMap(example);
       (exampleMap['myNullableDateTime'] as String?)
           .should
           .be(dateTimeValue.toIso8601String());
@@ -53,7 +54,7 @@ void main() {
       final example = Example()
         ..myDateTime = dateTimeValue
         ..myNullableDateTime = null;
-      final exampleMap = exampleToMap(example);
+      final exampleMap = exampleMapper.toMap(example);
       (exampleMap['myNullableDateTime'] as String?).should.beNull();
     });
   });

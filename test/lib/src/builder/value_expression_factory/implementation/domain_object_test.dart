@@ -42,7 +42,7 @@ void main() {
           )
           .toUnFormattedString()
           .should
-          .be("i1.mapToPerson($mapVariableName['$propertyName'] as Map<String,dynamic> )");
+          .be("const i1.PersonMapper().fromMap(map['parent'] as Map<String,dynamic> )");
     });
     test('fromMapValue, nullable=true', () {
       expressionFactory
@@ -53,9 +53,9 @@ void main() {
           )
           .toUnFormattedString()
           .should
-          .be("$mapVariableName['$propertyName'] == null "
+          .be("map['parent'] == null "
               "? null "
-              ": i1.mapToPerson($mapVariableName['$propertyName'] as Map<String,dynamic> )");
+              ": const i1.PersonMapper().fromMap(map['parent'] as Map<String,dynamic> )");
     });
     test('toMapValue nullable=false', () {
       expressionFactory
@@ -66,7 +66,7 @@ void main() {
           )
           .toUnFormattedString()
           .should
-          .be("i1.personToMap($instanceVariableName.$propertyName)");
+          .be("const i1.PersonMapper().toMap(person.parent)");
     });
     test('toMapValue nullable=true', () {
       expressionFactory
@@ -77,9 +77,9 @@ void main() {
           )
           .toUnFormattedString()
           .should
-          .be("$instanceVariableName.parent == null ? null : "
-              "i1.${instanceVariableName}ToMap"
-              "($instanceVariableName.$propertyName!)");
+          .be("person.parent == null "
+              "? null "
+              ": const i1.PersonMapper().toMap(person.parent!)");
     });
   });
 }

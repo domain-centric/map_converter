@@ -5,8 +5,11 @@ import '../../../example/lib/custom_converter/custom_converter.dart' as i1;
 /// Input: map_converter/example/lib/custom_converter/custom_converter.dart
 /// Generate command: dart run build_runner build --delete-conflicting-outputs
 /// For more information see: https://pub.dev/packages/map_converter
-i1.Example mapToExample(Map<String, dynamic> exampleMap) =>
-    i1.Example(i1.dateTimeFromMapValue(exampleMap['dateTime']));
-Map<String, dynamic> exampleToMap(i1.Example example) => {
-  'dateTime': i1.dateTimeToMapValue(example.dateTime),
-};
+class ExampleMapper {
+  const ExampleMapper();
+  i1.Example fromMap(Map<String, dynamic> exampleMap) =>
+      i1.Example(i1.dateTimeFromMapValue(exampleMap['dateTime']));
+  Map<String, dynamic> toMap(i1.Example example) => {
+        'dateTime': i1.dateTimeToMapValue(example.dateTime),
+      };
+}

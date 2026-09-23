@@ -7,36 +7,43 @@ import '../../../example/lib/remove_me/variable.domain_map_converter.dart'
 /// Input: map_converter/example/lib/remove_me/variable.domain.dart
 /// Generate command: dart run build_runner build --delete-conflicting-outputs
 /// For more information see: https://pub.dev/packages/map_converter
-i1.BaseType mapToBaseType(Map<String, dynamic> baseTypeMap) =>
-    i1.BaseType()..name = baseTypeMap['name'] as String;
-Map<String, dynamic> baseTypeToMap(i1.BaseType baseType) => {
-  'name': baseType.name,
-};
-i1.Variable mapToVariable(Map<String, dynamic> variableMap) => i1.Variable(
-  name: variableMap['name'] as String,
-  comment: variableMap['comment'] as String,
-  networkPublish: i1.NetworkPublish.values.firstWhere(
-    (enumValue) => enumValue.name == variableMap['networkPublish'],
-  ),
-  baseType: i2.mapToBaseType(variableMap['baseType'] as Map<String, dynamic>),
-  hardwareAddress: variableMap['hardwareAddress'] as String?,
-  direction: variableMap['direction'] == null
-      ? null
-      : i1.VariableDirection.values.firstWhere(
-          (enumValue) => enumValue.name == variableMap['direction'],
+class BaseTypeMapper {
+  const BaseTypeMapper();
+  i1.BaseType fromMap(Map<String, dynamic> baseTypeMap) =>
+      i1.BaseType()..name = baseTypeMap['name'] as String;
+  Map<String, dynamic> toMap(i1.BaseType baseType) => {'name': baseType.name};
+}
+
+class VariableMapper {
+  const VariableMapper();
+  i1.Variable fromMap(Map<String, dynamic> variableMap) => i1.Variable(
+        name: variableMap['name'] as String,
+        comment: variableMap['comment'] as String,
+        networkPublish: i1.NetworkPublish.values.firstWhere(
+          (enumValue) => enumValue.name == variableMap['networkPublish'],
         ),
-  isRetained: variableMap['isRetained'] as bool,
-  isConstant: variableMap['isConstant'] as bool,
-  initialValue: variableMap['initialValue'] as String?,
-);
-Map<String, dynamic> variableToMap(i1.Variable variable) => {
-  'name': variable.name,
-  'comment': variable.comment,
-  'networkPublish': variable.networkPublish.name,
-  'baseType': i2.baseTypeToMap(variable.baseType),
-  'hardwareAddress': variable.hardwareAddress,
-  'direction': variable.direction?.name,
-  'isRetained': variable.isRetained,
-  'isConstant': variable.isConstant,
-  'initialValue': variable.initialValue,
-};
+        baseType: const i2.BaseTypeMapper().fromMap(
+          variableMap['baseType'] as Map<String, dynamic>,
+        ),
+        hardwareAddress: variableMap['hardwareAddress'] as String?,
+        direction: variableMap['direction'] == null
+            ? null
+            : i1.VariableDirection.values.firstWhere(
+                (enumValue) => enumValue.name == variableMap['direction'],
+              ),
+        isRetained: variableMap['isRetained'] as bool,
+        isConstant: variableMap['isConstant'] as bool,
+        initialValue: variableMap['initialValue'] as String?,
+      );
+  Map<String, dynamic> toMap(i1.Variable variable) => {
+        'name': variable.name,
+        'comment': variable.comment,
+        'networkPublish': variable.networkPublish.name,
+        'baseType': const i2.BaseTypeMapper().toMap(variable.baseType),
+        'hardwareAddress': variable.hardwareAddress,
+        'direction': variable.direction?.name,
+        'isRetained': variable.isRetained,
+        'isConstant': variable.isConstant,
+        'initialValue': variable.initialValue,
+      };
+}

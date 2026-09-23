@@ -8,10 +8,11 @@ import '../../../example/lib/type/double_map_converter.dart';
 
 const doubleValue = pi;
 void main() {
-  group('mapToExample', () {
+  final exampleMapper = const ExampleMapper();
+  group('exampleMapper.fromMap', () {
     test('myDouble should be correct', () {
       final exampleMap = {'myDouble': doubleValue};
-      final example = mapToExample(exampleMap);
+      final example = exampleMapper.fromMap(exampleMap);
       example.myDouble.should.be(doubleValue);
     });
     test('myNullableDouble should be correct', () {
@@ -19,7 +20,7 @@ void main() {
         'myDouble': doubleValue,
         'myNullableDouble': doubleValue,
       };
-      final example = mapToExample(exampleMap);
+      final example = exampleMapper.fromMap(exampleMap);
       example.myNullableDouble.should.be(doubleValue);
     });
     test('myNullableDouble with null should be correct', () {
@@ -27,31 +28,31 @@ void main() {
         'myDouble': doubleValue,
         'myNullableDouble': null,
       };
-      final example = mapToExample(exampleMap);
+      final example = exampleMapper.fromMap(exampleMap);
       example.myNullableDouble.should.beNull();
     });
   });
 
-  group('exampleToMap', () {
+  group('exampleMapper.toMap', () {
     test('myDouble should be correct', () {
       final example = Example()
         ..myDouble = doubleValue
         ..myNullableDouble = null;
-      final exampleMap = exampleToMap(example);
+      final exampleMap = exampleMapper.toMap(example);
       (exampleMap['myDouble'] as num).should.be(doubleValue);
     });
     test('myNullableDouble should be correct', () {
       final example = Example()
         ..myDouble = doubleValue
         ..myNullableDouble = doubleValue;
-      final exampleMap = exampleToMap(example);
+      final exampleMap = exampleMapper.toMap(example);
       (exampleMap['myNullableDouble'] as num?).should.be(doubleValue);
     });
     test('myNullableDouble with null should be correct', () {
       final example = Example()
         ..myDouble = doubleValue
         ..myNullableDouble = null;
-      final exampleMap = exampleToMap(example);
+      final exampleMap = exampleMapper.toMap(example);
       (exampleMap['myNullableDouble'] as num?).should.beNull();
     });
   });

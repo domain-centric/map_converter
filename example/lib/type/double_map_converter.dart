@@ -5,10 +5,13 @@ import '../../../example/lib/type/double.dart' as i1;
 /// Input: map_converter/example/lib/type/double.dart
 /// Generate command: dart run build_runner build --delete-conflicting-outputs
 /// For more information see: https://pub.dev/packages/map_converter
-i1.Example mapToExample(Map<String, dynamic> exampleMap) => i1.Example()
-  ..myDouble = (exampleMap['myDouble'] as num).toDouble()
-  ..myNullableDouble = (exampleMap['myNullableDouble'] as num?)?.toDouble();
-Map<String, dynamic> exampleToMap(i1.Example example) => {
-  'myDouble': example.myDouble,
-  'myNullableDouble': example.myNullableDouble,
-};
+class ExampleMapper {
+  const ExampleMapper();
+  i1.Example fromMap(Map<String, dynamic> exampleMap) => i1.Example()
+    ..myDouble = (exampleMap['myDouble'] as num).toDouble()
+    ..myNullableDouble = (exampleMap['myNullableDouble'] as num?)?.toDouble();
+  Map<String, dynamic> toMap(i1.Example example) => {
+        'myDouble': example.myDouble,
+        'myNullableDouble': example.myNullableDouble,
+      };
+}

@@ -5,12 +5,15 @@ import '../../../example/lib/type/uri.dart' as i1;
 /// Input: map_converter/example/lib/type/uri.dart
 /// Generate command: dart run build_runner build --delete-conflicting-outputs
 /// For more information see: https://pub.dev/packages/map_converter
-i1.Example mapToExample(Map<String, dynamic> exampleMap) => i1.Example()
-  ..myUri = Uri.parse(exampleMap['myUri'] as String)
-  ..myNullableUri = exampleMap['myNullableUri'] == null
-      ? null
-      : Uri.parse(exampleMap['myNullableUri'] as String);
-Map<String, dynamic> exampleToMap(i1.Example example) => {
-  'myUri': example.myUri.toString(),
-  'myNullableUri': example.myNullableUri?.toString(),
-};
+class ExampleMapper {
+  const ExampleMapper();
+  i1.Example fromMap(Map<String, dynamic> exampleMap) => i1.Example()
+    ..myUri = Uri.parse(exampleMap['myUri'] as String)
+    ..myNullableUri = exampleMap['myNullableUri'] == null
+        ? null
+        : Uri.parse(exampleMap['myNullableUri'] as String);
+  Map<String, dynamic> toMap(i1.Example example) => {
+        'myUri': example.myUri.toString(),
+        'myNullableUri': example.myNullableUri?.toString(),
+      };
+}

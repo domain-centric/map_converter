@@ -5,10 +5,13 @@ import '../../../example/lib/type/string.dart' as i1;
 /// Input: map_converter/example/lib/type/string.dart
 /// Generate command: dart run build_runner build --delete-conflicting-outputs
 /// For more information see: https://pub.dev/packages/map_converter
-i1.Example mapToExample(Map<String, dynamic> exampleMap) => i1.Example()
-  ..myString = exampleMap['myString'] as String
-  ..myNullableString = exampleMap['myNullableString'] as String?;
-Map<String, dynamic> exampleToMap(i1.Example example) => {
-  'myString': example.myString,
-  'myNullableString': example.myNullableString,
-};
+class ExampleMapper {
+  const ExampleMapper();
+  i1.Example fromMap(Map<String, dynamic> exampleMap) => i1.Example()
+    ..myString = exampleMap['myString'] as String
+    ..myNullableString = exampleMap['myNullableString'] as String?;
+  Map<String, dynamic> toMap(i1.Example example) => {
+        'myString': example.myString,
+        'myNullableString': example.myNullableString,
+      };
+}

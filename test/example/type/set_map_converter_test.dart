@@ -6,19 +6,21 @@ import '../../../example/lib/type/set_map_converter.dart';
 import '../../../example/lib/person/person.dart';
 
 void main() {
+  final personMapper = const PersonMapper();
   final john = Person('John',
       dateOfBirth: DateTime(2000, 1, 1),
       children: [],
       hobby: 'gaming',
       gender: Gender.male);
-  final johnMap = personToMap(john);
+  final johnMap = personMapper.toMap(john);
   final sara = Person('Sara',
       dateOfBirth: DateTime(2003, 2, 3),
       children: [],
       hobby: 'reading',
       gender: Gender.female);
-  final saraMap = personToMap(sara);
-  group('mapToExample', () {
+  final saraMap = personMapper.toMap(sara);
+  final exampleMapper = const ExampleMapper();
+  group('exampleMapper.fromMap', () {
     final exampleMap = {
       'setOfBool': {true, false},
       'setOfGender': {'male', 'female'},
@@ -31,7 +33,7 @@ void main() {
       'nullableSetOfNullableStrings': ['a', null, 'c']
     };
 
-    final example = mapToExample(exampleMap);
+    final example = exampleMapper.fromMap(exampleMap);
 
     test('setOfBool should be correct', () {
       example.setOfBool.should.be({true, false});
@@ -53,7 +55,7 @@ void main() {
     });
   });
 
-  group('exampleToMap', () {
+  group('exampleMapper.toMap', () {
     final example = Example()
       ..setOfBool = {true, false}
       ..setOfGender = {Gender.male, Gender.female}
@@ -65,7 +67,7 @@ void main() {
       ..nullableSetOfDouble = {1.1, 2.2, 3.3}
       ..nullableSetOfNullableStrings = {'a', null, 'c'};
 
-    final exampleMap = exampleToMap(example);
+    final exampleMap = exampleMapper.toMap(example);
 
     test('setOfBool should be correct', () {
       (exampleMap['setOfBool'] as Set).should.be({true, false});

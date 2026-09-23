@@ -6,14 +6,21 @@ import '../../../example/lib/person/person_map_converter.dart' as i2;
 /// Input: map_converter/example/lib/type/object.dart
 /// Generate command: dart run build_runner build --delete-conflicting-outputs
 /// For more information see: https://pub.dev/packages/map_converter
-i1.Example mapToExample(Map<String, dynamic> exampleMap) => i1.Example()
-  ..myPerson = i2.mapToPerson(exampleMap['myPerson'] as Map<String, dynamic>)
-  ..myNullablePerson = exampleMap['myNullablePerson'] == null
-      ? null
-      : i2.mapToPerson(exampleMap['myNullablePerson'] as Map<String, dynamic>);
-Map<String, dynamic> exampleToMap(i1.Example example) => {
-  'myPerson': i2.personToMap(example.myPerson),
-  'myNullablePerson': example.myNullablePerson == null
-      ? null
-      : i2.personToMap(example.myNullablePerson!),
-};
+class ExampleMapper {
+  const ExampleMapper();
+  i1.Example fromMap(Map<String, dynamic> exampleMap) => i1.Example()
+    ..myPerson = const i2.PersonMapper().fromMap(
+      exampleMap['myPerson'] as Map<String, dynamic>,
+    )
+    ..myNullablePerson = exampleMap['myNullablePerson'] == null
+        ? null
+        : const i2.PersonMapper().fromMap(
+            exampleMap['myNullablePerson'] as Map<String, dynamic>,
+          );
+  Map<String, dynamic> toMap(i1.Example example) => {
+        'myPerson': const i2.PersonMapper().toMap(example.myPerson),
+        'myNullablePerson': example.myNullablePerson == null
+            ? null
+            : const i2.PersonMapper().toMap(example.myNullablePerson!),
+      };
+}

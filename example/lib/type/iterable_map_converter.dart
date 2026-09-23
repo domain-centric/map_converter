@@ -7,46 +7,52 @@ import '../../../example/lib/person/person_map_converter.dart' as i3;
 /// Input: map_converter/example/lib/type/iterable.dart
 /// Generate command: dart run build_runner build --delete-conflicting-outputs
 /// For more information see: https://pub.dev/packages/map_converter
-i1.Example mapToExample(Map<String, dynamic> exampleMap) => i1.Example()
-  ..iterableOfBool = exampleMap['iterableOfBool']
-      .map((element) => element as bool)
-      .toList()
-      .cast<bool>()
-  ..iterableOfGender = exampleMap['iterableOfGender']
-      .map(
-        (element) => i2.Gender.values.firstWhere(
-          (enumValue) => enumValue.name == element,
-        ),
-      )
-      .toList()
-      .cast<i2.Gender>()
-  ..iterableOfPerson = exampleMap['iterableOfPerson']
-      .map((element) => i3.mapToPerson(element as Map<String, dynamic>))
-      .toList()
-      .cast<i2.Person>()
-  ..iterableOfNullableInt = exampleMap['iterableOfNullableInt']
-      .map((element) => (element as num?)?.toInt())
-      .toList()
-      .cast<int?>()
-  ..nullableIterableOfDouble = exampleMap['nullableIterableOfDouble']
-      ?.map((element) => (element as num).toDouble())
-      .toList()
-      .cast<double>()
-  ..nullableIterableOfNullableStrings =
-      exampleMap['nullableIterableOfNullableStrings']
-          ?.map((element) => element as String?)
-          .toList()
-          .cast<String?>();
-Map<String, dynamic> exampleToMap(i1.Example example) => {
-  'iterableOfBool': example.iterableOfBool,
-  'iterableOfGender': example.iterableOfGender
-      .map((i2.Gender element) => element.name)
-      .toList(),
-  'iterableOfPerson': example.iterableOfPerson
-      .map((i2.Person element) => i3.personToMap(element))
-      .toList(),
-  'iterableOfNullableInt': example.iterableOfNullableInt,
-  'nullableIterableOfDouble': example.nullableIterableOfDouble,
-  'nullableIterableOfNullableStrings':
-      example.nullableIterableOfNullableStrings,
-};
+class ExampleMapper {
+  const ExampleMapper();
+  i1.Example fromMap(Map<String, dynamic> exampleMap) => i1.Example()
+    ..iterableOfBool = exampleMap['iterableOfBool']
+        .map((element) => element as bool)
+        .toList()
+        .cast<bool>()
+    ..iterableOfGender = exampleMap['iterableOfGender']
+        .map(
+          (element) => i2.Gender.values.firstWhere(
+            (enumValue) => enumValue.name == element,
+          ),
+        )
+        .toList()
+        .cast<i2.Gender>()
+    ..iterableOfPerson = exampleMap['iterableOfPerson']
+        .map(
+          (element) =>
+              const i3.PersonMapper().fromMap(element as Map<String, dynamic>),
+        )
+        .toList()
+        .cast<i2.Person>()
+    ..iterableOfNullableInt = exampleMap['iterableOfNullableInt']
+        .map((element) => (element as num?)?.toInt())
+        .toList()
+        .cast<int?>()
+    ..nullableIterableOfDouble = exampleMap['nullableIterableOfDouble']
+        ?.map((element) => (element as num).toDouble())
+        .toList()
+        .cast<double>()
+    ..nullableIterableOfNullableStrings =
+        exampleMap['nullableIterableOfNullableStrings']
+            ?.map((element) => element as String?)
+            .toList()
+            .cast<String?>();
+  Map<String, dynamic> toMap(i1.Example example) => {
+        'iterableOfBool': example.iterableOfBool,
+        'iterableOfGender': example.iterableOfGender
+            .map((i2.Gender element) => element.name)
+            .toList(),
+        'iterableOfPerson': example.iterableOfPerson
+            .map((i2.Person element) => const i3.PersonMapper().toMap(element))
+            .toList(),
+        'iterableOfNullableInt': example.iterableOfNullableInt,
+        'nullableIterableOfDouble': example.nullableIterableOfDouble,
+        'nullableIterableOfNullableStrings':
+            example.nullableIterableOfNullableStrings,
+      };
+}

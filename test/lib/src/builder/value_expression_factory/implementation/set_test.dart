@@ -747,7 +747,10 @@ void main() {
             )
             .toUnFormattedString()
             .should
-            .be("$mapVariableName['$propertyName'].map((setElement) => i1.mapToPerson(setElement as Map<String,dynamic> )).toSet().cast<i2.Person>()");
+            .be("map['persons'].map((setElement) => "
+                "const i1.PersonMapper()"
+                ".fromMap(setElement as Map<String,dynamic> ))"
+                ".toSet().cast<i2.Person>()");
       });
       test('fromMapValue, nullable=true', () {
         expressionFactory
@@ -758,7 +761,10 @@ void main() {
             )
             .toUnFormattedString()
             .should
-            .be("map['persons']?.map((setElement) => i1.mapToPerson(setElement as Map<String,dynamic> )).toSet().cast<i2.Person>()");
+            .be("map['persons']?.map((setElement) => "
+                "const i1.PersonMapper()"
+                ".fromMap(setElement as Map<String,dynamic> ))"
+                ".toSet().cast<i2.Person>()");
       });
       test('toMapValue nullable=false', () {
         expressionFactory
@@ -769,7 +775,8 @@ void main() {
             )
             .toUnFormattedString()
             .should
-            .be("$instanceVariableName.$propertyName.map((i1.Person setElement) => i2.personToMap(setElement)).toSet()");
+            .be("person.persons.map((i1.Person setElement) => "
+                "const i2.PersonMapper().toMap(setElement)).toSet()");
       });
       test('toMapValue nullable=true', () {
         expressionFactory
@@ -780,7 +787,8 @@ void main() {
             )
             .toUnFormattedString()
             .should
-            .be("person.persons?.map((i1.Person setElement) => i2.personToMap(setElement)).toSet()");
+            .be("person.persons?.map((i1.Person setElement) => "
+                "const i2.PersonMapper().toMap(setElement)).toSet()");
       });
     });
   });

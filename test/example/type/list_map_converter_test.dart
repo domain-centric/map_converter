@@ -6,19 +6,20 @@ import '../../../example/lib/type/list_map_converter.dart';
 import '../../../example/lib/person/person.dart';
 
 void main() {
-  group('mapToExample', () {
+  group('exampleMapper.fromMap', () {
+    final personMapper = const PersonMapper();
     final john = Person('John',
         dateOfBirth: DateTime(2000, 1, 1),
         children: [],
         hobby: 'gaming',
         gender: Gender.male);
-    final johnMap = personToMap(john);
+    final johnMap = personMapper.toMap(john);
     final sara = Person('Sara',
         dateOfBirth: DateTime(2003, 2, 3),
         children: [],
         hobby: 'reading',
         gender: Gender.female);
-    final saraMap = personToMap(sara);
+    final saraMap = personMapper.toMap(sara);
     final exampleMap = {
       'boolList': [true, false],
       'boolListWithNullableBools': [true, null, false],
@@ -54,7 +55,7 @@ void main() {
       'nullablePersonList': [johnMap, null],
     };
 
-    final example = mapToExample(exampleMap);
+    final example = const ExampleMapper().fromMap(exampleMap);
 
     group('boolList', () {
       test('should convert boolList', () {
@@ -192,7 +193,7 @@ void main() {
       });
     });
   });
-  group('exampleToMap', () {
+  group('exampleMapper.toMap', () {
     final john = Person('John',
         dateOfBirth: DateTime(2000, 1, 1),
         children: [],
@@ -257,7 +258,7 @@ void main() {
       ..personList = [john, sara]
       ..nullablePersonList = [john, null];
 
-    final exampleMap = exampleToMap(example);
+    final exampleMap = const ExampleMapper().toMap(example);
 
     group('boolList', () {
       test('should convert boolList', () {
@@ -376,17 +377,16 @@ void main() {
     });
 
     group('personList', () {
+      final personMapper = const PersonMapper();
       test('should convert personList', () {
-        exampleMap['personList']
-            .toString()
-            .should
-            .be([personToMap(john), personToMap(sara)].toString());
+        exampleMap['personList'].toString().should.be(
+            [personMapper.toMap(john), personMapper.toMap(sara)].toString());
       });
       test('should convert nullablePersonList', () {
         exampleMap['nullablePersonList']
             .toString()
             .should
-            .be([personToMap(john), null].toString());
+            .be([personMapper.toMap(john), null].toString());
       });
     });
   });
