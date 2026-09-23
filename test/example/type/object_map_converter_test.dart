@@ -2,7 +2,7 @@ import 'package:shouldly/shouldly.dart';
 import 'package:test/test.dart';
 
 import '../../../example/lib/type/object.dart';
-import '../../../example/lib/type/object_map_converter.dart';
+import '../../../example/lib/type/object.mapper.dart';
 import '../person/person_map_converter_test.dart';
 
 final object = JaneSmith();

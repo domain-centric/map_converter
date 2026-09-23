@@ -2,7 +2,7 @@ import 'package:shouldly/shouldly.dart';
 import 'package:test/test.dart';
 
 import '../../../example/lib/type/string.dart';
-import '../../../example/lib/type/string_map_converter.dart';
+import '../../../example/lib/type/string.mapper.dart';
 
 const helloWorld = 'Hello World';
 void main() {

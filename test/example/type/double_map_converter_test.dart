@@ -4,7 +4,7 @@ import 'package:shouldly/shouldly.dart';
 import 'package:test/test.dart';
 
 import '../../../example/lib/type/double.dart';
-import '../../../example/lib/type/double_map_converter.dart';
+import '../../../example/lib/type/double.mapper.dart';
 
 const doubleValue = pi;
 void main() {

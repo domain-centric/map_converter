@@ -2,7 +2,7 @@ import 'package:shouldly/shouldly.dart';
 import 'package:test/test.dart';
 
 import '../../../example/lib/alias/alias.dart';
-import '../../../example/lib/alias/alias_map_converter.dart';
+import '../../../example/lib/alias/alias.mapper.dart';
 
 void main() {
   group('exampleMapper.toMap(example) function', () {

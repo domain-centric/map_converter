@@ -2,7 +2,7 @@ import 'package:shouldly/shouldly.dart';
 import 'package:test/test.dart';
 
 import '../../../example/lib/type/uri.dart';
-import '../../../example/lib/type/uri_map_converter.dart';
+import '../../../example/lib/type/uri.mapper.dart';
 
 final uriValue = Uri(scheme: 'https', host: 'dart.dev');
 void main() {

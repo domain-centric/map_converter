@@ -2,7 +2,7 @@ import 'package:shouldly/shouldly.dart';
 import 'package:test/test.dart';
 
 import '../../../example/lib/type/date_time.dart';
-import '../../../example/lib/type/date_time_map_converter.dart';
+import '../../../example/lib/type/date_time.mapper.dart';
 
 final dateTimeValue = DateTime.now();
 void main() {

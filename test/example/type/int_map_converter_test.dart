@@ -2,7 +2,7 @@ import 'package:shouldly/shouldly.dart';
 import 'package:test/test.dart';
 
 import '../../../example/lib/type/int.dart';
-import '../../../example/lib/type/int_map_converter.dart';
+import '../../../example/lib/type/int.mapper.dart';
 
 const intValue = 3;
 void main() {

@@ -1,8 +1,8 @@
 import 'package:shouldly/shouldly.dart';
 import 'package:test/test.dart';
-import '../../../example/lib/person/person_map_converter.dart';
+import '../../../example/lib/person/person.mapper.dart';
 import '../../../example/lib/type/list.dart';
-import '../../../example/lib/type/list_map_converter.dart';
+import '../../../example/lib/type/list.mapper.dart';
 import '../../../example/lib/person/person.dart';
 
 void main() {

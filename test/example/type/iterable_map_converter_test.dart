@@ -1,8 +1,8 @@
 import 'package:shouldly/shouldly.dart';
 import 'package:test/test.dart';
-import '../../../example/lib/person/person_map_converter.dart';
+import '../../../example/lib/person/person.mapper.dart';
 import '../../../example/lib/type/iterable.dart';
-import '../../../example/lib/type/iterable_map_converter.dart';
+import '../../../example/lib/type/iterable.mapper.dart';
 import '../../../example/lib/person/person.dart';
 
 void main() {

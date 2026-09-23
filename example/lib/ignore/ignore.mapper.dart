@@ -6,6 +6,24 @@ import '../../../example/lib/ignore/ignore.dart' as i1;
 /// Generate command: dart run build_runner build --delete-conflicting-outputs
 /// For more information see: https://pub.dev/packages/map_converter
 class ExampleMapper {
+  static Map<String, dynamic> schema = {
+    'className': 'Example',
+    'classDescription': '',
+    'classLibraryUri': 'asset:map_converter/example/lib/ignore/ignore.dart',
+    'mapperClassName': 'ExampleMapper',
+    'mapperClassLibraryUri':
+        'asset:map_converter/example/lib/ignore/ignore.mapper.dart',
+    'fields': [
+      {
+        'name': 'keep',
+        'mapKey': 'keep',
+        'description': '',
+        'presence': 'required',
+        'type': 'bool',
+        'typeLibraryUri': 'dart:core',
+      },
+    ],
+  };
   const ExampleMapper();
   i1.Example fromMap(Map<String, dynamic> exampleMap) =>
       i1.Example()..keep = exampleMap['keep'] as bool;

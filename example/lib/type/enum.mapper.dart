@@ -7,6 +7,32 @@ import '../../../example/lib/person/person.dart' as i2;
 /// Generate command: dart run build_runner build --delete-conflicting-outputs
 /// For more information see: https://pub.dev/packages/map_converter
 class ExampleMapper {
+  static Map<String, dynamic> schema = {
+    'className': 'Example',
+    'classDescription': '',
+    'classLibraryUri': 'asset:map_converter/example/lib/type/enum.dart',
+    'mapperClassName': 'ExampleMapper',
+    'mapperClassLibraryUri':
+        'asset:map_converter/example/lib/type/enum.mapper.dart',
+    'fields': [
+      {
+        'name': 'myEnum',
+        'mapKey': 'myEnum',
+        'description': '',
+        'presence': 'required',
+        'type': 'Gender',
+        'typeLibraryUri': 'asset:map_converter/example/lib/person/person.dart',
+      },
+      {
+        'name': 'myNullableEnum',
+        'mapKey': 'myNullableEnum',
+        'description': '',
+        'presence': 'optional',
+        'type': 'Gender',
+        'typeLibraryUri': 'asset:map_converter/example/lib/person/person.dart',
+      },
+    ],
+  };
   const ExampleMapper();
   i1.Example fromMap(Map<String, dynamic> exampleMap) => i1.Example()
     ..myEnum = i2.Gender.values.firstWhere(

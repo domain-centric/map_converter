@@ -2,7 +2,7 @@ import 'package:shouldly/shouldly.dart';
 import 'package:test/test.dart';
 
 import '../../../example/lib/type/bigint.dart';
-import '../../../example/lib/type/bigint_map_converter.dart';
+import '../../../example/lib/type/bigint.mapper.dart';
 
 final bigIntValue = BigInt.from(0x7FFFFFFFFFFFFFFF);
 void main() {

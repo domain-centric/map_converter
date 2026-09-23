@@ -4,7 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:shouldly/shouldly.dart';
 import 'package:test/test.dart';
 import '../../../example/lib/person/person.dart';
-import '../../../example/lib/person/person_map_converter.dart';
+import '../../../example/lib/person/person.mapper.dart';
 
 void main() {
   group('personToMap', () {

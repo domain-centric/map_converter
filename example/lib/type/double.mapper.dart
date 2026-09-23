@@ -6,6 +6,32 @@ import '../../../example/lib/type/double.dart' as i1;
 /// Generate command: dart run build_runner build --delete-conflicting-outputs
 /// For more information see: https://pub.dev/packages/map_converter
 class ExampleMapper {
+  static Map<String, dynamic> schema = {
+    'className': 'Example',
+    'classDescription': '',
+    'classLibraryUri': 'asset:map_converter/example/lib/type/double.dart',
+    'mapperClassName': 'ExampleMapper',
+    'mapperClassLibraryUri':
+        'asset:map_converter/example/lib/type/double.mapper.dart',
+    'fields': [
+      {
+        'name': 'myDouble',
+        'mapKey': 'myDouble',
+        'description': '',
+        'presence': 'required',
+        'type': 'double',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'myNullableDouble',
+        'mapKey': 'myNullableDouble',
+        'description': '',
+        'presence': 'optional',
+        'type': 'double',
+        'typeLibraryUri': 'dart:core',
+      },
+    ],
+  };
   const ExampleMapper();
   i1.Example fromMap(Map<String, dynamic> exampleMap) => i1.Example()
     ..myDouble = (exampleMap['myDouble'] as num).toDouble()

@@ -6,6 +6,32 @@ import '../../../example/lib/type/bigint.dart' as i1;
 /// Generate command: dart run build_runner build --delete-conflicting-outputs
 /// For more information see: https://pub.dev/packages/map_converter
 class ExampleMapper {
+  static Map<String, dynamic> schema = {
+    'className': 'Example',
+    'classDescription': '',
+    'classLibraryUri': 'asset:map_converter/example/lib/type/bigint.dart',
+    'mapperClassName': 'ExampleMapper',
+    'mapperClassLibraryUri':
+        'asset:map_converter/example/lib/type/bigint.mapper.dart',
+    'fields': [
+      {
+        'name': 'myBigInt',
+        'mapKey': 'myBigInt',
+        'description': '',
+        'presence': 'required',
+        'type': 'BigInt',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'myNullableBigInt',
+        'mapKey': 'myNullableBigInt',
+        'description': '',
+        'presence': 'optional',
+        'type': 'BigInt',
+        'typeLibraryUri': 'dart:core',
+      },
+    ],
+  };
   const ExampleMapper();
   i1.Example fromMap(Map<String, dynamic> exampleMap) => i1.Example()
     ..myBigInt = BigInt.parse(exampleMap['myBigInt'] as String)

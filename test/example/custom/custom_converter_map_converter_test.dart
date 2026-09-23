@@ -1,8 +1,8 @@
 import 'package:shouldly/shouldly.dart';
 import 'package:test/test.dart';
 
-import '../../../example/lib/custom_converter/custom_converter.dart';
-import '../../../example/lib/custom_converter/custom_converter_map_converter.dart';
+import '../../../example/lib/custom/custom.dart';
+import '../../../example/lib/custom/custom.mapper.dart';
 
 void main() {
   group('exampleMapper.toMap(example) function', () {

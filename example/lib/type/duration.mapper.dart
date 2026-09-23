@@ -6,6 +6,32 @@ import '../../../example/lib/type/duration.dart' as i1;
 /// Generate command: dart run build_runner build --delete-conflicting-outputs
 /// For more information see: https://pub.dev/packages/map_converter
 class ExampleMapper {
+  static Map<String, dynamic> schema = {
+    'className': 'Example',
+    'classDescription': '',
+    'classLibraryUri': 'asset:map_converter/example/lib/type/duration.dart',
+    'mapperClassName': 'ExampleMapper',
+    'mapperClassLibraryUri':
+        'asset:map_converter/example/lib/type/duration.mapper.dart',
+    'fields': [
+      {
+        'name': 'myDuration',
+        'mapKey': 'myDuration',
+        'description': '',
+        'presence': 'required',
+        'type': 'Duration',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'myNullableDuration',
+        'mapKey': 'myNullableDuration',
+        'description': '',
+        'presence': 'optional',
+        'type': 'Duration',
+        'typeLibraryUri': 'dart:core',
+      },
+    ],
+  };
   const ExampleMapper();
   i1.Example fromMap(Map<String, dynamic> exampleMap) => i1.Example()
     ..myDuration = Duration(microseconds: exampleMap['myDuration'] as int)

@@ -23,5 +23,3 @@ dev_dependencies:
   json_serializable: ^6.9.3
   shouldly: ^0.5.0+1
   json_annotation: ^4.9.0
-  dart_mappable_builder: ^4.10.0
-

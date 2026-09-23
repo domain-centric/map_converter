@@ -2,7 +2,7 @@ import 'package:shouldly/shouldly.dart';
 import 'package:test/test.dart';
 
 import '../../../example/lib/type/bool.dart';
-import '../../../example/lib/type/bool_map_converter.dart';
+import '../../../example/lib/type/bool.mapper.dart';
 
 const boolValue = true;
 void main() {

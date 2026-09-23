@@ -2,7 +2,7 @@ import 'package:shouldly/shouldly.dart';
 import 'package:test/test.dart';
 
 import '../../../example/lib/type/duration.dart';
-import '../../../example/lib/type/duration_map_converter.dart';
+import '../../../example/lib/type/duration.mapper.dart';
 
 final durationValue = Duration(hours: 2);
 void main() {

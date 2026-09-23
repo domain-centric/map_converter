@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
 import 'package:collection/collection.dart';
@@ -41,7 +42,7 @@ class MapConverterBuilder implements Builder {
 
   @override
   Map<String, List<String>> get buildExtensions => {
-        '^{{}}.dart': ['{{}}_map_converter.dart']
+        '^{{}}.dart': ['{{}}.mapper.dart']
       };
 }
 
@@ -107,6 +108,8 @@ class MapperClass extends code.Class {
         ], methods: [
           FromMapValueMethod(domainClass, idFactory),
           ToMapValueMethod(domainClass, idFactory)
+        ], fields: [
+          SchemaField(domainClass, idFactory)
         ]);
 
   static String _name(DomainClass domainClass) =>
@@ -669,4 +672,74 @@ class BestConstructorFactory {
       field.element.type.element!.name == parameter.type.element!.name &&
       field.element.type.element?.library?.uri ==
           parameter.type.element?.library?.uri;
+}
+
+// e.g.:
+// {
+//     'className': 'Example',
+//     'classDescription': '',
+//     'classLibraryUri': 'asset:map_converter/example/lib/alias/alias.dart',
+//     'mapperClassName': 'ExampleMapper',
+//     'mapperClassLibraryUri':
+//         'asset:map_converter/example/lib/alias/alias.mapper.dart',
+//     'fields': [
+//       {
+//         'name': 'email',
+//         'mapKey': 'emailAddress',
+//         'description': '',
+//         'presence': 'required',
+//         'type': 'String',
+//         'typeLibraryUri': 'dart:core',
+//       }]}
+class SchemaField extends code.Field {
+  SchemaField(
+      DomainClass domainClass, MapConverterLibraryAssetIdFactory idFactory)
+      : super('schema',
+            type: _type(),
+            static: true,
+            value: _toMapExpression(domainClass, idFactory));
+
+  static code.Type _type() {
+    return code.Type.ofMap(
+        keyType: code.Type.ofString(), valueType: code.Type.ofDynamic());
+  }
+
+  static code.Expression _toMapExpression(DomainClass domainClass,
+          MapConverterLibraryAssetIdFactory idFactory) =>
+      code.Expression.ofMap({
+        code.Expression.ofString('className'):
+            code.Expression.ofString(domainClass.element.name!),
+        code.Expression.ofString('classDescription'): code.Expression.ofString(
+            domainClass.element.documentationComment ?? ''),
+        code.Expression.ofString('classLibraryUri'): code.Expression.ofString(
+            domainClass.element.library.uri.toString()),
+        code.Expression.ofString('mapperClassName'):
+            code.Expression.ofString('${domainClass.element.name}Mapper'),
+        code.Expression.ofString('mapperClassLibraryUri'):
+            code.Expression.ofString(
+                idFactory.createOutputUriForType(domainClass.element.thisType)),
+        code.Expression.ofString('fields'):
+            _toFieldsExpression(domainClass.fields)
+      });
+
+  static code.Expression _toFieldsExpression(List<FieldMetadata> fields) =>
+      code.Expression.ofList(fields.map(_toFieldMapExpression).toList());
+
+  static code.Expression _toFieldMapExpression(FieldMetadata field) =>
+      code.Expression.ofMap({
+        code.Expression.ofString('name'):
+            code.Expression.ofString(field.element.name!),
+        code.Expression.ofString('mapKey'):
+            code.Expression.ofString(field.alias ?? field.element.name!),
+        code.Expression.ofString('description'):
+            code.Expression.ofString(field.element.documentationComment ?? ''),
+        code.Expression.ofString('presence'): code.Expression.ofString(
+            field.element.type.nullabilitySuffix == NullabilitySuffix.question
+                ? 'optional'
+                : 'required'),
+        code.Expression.ofString('type'):
+            code.Expression.ofString(field.element.type.element?.name ?? ''),
+        code.Expression.ofString('typeLibraryUri'): code.Expression.ofString(
+            field.element.type.element?.library?.uri.toString() ?? ''),
+      });
 }

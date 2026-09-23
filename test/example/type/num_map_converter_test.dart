@@ -2,7 +2,7 @@ import 'package:shouldly/shouldly.dart';
 import 'package:test/test.dart';
 
 import '../../../example/lib/type/num.dart';
-import '../../../example/lib/type/num_map_converter.dart';
+import '../../../example/lib/type/num.mapper.dart';
 
 const numberValue = 3.2; // could be double or int
 void main() {

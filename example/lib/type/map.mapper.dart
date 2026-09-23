@@ -1,5 +1,5 @@
 import '../../../example/lib/type/map.dart' as i1;
-import '../../../example/lib/person/person_map_converter.dart' as i2;
+import '../../../example/lib/person/person.mapper.dart' as i2;
 import '../../../example/lib/person/person.dart' as i3;
 
 /// Do not make changes to this file!
@@ -8,6 +8,88 @@ import '../../../example/lib/person/person.dart' as i3;
 /// Generate command: dart run build_runner build --delete-conflicting-outputs
 /// For more information see: https://pub.dev/packages/map_converter
 class ExampleMapper {
+  static Map<String, dynamic> schema = {
+    'className': 'Example',
+    'classDescription': '',
+    'classLibraryUri': 'asset:map_converter/example/lib/type/map.dart',
+    'mapperClassName': 'ExampleMapper',
+    'mapperClassLibraryUri':
+        'asset:map_converter/example/lib/type/map.mapper.dart',
+    'fields': [
+      {
+        'name': 'mapWithPrimitiveKeyAndPrimitiveValue',
+        'mapKey': 'mapWithPrimitiveKeyAndPrimitiveValue',
+        'description': '',
+        'presence': 'required',
+        'type': 'Map',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'nullableMapWithPrimitiveKeyAndPrimitiveValue',
+        'mapKey': 'nullableMapWithPrimitiveKeyAndPrimitiveValue',
+        'description': '',
+        'presence': 'optional',
+        'type': 'Map',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'mapWithPrimitiveKeyAndPrimitiveNullableValue',
+        'mapKey': 'mapWithPrimitiveKeyAndPrimitiveNullableValue',
+        'description': '',
+        'presence': 'required',
+        'type': 'Map',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'mapWithPrimitiveKeyAndComplexValue',
+        'mapKey': 'mapWithPrimitiveKeyAndComplexValue',
+        'description': '',
+        'presence': 'required',
+        'type': 'Map',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'mapWithPrimitiveKeyAndComplexNullableValue',
+        'mapKey': 'mapWithPrimitiveKeyAndComplexNullableValue',
+        'description': '',
+        'presence': 'required',
+        'type': 'Map',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'mapWithPrimitiveKeyAndListValue',
+        'mapKey': 'mapWithPrimitiveKeyAndListValue',
+        'description': '',
+        'presence': 'required',
+        'type': 'Map',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'mapWithPrimitiveKeyAndNullableListValue',
+        'mapKey': 'mapWithPrimitiveKeyAndNullableListValue',
+        'description': '',
+        'presence': 'required',
+        'type': 'Map',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'mapWithPrimitiveKeyAndMapValue',
+        'mapKey': 'mapWithPrimitiveKeyAndMapValue',
+        'description': '',
+        'presence': 'required',
+        'type': 'Map',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'mapWithPrimitiveKeyAndNullableMapValue',
+        'mapKey': 'mapWithPrimitiveKeyAndNullableMapValue',
+        'description': '',
+        'presence': 'required',
+        'type': 'Map',
+        'typeLibraryUri': 'dart:core',
+      },
+    ],
+  };
   const ExampleMapper();
   i1.Example fromMap(Map<String, dynamic> exampleMap) => i1.Example()
     ..mapWithPrimitiveKeyAndPrimitiveValue =

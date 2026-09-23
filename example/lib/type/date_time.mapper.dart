@@ -6,6 +6,32 @@ import '../../../example/lib/type/date_time.dart' as i1;
 /// Generate command: dart run build_runner build --delete-conflicting-outputs
 /// For more information see: https://pub.dev/packages/map_converter
 class ExampleMapper {
+  static Map<String, dynamic> schema = {
+    'className': 'Example',
+    'classDescription': '',
+    'classLibraryUri': 'asset:map_converter/example/lib/type/date_time.dart',
+    'mapperClassName': 'ExampleMapper',
+    'mapperClassLibraryUri':
+        'asset:map_converter/example/lib/type/date_time.mapper.dart',
+    'fields': [
+      {
+        'name': 'myDateTime',
+        'mapKey': 'myDateTime',
+        'description': '',
+        'presence': 'required',
+        'type': 'DateTime',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'myNullableDateTime',
+        'mapKey': 'myNullableDateTime',
+        'description': '',
+        'presence': 'optional',
+        'type': 'DateTime',
+        'typeLibraryUri': 'dart:core',
+      },
+    ],
+  };
   const ExampleMapper();
   i1.Example fromMap(Map<String, dynamic> exampleMap) => i1.Example()
     ..myDateTime = DateTime.parse(exampleMap['myDateTime'] as String)

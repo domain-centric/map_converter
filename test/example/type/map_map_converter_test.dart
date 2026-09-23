@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 
 import '../../../example/lib/person/person.dart';
 import '../../../example/lib/type/map.dart';
-import '../../../example/lib/type/map_map_converter.dart';
+import '../../../example/lib/type/map.mapper.dart';
 
 void main() {
   group('exampleMapper.fromMap should convert map to Example object correctly',

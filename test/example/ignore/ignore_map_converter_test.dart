@@ -2,7 +2,7 @@ import 'package:shouldly/shouldly.dart';
 import 'package:test/test.dart';
 
 import '../../../example/lib/ignore/ignore.dart';
-import '../../../example/lib/ignore/ignore_map_converter.dart';
+import '../../../example/lib/ignore/ignore.mapper.dart';
 
 void main() {
   group('exampleMapper.toMap(example) function', () {

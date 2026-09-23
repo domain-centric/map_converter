@@ -6,6 +6,33 @@ import '../../../example/lib/constructor/constructor.dart' as i1;
 /// Generate command: dart run build_runner build --delete-conflicting-outputs
 /// For more information see: https://pub.dev/packages/map_converter
 class DefaultConstructorExampleMapper {
+  static Map<String, dynamic> schema = {
+    'className': 'DefaultConstructorExample',
+    'classDescription': '',
+    'classLibraryUri':
+        'asset:map_converter/example/lib/constructor/constructor.dart',
+    'mapperClassName': 'DefaultConstructorExampleMapper',
+    'mapperClassLibraryUri':
+        'asset:map_converter/example/lib/constructor/constructor.mapper.dart',
+    'fields': [
+      {
+        'name': 'property1',
+        'mapKey': 'property1',
+        'description': '',
+        'presence': 'required',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property2',
+        'mapKey': 'property2',
+        'description': '',
+        'presence': 'optional',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+    ],
+  };
   const DefaultConstructorExampleMapper();
   i1.DefaultConstructorExample fromMap(
     Map<String, dynamic> defaultConstructorExampleMap,
@@ -23,6 +50,33 @@ class DefaultConstructorExampleMapper {
 }
 
 class ConstructorExampleMapper {
+  static Map<String, dynamic> schema = {
+    'className': 'ConstructorExample',
+    'classDescription': '',
+    'classLibraryUri':
+        'asset:map_converter/example/lib/constructor/constructor.dart',
+    'mapperClassName': 'ConstructorExampleMapper',
+    'mapperClassLibraryUri':
+        'asset:map_converter/example/lib/constructor/constructor.mapper.dart',
+    'fields': [
+      {
+        'name': 'property1',
+        'mapKey': 'property1',
+        'description': '',
+        'presence': 'required',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property2',
+        'mapKey': 'property2',
+        'description': '',
+        'presence': 'optional',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+    ],
+  };
   const ConstructorExampleMapper();
   i1.ConstructorExample fromMap(Map<String, dynamic> constructorExampleMap) =>
       i1.ConstructorExample()
@@ -35,6 +89,50 @@ class ConstructorExampleMapper {
 }
 
 class ConstructorWithRequiredPositionalParametersExampleMapper {
+  static Map<String, dynamic> schema = {
+    'className': 'ConstructorWithRequiredPositionalParametersExample',
+    'classDescription': '',
+    'classLibraryUri':
+        'asset:map_converter/example/lib/constructor/constructor.dart',
+    'mapperClassName':
+        'ConstructorWithRequiredPositionalParametersExampleMapper',
+    'mapperClassLibraryUri':
+        'asset:map_converter/example/lib/constructor/constructor.mapper.dart',
+    'fields': [
+      {
+        'name': 'property1',
+        'mapKey': 'property1',
+        'description': '',
+        'presence': 'required',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property2',
+        'mapKey': 'property2',
+        'description': '',
+        'presence': 'optional',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property3',
+        'mapKey': 'property3',
+        'description': '',
+        'presence': 'required',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property4',
+        'mapKey': 'property4',
+        'description': '',
+        'presence': 'optional',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+    ],
+  };
   const ConstructorWithRequiredPositionalParametersExampleMapper();
   i1.ConstructorWithRequiredPositionalParametersExample fromMap(
     Map<String, dynamic> constructorWithRequiredPositionalParametersExampleMap,
@@ -68,6 +166,49 @@ class ConstructorWithRequiredPositionalParametersExampleMapper {
 }
 
 class ConstructorWithNamedParametersExampleMapper {
+  static Map<String, dynamic> schema = {
+    'className': 'ConstructorWithNamedParametersExample',
+    'classDescription': '',
+    'classLibraryUri':
+        'asset:map_converter/example/lib/constructor/constructor.dart',
+    'mapperClassName': 'ConstructorWithNamedParametersExampleMapper',
+    'mapperClassLibraryUri':
+        'asset:map_converter/example/lib/constructor/constructor.mapper.dart',
+    'fields': [
+      {
+        'name': 'property1',
+        'mapKey': 'property1',
+        'description': '',
+        'presence': 'required',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property2',
+        'mapKey': 'property2',
+        'description': '',
+        'presence': 'optional',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property3',
+        'mapKey': 'property3',
+        'description': '',
+        'presence': 'required',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property4',
+        'mapKey': 'property4',
+        'description': '',
+        'presence': 'optional',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+    ],
+  };
   const ConstructorWithNamedParametersExampleMapper();
   i1.ConstructorWithNamedParametersExample fromMap(
     Map<String, dynamic> constructorWithNamedParametersExampleMap,
@@ -95,6 +236,67 @@ class ConstructorWithNamedParametersExampleMapper {
 }
 
 class ConstructorWithRequiredPositionalParametersAndNamedParametersExampleMapper {
+  static Map<String, dynamic> schema = {
+    'className':
+        'ConstructorWithRequiredPositionalParametersAndNamedParametersExample',
+    'classDescription': '',
+    'classLibraryUri':
+        'asset:map_converter/example/lib/constructor/constructor.dart',
+    'mapperClassName':
+        'ConstructorWithRequiredPositionalParametersAndNamedParametersExampleMapper',
+    'mapperClassLibraryUri':
+        'asset:map_converter/example/lib/constructor/constructor.mapper.dart',
+    'fields': [
+      {
+        'name': 'property1',
+        'mapKey': 'property1',
+        'description': '',
+        'presence': 'required',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property2',
+        'mapKey': 'property2',
+        'description': '',
+        'presence': 'optional',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property3',
+        'mapKey': 'property3',
+        'description': '',
+        'presence': 'required',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property4',
+        'mapKey': 'property4',
+        'description': '',
+        'presence': 'optional',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property5',
+        'mapKey': 'property5',
+        'description': '',
+        'presence': 'required',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property6',
+        'mapKey': 'property6',
+        'description': '',
+        'presence': 'optional',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+    ],
+  };
   const ConstructorWithRequiredPositionalParametersAndNamedParametersExampleMapper();
   i1.ConstructorWithRequiredPositionalParametersAndNamedParametersExample
       fromMap(
@@ -147,6 +349,49 @@ class ConstructorWithRequiredPositionalParametersAndNamedParametersExampleMapper
 }
 
 class ConstructorWithOptionalParametersExampleMapper {
+  static Map<String, dynamic> schema = {
+    'className': 'ConstructorWithOptionalParametersExample',
+    'classDescription': '',
+    'classLibraryUri':
+        'asset:map_converter/example/lib/constructor/constructor.dart',
+    'mapperClassName': 'ConstructorWithOptionalParametersExampleMapper',
+    'mapperClassLibraryUri':
+        'asset:map_converter/example/lib/constructor/constructor.mapper.dart',
+    'fields': [
+      {
+        'name': 'property1',
+        'mapKey': 'property1',
+        'description': '',
+        'presence': 'required',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property2',
+        'mapKey': 'property2',
+        'description': '',
+        'presence': 'optional',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property3',
+        'mapKey': 'property3',
+        'description': '',
+        'presence': 'required',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property4',
+        'mapKey': 'property4',
+        'description': '',
+        'presence': 'optional',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+    ],
+  };
   const ConstructorWithOptionalParametersExampleMapper();
   i1.ConstructorWithOptionalParametersExample fromMap(
     Map<String, dynamic> constructorWithOptionalParametersExampleMap,
@@ -172,6 +417,67 @@ class ConstructorWithOptionalParametersExampleMapper {
 }
 
 class ConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMapper {
+  static Map<String, dynamic> schema = {
+    'className':
+        'ConstructorWithRequiredPositionalParametersAndOptionalParametersExample',
+    'classDescription': '',
+    'classLibraryUri':
+        'asset:map_converter/example/lib/constructor/constructor.dart',
+    'mapperClassName':
+        'ConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMapper',
+    'mapperClassLibraryUri':
+        'asset:map_converter/example/lib/constructor/constructor.mapper.dart',
+    'fields': [
+      {
+        'name': 'property1',
+        'mapKey': 'property1',
+        'description': '',
+        'presence': 'required',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property2',
+        'mapKey': 'property2',
+        'description': '',
+        'presence': 'optional',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property3',
+        'mapKey': 'property3',
+        'description': '',
+        'presence': 'required',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property4',
+        'mapKey': 'property4',
+        'description': '',
+        'presence': 'optional',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property5',
+        'mapKey': 'property5',
+        'description': '',
+        'presence': 'required',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property6',
+        'mapKey': 'property6',
+        'description': '',
+        'presence': 'optional',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+    ],
+  };
   const ConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMapper();
   i1.ConstructorWithRequiredPositionalParametersAndOptionalParametersExample
       fromMap(
@@ -222,6 +528,67 @@ class ConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMap
 }
 
 class NamedConstructorWithRequiredPositionalParametersAndNamedParametersExampleMapper {
+  static Map<String, dynamic> schema = {
+    'className':
+        'NamedConstructorWithRequiredPositionalParametersAndNamedParametersExample',
+    'classDescription': '',
+    'classLibraryUri':
+        'asset:map_converter/example/lib/constructor/constructor.dart',
+    'mapperClassName':
+        'NamedConstructorWithRequiredPositionalParametersAndNamedParametersExampleMapper',
+    'mapperClassLibraryUri':
+        'asset:map_converter/example/lib/constructor/constructor.mapper.dart',
+    'fields': [
+      {
+        'name': 'property1',
+        'mapKey': 'property1',
+        'description': '',
+        'presence': 'required',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property2',
+        'mapKey': 'property2',
+        'description': '',
+        'presence': 'optional',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property3',
+        'mapKey': 'property3',
+        'description': '',
+        'presence': 'required',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property4',
+        'mapKey': 'property4',
+        'description': '',
+        'presence': 'optional',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property5',
+        'mapKey': 'property5',
+        'description': '',
+        'presence': 'required',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property6',
+        'mapKey': 'property6',
+        'description': '',
+        'presence': 'optional',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+    ],
+  };
   const NamedConstructorWithRequiredPositionalParametersAndNamedParametersExampleMapper();
   i1.NamedConstructorWithRequiredPositionalParametersAndNamedParametersExample
       fromMap(
@@ -274,6 +641,67 @@ class NamedConstructorWithRequiredPositionalParametersAndNamedParametersExampleM
 }
 
 class NamedConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMapper {
+  static Map<String, dynamic> schema = {
+    'className':
+        'NamedConstructorWithRequiredPositionalParametersAndOptionalParametersExample',
+    'classDescription': '',
+    'classLibraryUri':
+        'asset:map_converter/example/lib/constructor/constructor.dart',
+    'mapperClassName':
+        'NamedConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMapper',
+    'mapperClassLibraryUri':
+        'asset:map_converter/example/lib/constructor/constructor.mapper.dart',
+    'fields': [
+      {
+        'name': 'property1',
+        'mapKey': 'property1',
+        'description': '',
+        'presence': 'required',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property2',
+        'mapKey': 'property2',
+        'description': '',
+        'presence': 'optional',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property3',
+        'mapKey': 'property3',
+        'description': '',
+        'presence': 'required',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property4',
+        'mapKey': 'property4',
+        'description': '',
+        'presence': 'optional',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property5',
+        'mapKey': 'property5',
+        'description': '',
+        'presence': 'required',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+      {
+        'name': 'property6',
+        'mapKey': 'property6',
+        'description': '',
+        'presence': 'optional',
+        'type': 'String',
+        'typeLibraryUri': 'dart:core',
+      },
+    ],
+  };
   const NamedConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMapper();
   i1.NamedConstructorWithRequiredPositionalParametersAndOptionalParametersExample
       fromMap(
