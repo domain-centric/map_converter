@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
@@ -179,22 +180,21 @@ class ObjectToMapFunctionFactory {
     MapConverterLibraryAssetIdFactory idFactory,
   ) {
     Map<code.Expression, code.Expression> map = {};
-    for (var property
-        in domainClass.properties.where((p) => p.fieldElement.name != null)) {
-      var propertyNameExpression =
-          code.Expression.ofString(property.alias ?? property.name);
-      var expressionFactory = property.valueExpressionFactory;
-      var propertyType = property.fieldElement.type as InterfaceType;
+    for (var field in domainClass.fields.where((f) =>
+        f.element.name != null &&
+        f.objectToMapValueExpressionFunction != null)) {
+      var fieldName =
+          code.Expression.ofString(field.alias ?? field.element.name!);
+      var fieldType = field.element.type as InterfaceType;
       var instanceVariableName = domainClass.element.name!.camelCase;
       var source = code.Expression.ofVariable(instanceVariableName)
-          .getProperty(property.fieldElement.name!);
-      var propertyValue = expressionFactory.objectToMapValue(
+          .getProperty(field.element.name!);
+      var fieldValueExpression = field.objectToMapValueExpressionFunction!(
         idFactory,
-        property,
         source,
-        propertyType,
+        fieldType,
       );
-      map[propertyNameExpression] = propertyValue;
+      map[fieldName] = fieldValueExpression;
     }
     return code.Expression.ofMap(map);
   }
@@ -236,10 +236,10 @@ class MapToObjectFunctionFactory {
       domainClass,
       idFactory,
     );
-    for (var property in domainClass.noneConstructorProperties) {
-      var propertyName = property.alias ?? property.name;
+    for (var field in domainClass.fieldsSetBySetter) {
+      var propertyName = field.alias ?? field.element.name!;
       var propertyValue = propertyValueExpression(
-        property,
+        field,
         idFactory,
         domainMapVariableName,
       );
@@ -295,8 +295,8 @@ class MapToObjectFunctionFactory {
     for (var parameter in bestConstructor.namedParameters) {
       code.Expression valueExpression =
           propertyValueExpression(parameter, idFactory, mapVariableName);
-      parameterValues.add(code.ParameterValue.named(
-          parameter.fieldElement.name!, valueExpression));
+      parameterValues.add(
+          code.ParameterValue.named(parameter.element.name!, valueExpression));
     }
     return code.ParameterValues(parameterValues);
   }
@@ -307,19 +307,16 @@ code.Type createDomainType(DomainClass domainClass) => code.Type(
       libraryUri: createLibraryUri(domainClass.element),
     );
 
-code.Expression propertyValueExpression(
-    PropertyWithValueExpressionFactory property,
-    MapConverterLibraryAssetIdFactory idFactory,
-    String mapVariableName) {
-  var propertyName = property.alias ?? property.name;
-  var propertyType = property.fieldElement.type as InterfaceType;
+code.Expression propertyValueExpression(FieldMetadata field,
+    MapConverterLibraryAssetIdFactory idFactory, String mapVariableName) {
+  var fieldName = field.alias ?? field.element.name!;
+  var fieldType = field.element.type as InterfaceType;
   var source = code.Expression.ofVariable(mapVariableName)
-      .index(code.Expression.ofString(propertyName));
-  var valueExpression = property.valueExpressionFactory.mapValueToObject(
+      .index(code.Expression.ofString(fieldName));
+  var valueExpression = field.mapValueToObjectExpressionFunction!(
     idFactory,
-    property,
     source,
-    propertyType,
+    fieldType,
   );
   return valueExpression;
 }
@@ -328,27 +325,26 @@ code.Expression propertyValueExpression(
 class DomainClass {
   final ClassElement element;
   final Constructor bestConstructor;
-  final List<PropertyWithValueExpressionFactory> properties;
-  late List<PropertyWithValueExpressionFactory> noneConstructorProperties;
+  final List<FieldMetadata> fields;
+  final List<FieldMetadata> fieldsSetBySetter;
 
   DomainClass(
     this.element,
     this.bestConstructor,
-    this.properties,
-  ) {
-    noneConstructorProperties = properties
-        .whereNot(
-            (property) => bestConstructor.propertiesBeingSet.contains(property))
-        .toList();
-  }
+    this.fields,
+  ) : fieldsSetBySetter = fields
+            .where((field) =>
+                !bestConstructor.fieldsBeingSet.contains(field) &&
+                field.element.setter != null)
+            .toList();
 }
 
 class Constructor {
   late String? name;
-  final List<PropertyWithValueExpressionFactory> requiredPositionalParameters;
-  final List<PropertyWithValueExpressionFactory> namedParameters;
-  final List<PropertyWithValueExpressionFactory> optionalParameters;
-  late Set<PropertyWithValueExpressionFactory> propertiesBeingSet;
+  final List<FieldMetadata> requiredPositionalParameters;
+  final List<FieldMetadata> namedParameters;
+  final List<FieldMetadata> optionalParameters;
+  late Set<FieldMetadata> fieldsBeingSet;
 
   Constructor({
     String? name,
@@ -357,46 +353,67 @@ class Constructor {
     required this.optionalParameters,
   }) {
     this.name = (name == null || name.isEmpty) ? null : name;
-    propertiesBeingSet = {};
-    propertiesBeingSet.addAll(requiredPositionalParameters);
-    propertiesBeingSet.addAll(namedParameters);
-    propertiesBeingSet.addAll(optionalParameters);
+    fieldsBeingSet = {};
+    fieldsBeingSet.addAll(requiredPositionalParameters);
+    fieldsBeingSet.addAll(namedParameters);
+    fieldsBeingSet.addAll(optionalParameters);
   }
 
-  Constructor.basic()
+  Constructor.withoutParameters()
       : name = null,
         requiredPositionalParameters = [],
         namedParameters = [],
         optionalParameters = [],
-        propertiesBeingSet = {};
+        fieldsBeingSet = {};
 }
 
-class PropertyWithBuildInfo extends PropertyWithConverterType {
-  final FieldElement fieldElement;
+class FieldMetadata {
+  final FieldElement element;
+  final String? alias;
+  final ObjectToMapValueExpressionFunction? objectToMapValueExpressionFunction;
+  final MapValueToObjectExpressionFunction? mapValueToObjectExpressionFunction;
 
-  PropertyWithBuildInfo(
-    super.name, {
-    super.alias,
-    super.ignore,
-    super.converter,
-    super.converterType,
-    required this.fieldElement,
-  });
+  FieldMetadata(this.element,
+      {this.alias,
+      required this.objectToMapValueExpressionFunction,
+      required this.mapValueToObjectExpressionFunction});
 }
 
-class PropertyWithValueExpressionFactory extends PropertyWithBuildInfo {
-  final ValueExpressionFactory valueExpressionFactory;
+typedef ObjectToMapValueExpressionFunction =
 
-  PropertyWithValueExpressionFactory(
-    super.name, {
-    required super.alias,
-    required super.ignore,
-    super.converter,
-    required super.converterType,
-    required super.fieldElement,
-    required this.valueExpressionFactory,
-  });
-}
+    /// Creates a Dart code expressions for a generated MapConverter
+    /// to convert a [source] object to a [PrimitiveType]
+    code.Expression Function(
+  MapConverterLibraryAssetIdFactory idFactory,
+
+  /// [source]: An expression of the source data, e.g.:
+  /// * person.name (a field or property value of an object)
+  /// * enumValue
+  /// * listElement
+  /// * setElement
+  /// * k (for a key value in a [Map])
+  /// * v (for a value in a [Map])
+  code.Expression source,
+  InterfaceType typeToConvert,
+);
+
+typedef MapValueToObjectExpressionFunction =
+
+    /// Creates a Dart code expressions for a generated MapConverter
+    /// to convert a [PrimitiveType] to an object
+    code.Expression Function(
+  MapConverterLibraryAssetIdFactory idFactory,
+
+  /// [source]: An expression of the source data, e.g.:
+  /// * personMap['propertyName'] (a [PrimitiveType] within a [Map])
+  /// * enumValue
+  /// * listElement
+  /// * setElement
+  /// * k (for a key value in a [Map])
+  /// * v (for a value in a [Map])
+  code.Expression source,
+  InterfaceType typeToConvert,
+);
 
 class DomainClassFactory {
   List<DomainClass> create(LibraryElement libraryElement) {
@@ -405,17 +422,34 @@ class DomainClassFactory {
     for (var topElement in topElements) {
       if (isDomainClass(topElement)) {
         var classElement = topElement as ClassElement;
-        var properties = _createProperties(classElement);
-        if (properties.isNotEmpty) {
+        var fields = _createFields(classElement);
+        if (fields.isNotEmpty) {
           var bestConstructor =
-              BestConstructorFactory().createFor(classElement, properties);
-          var domainClass =
-              DomainClass(classElement, bestConstructor, properties);
-          domainClasses.add(domainClass);
+              BestConstructorFactory().createFor(classElement, fields);
+          var fieldsThatAreNotSet =
+              findFieldsThatAreNotSet(fields, bestConstructor);
+          validateIfAllFieldsAreSet(fieldsThatAreNotSet, classElement);
+          if (fieldsThatAreNotSet.length != fields.length) {
+            var domainClass =
+                DomainClass(classElement, bestConstructor, fields);
+            domainClasses.add(domainClass);
+          }
         }
       }
     }
     return domainClasses;
+  }
+
+  void validateIfAllFieldsAreSet(
+      List<FieldMetadata> fieldsThatAreNotSet, ClassElement classElement) {
+    if (fieldsThatAreNotSet.isNotEmpty) {
+      var fieldNamesThatAreNotSet =
+          fieldsThatAreNotSet.map((field) => field.element.name).join(', ');
+      log.log(
+          Level.WARNING,
+          'Class: ${classElement.name} '
+          'contains fields that could not be set: $fieldNamesThatAreNotSet');
+    }
   }
 
   bool isDomainClass(Element element) {
@@ -430,7 +464,7 @@ class DomainClassFactory {
 
   bool isDomainClassWithSupportedPropertyTypes(Element element) {
     return isDomainClass(element) &&
-        _createProperties(element as ClassElement).isNotEmpty;
+        _createFields(element as ClassElement).isNotEmpty;
   }
 
   bool _isListSetMapIteratorType(InterfaceElement element) {
@@ -446,9 +480,9 @@ class DomainClassFactory {
   /// including those from super classes, mixins and interfaces
   List<FieldElement> _findAllPublicFields(InterfaceElement interfaceElement) {
     Map<String, FieldElement> fields = {};
-    for (var fieldElement in interfaceElement.fields) {
-      if (_isPublicPropertyField(fieldElement)) {
-        fields[fieldElement.name!] = fieldElement;
+    for (var element in interfaceElement.fields) {
+      if (_isPublicPropertyField(element)) {
+        fields[element.name!] = element;
       }
     }
     for (var superType in interfaceElement.allSupertypes) {
@@ -460,52 +494,105 @@ class DomainClassFactory {
     return fields.values.toList();
   }
 
-  /// creates a [MAP] with [FieldElement] and [ValueExpressionFactory] for
-  /// any property in a [ClassElement]
-  /// if there is a matching [ValueExpressionFactory].
-  List<PropertyWithValueExpressionFactory> _createProperties(
-      ClassElement classElement) {
-    var mapConverterAnnotation = createFromClassElement(classElement);
+  List<FieldMetadata> _createFields(ClassElement classElement) {
+    final mapConverterAnnotation = findMapConverterAnnotation(classElement);
 
-    var properties = <PropertyWithValueExpressionFactory>[];
+    var fieldMetaData = <FieldMetadata>[];
     var fields = _findAllPublicFields(classElement);
+    var fieldAnnotations = _findFieldAnnotations(mapConverterAnnotation);
     for (var field in fields) {
-      var propertyAnnotation = mapConverterAnnotation!.properties
-          .firstWhereOrNull((element) => element.name == field.name);
-      if (propertyAnnotation?.ignore != true) {
-        var propertyPath = '${classElement.name}.${field.name}';
+      var fieldAnnotation = fieldAnnotations?.firstWhereOrNull((dartObject) =>
+          dartObject
+              .getField('symbol')
+              ?.toStringValue()
+              ?.contains(field.name!) ==
+          true);
+      var ignore = fieldAnnotation?.getField('ignore')?.toBoolValue() ?? false;
+      if (!ignore) {
+        var fieldPath = '${classElement.name}.${field.name}';
         try {
-          var propertyType = field.type as InterfaceType;
-          var query = Query(propertyType, propertyAnnotation);
+          var fieldType = field.type as InterfaceType;
           var valueExpressionFactory =
-              ValueExpressionFactories().findFor(query);
-          if (valueExpressionFactory == null) {
+              ValueExpressionFactories().findFor(fieldType);
+          var alias = fieldAnnotation?.getField('alias')?.toStringValue();
+          var mapValueToObjectExpressionFunction =
+              createMapValueToObjectExpressionFunction(
+                  fieldAnnotation, valueExpressionFactory);
+          var objectToMapValueExpressionFunction =
+              createObjectToMapValueExpressionFunction(
+                  fieldAnnotation, valueExpressionFactory);
+
+          if (mapValueToObjectExpressionFunction == null &&
+              objectToMapValueExpressionFunction == null) {
             log.log(
                 Level.WARNING,
-                'Could not find a $ValueExpressionFactory '
-                'for type: $propertyType '
-                'used in property: $propertyPath');
+                'Property: $fieldPath '
+                'has an unsupported type: $fieldType. '
+                'Define a custom converter in the @MapConverter annotation.');
           } else {
-            var property = PropertyWithValueExpressionFactory(field.name!,
-                alias: propertyAnnotation?.alias,
-                ignore: false,
-                converterType: propertyAnnotation == null
-                    ? null
-                    : (propertyAnnotation as PropertyWithConverterType)
-                        .converterType,
-                fieldElement: field,
-                valueExpressionFactory: valueExpressionFactory);
-            properties.add(property);
+            var fieldExpressionFactory = FieldMetadata(
+              field,
+              alias: alias,
+              mapValueToObjectExpressionFunction:
+                  mapValueToObjectExpressionFunction,
+              objectToMapValueExpressionFunction:
+                  objectToMapValueExpressionFunction,
+            );
+            fieldMetaData.add(fieldExpressionFactory);
           }
         } on Exception catch (e) {
-          throw Exception('$propertyPath: $e');
+          throw Exception('$fieldPath: $e');
         }
       }
     }
-    return properties;
+    return fieldMetaData;
   }
 
-  // Iterable<FieldElement> _findFieldsToProcess(ClassElement classElement) {
+  MapValueToObjectExpressionFunction? createMapValueToObjectExpressionFunction(
+      DartObject? fieldAnnotation,
+      ValueExpressionFactory? valueExpressionFactory) {
+    var mapValueToObjectCustomFunction =
+        fieldAnnotation?.getField('toPrimitiveConverter')?.toFunctionValue();
+    if (mapValueToObjectCustomFunction == null &&
+        valueExpressionFactory == null) {
+      return null;
+    }
+    if (mapValueToObjectCustomFunction != null) {
+      return createMapValueToObjectExpressionCustomFunction(
+          functionName: mapValueToObjectCustomFunction.name!,
+          functionLibraryUri:
+              mapValueToObjectCustomFunction.library.uri.toString());
+    } else {
+      return valueExpressionFactory!.mapValueToObjectFunction;
+    }
+  }
+
+  ObjectToMapValueExpressionFunction? createObjectToMapValueExpressionFunction(
+      DartObject? fieldAnnotation,
+      ValueExpressionFactory? valueExpressionFactory) {
+    var objectToMapValueExpressionFunction =
+        fieldAnnotation?.getField('fromPrimitiveConverter')?.toFunctionValue();
+    if (objectToMapValueExpressionFunction == null &&
+        valueExpressionFactory == null) {
+      return null;
+    }
+    if (objectToMapValueExpressionFunction != null) {
+      return createObjectToMapValueExpressionCustomFunction(
+          functionName: objectToMapValueExpressionFunction.name!,
+          functionLibraryUri:
+              objectToMapValueExpressionFunction.library.uri.toString());
+    } else {
+      return valueExpressionFactory!.objectToMapValueFunction;
+    }
+  }
+
+  List<DartObject>? _findFieldAnnotations(DartObject? mapConverterAnnotation) {
+    if (mapConverterAnnotation == null) {
+      return null;
+    }
+    return mapConverterAnnotation.getField('fields')?.toListValue();
+  }
+  // Iterable<element> _findFieldsToProcess(ClassElement classElement) {
   //   var publicFields = _findAllPublicFields(classElement);
   //   var propertyNamesToIgnore = _findPropertyNamesToIgnore(classElement);
   //   var fieldsToProcess = publicFields
@@ -513,15 +600,15 @@ class DomainClassFactory {
   //   return fieldsToProcess;
   // }
 
-  bool _isPublicPropertyField(FieldElement fieldElement) =>
-      fieldElement.isPublic &&
-      !fieldElement.isAbstract &&
-      !fieldElement.isStatic &&
-      !fieldElement.isConst &&
-      (fieldElement.setter != null || _isSetInConstructor(fieldElement)) &&
-      fieldElement.type is InterfaceType;
+  bool _isPublicPropertyField(FieldElement element) =>
+      element.isPublic &&
+      !element.isAbstract &&
+      !element.isStatic &&
+      !element.isConst &&
+      (element.setter != null || _isSetInConstructor(element)) &&
+      element.type is InterfaceType;
 
-  bool _isSetInConstructor(FieldElement fieldElement) => fieldElement.isFinal;
+  bool _isSetInConstructor(FieldElement element) => element.isFinal;
 
   bool _hasMapConverterAnnotation(Element element) {
     for (var annotation in element.metadata.annotations) {
@@ -531,6 +618,17 @@ class DomainClassFactory {
       }
     }
     return false;
+  }
+
+  List<FieldMetadata> findFieldsThatAreNotSet(
+      List<FieldMetadata> fields, Constructor bestConstructor) {
+    var fieldsSetByConstructor = bestConstructor.fieldsBeingSet;
+    var fieldsWithSetter =
+        fields.where((field) => field.element.setter != null);
+    var fieldsThatAreNotSet = [...fields]..removeWhere((field) =>
+        fieldsSetByConstructor.contains(field) ||
+        fieldsWithSetter.contains(field));
+    return fieldsThatAreNotSet;
   }
 
   // /// get property names to ignore from [MapConverter.properties] annotation
@@ -557,59 +655,93 @@ class DomainClassFactory {
   // }
 }
 
+MapValueToObjectExpressionFunction
+    createMapValueToObjectExpressionCustomFunction({
+  //FIXME: simpler names
+  required String functionName,
+  required String functionLibraryUri,
+}) =>
+        (
+          MapConverterLibraryAssetIdFactory idFactory,
+          code.Expression source,
+          InterfaceType typeToConvert,
+        ) =>
+            code.Expression.callMethodOrFunction(
+              functionName,
+              libraryUri: functionLibraryUri,
+              parameterValues:
+                  code.ParameterValues([code.ParameterValue(source)]),
+            );
+
+ObjectToMapValueExpressionFunction
+    createObjectToMapValueExpressionCustomFunction({
+  //FIXME: simpler names
+  required String functionName,
+  required String functionLibraryUri,
+}) =>
+        (
+          MapConverterLibraryAssetIdFactory idFactory,
+          code.Expression source,
+          InterfaceType typeToConvert,
+        ) =>
+            code.Expression.callMethodOrFunction(
+              functionName,
+              libraryUri: functionLibraryUri,
+              parameterValues:
+                  code.ParameterValues([code.ParameterValue(source)]),
+            );
+
 class BestConstructorFactory {
   /// returns the best constructor to be used to create an DomainObject when
   /// converting a [Map] to a DomainObject
-  Constructor createFor(ClassElement classElement,
-      List<PropertyWithValueExpressionFactory> properties) {
-    var constructors = _usefulConstructors(classElement, properties);
+  Constructor createFor(ClassElement classElement, List<FieldMetadata> fields) {
+    var constructors = _usefulConstructors(classElement, fields);
     _orderByNumberOfPropertiesSet(constructors);
     return constructors.first;
   }
 
   /// constructor that sets most properties is put at the begin of the list
   void _orderByNumberOfPropertiesSet(List<Constructor> constructors) =>
-      constructors.sort((a, b) =>
-          b.propertiesBeingSet.length.compareTo(a.propertiesBeingSet.length));
+      constructors.sort(
+          (a, b) => b.fieldsBeingSet.length.compareTo(a.fieldsBeingSet.length));
 
   List<Constructor> _usefulConstructors(
     ClassElement classElement,
-    List<PropertyWithValueExpressionFactory> properties,
+    List<FieldMetadata> fields,
   ) {
     var constructors = <Constructor>[];
     for (var constructorElement in classElement.constructors) {
-      Constructor? constructor =
-          _usefulConstructor(constructorElement, properties);
+      Constructor? constructor = _usefulConstructor(constructorElement, fields);
       if (constructor != null) {
         constructors.add(constructor);
       }
     }
     if (constructors.isEmpty) {
-      constructors.add(Constructor.basic());
+      constructors.add(Constructor.withoutParameters());
     }
     return constructors;
   }
 
-  /// returns null if the constructor has parameters that are not understood
-  Constructor? _usefulConstructor(ConstructorElement constructorElement,
-      List<PropertyWithValueExpressionFactory> properties) {
+  /// returns null if the constructor has parameters that can not be mapped to fields
+  Constructor? _usefulConstructor(
+      ConstructorElement constructorElement, List<FieldMetadata> fields) {
     var name = constructorElement.name;
-    var requiredPositionalParameters = <PropertyWithValueExpressionFactory>[];
-    var namedParameters = <PropertyWithValueExpressionFactory>[];
-    var optionalParameters = <PropertyWithValueExpressionFactory>[];
+    var requiredPositionalParameters = <FieldMetadata>[];
+    var namedParameters = <FieldMetadata>[];
+    var optionalParameters = <FieldMetadata>[];
     for (var parameter in constructorElement.formalParameters) {
-      var property = _findProperty(parameter, properties);
-      if (property == null && parameter.isRequired) {
+      var field = _findProperty(parameter, fields);
+      if (field == null && parameter.isRequired) {
         //do not know what to do with this constructor parameter
         return null;
       }
-      if (property != null) {
+      if (field != null) {
         if (parameter.isRequiredPositional) {
-          requiredPositionalParameters.add(property);
+          requiredPositionalParameters.add(field);
         } else if (parameter.isNamed) {
-          namedParameters.add(property);
+          namedParameters.add(field);
         } else if (parameter.isOptional) {
-          optionalParameters.add(property);
+          optionalParameters.add(field);
         }
       }
     }
@@ -621,20 +753,17 @@ class BestConstructorFactory {
     );
   }
 
-  PropertyWithValueExpressionFactory? _findProperty(
+  FieldMetadata? _findProperty(
     FormalParameterElement parameter,
-    List<PropertyWithValueExpressionFactory> properties,
+    List<FieldMetadata> fields,
   ) =>
-      properties
-          .firstWhereOrNull((property) => _isComparable(parameter, property));
+      fields.firstWhereOrNull((field) => _isComparable(parameter, field));
 
-  bool _isComparable(
-          FormalParameterElement parameter, PropertyWithBuildInfo property) =>
-      property.name == parameter.name &&
-      property.fieldElement.type.element != null &&
+  bool _isComparable(FormalParameterElement parameter, FieldMetadata field) =>
+      field.element.name == parameter.name &&
+      field.element.type.element != null &&
       parameter.type.element != null &&
-      property.fieldElement.type.element!.name ==
-          parameter.type.element!.name &&
-      property.fieldElement.type.element?.library?.uri ==
+      field.element.type.element!.name == parameter.type.element!.name &&
+      field.element.type.element?.library?.uri ==
           parameter.type.element?.library?.uri;
 }

@@ -3,11 +3,9 @@ import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:collection/collection.dart';
 import 'package:dart_code/dart_code.dart' as code;
-import 'package:map_converter/map_converter.dart';
 import 'package:map_converter/src/builder/map_converter_builder.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/big_int.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/bool.dart';
-import 'package:map_converter/src/builder/value_expression_factory/implementation/custom_converter.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/date_time.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/domain_object.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/double.dart';
@@ -22,28 +20,28 @@ import 'package:map_converter/src/builder/value_expression_factory/implementatio
 import 'package:map_converter/src/builder/value_expression_factory/implementation/uri.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/list.dart';
 
-class Query {
-  final InterfaceType typeToConvert;
-  final Property? propertyAnnotation;
+// class Query {
+//   final InterfaceType typeToConvert;
+//   final Property? propertyAnnotation;
 
-  Query(this.typeToConvert, [this.propertyAnnotation]);
+//   Query(this.typeToConvert, [this.propertyAnnotation]);
 
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    return other is Query &&
-        other.typeToConvert == typeToConvert &&
-        other.propertyAnnotation == propertyAnnotation;
-  }
+//   @override
+//   bool operator ==(Object other) {
+//     if (identical(this, other)) return true;
+//     return other is Query &&
+//         other.typeToConvert == typeToConvert &&
+//         other.propertyAnnotation == propertyAnnotation;
+//   }
 
-  @override
-  int get hashCode => typeToConvert.hashCode ^ propertyAnnotation.hashCode;
+//   @override
+//   int get hashCode => typeToConvert.hashCode ^ propertyAnnotation.hashCode;
 
-  @override
-  String toString() {
-    return 'Query(typeToConvert: $typeToConvert, propertyAnnotation: $propertyAnnotation)';
-  }
-}
+//   @override
+//   String toString() {
+//     return 'Query(typeToConvert: $typeToConvert, propertyAnnotation: $propertyAnnotation)';
+//   }
+// }
 
 abstract class SupportResult {
   static SupportResult of(bool supported) {
@@ -60,11 +58,11 @@ class Supported implements SupportResult {
   const Supported();
 }
 
-class SupportedIfQueriesAreSupported implements SupportResult {
+class SupportedIfTypesAreSupported implements SupportResult {
   /// Types that need to be supported
-  final Set<Query> queriesThatMustBeSupported;
+  final Set<InterfaceType> typesThatMustBeSupported;
 
-  const SupportedIfQueriesAreSupported(this.queriesThatMustBeSupported);
+  const SupportedIfTypesAreSupported(this.typesThatMustBeSupported);
 }
 
 /// Returned if a [ValueExpressionFactory] not process a given type and or property annotation
@@ -76,42 +74,12 @@ class NotSupported implements SupportResult {
 abstract class ValueExpressionFactory {
   SupportResult supports(
     InterfaceType typeToConvert,
-    Property? propertyAnnotation,
   );
 
-  /// Creates a Dart code expressions for a generated MapConverter
-  /// to convert a [PrimitiveType] to an object
-  code.Expression mapValueToObject(
-    MapConverterLibraryAssetIdFactory idFactory,
-    PropertyWithBuildInfo property,
+  
+  MapValueToObjectExpressionFunction get mapValueToObjectFunction;
 
-    /// [source]: An expression of the source data, e.g.:
-    /// * personMap['propertyName'] (a [PrimitiveType] within a [Map])
-    /// * enumValue
-    /// * listElement
-    /// * setElement
-    /// * k (for a key value in a [Map])
-    /// * v (for a value in a [Map])
-    code.Expression source,
-    InterfaceType typeToConvert,
-  );
-
-  /// Creates a Dart code expressions for a generated MapConverter
-  /// to convert a [source] object to a [PrimitiveType]
-  code.Expression objectToMapValue(
-    MapConverterLibraryAssetIdFactory idFactory,
-    PropertyWithBuildInfo property,
-
-    /// [source]: An expression of the source data, e.g.:
-    /// * person.name (a field or property value of an object)
-    /// * enumValue
-    /// * listElement
-    /// * setElement
-    /// * k (for a key value in a [Map])
-    /// * v (for a value in a [Map])
-    code.Expression source,
-    InterfaceType typeToConvert,
-  );
+  ObjectToMapValueExpressionFunction get objectToMapValueFunction;
 }
 
 /// By convention, a [PrimitiveMap] map:
@@ -165,34 +133,31 @@ class ValueExpressionFactories extends DelegatingList<ValueExpressionFactory> {
 
   ValueExpressionFactories._internal()
       : super([
-          /// [CustomConverterExpressionFactory] must be first in the list
-          /// so that it overrides other factories
-          CustomConverterExpressionFactory(),
           ..._coreValueExpressionFactories,
           ..._collectionValueExpressionFactories
         ]);
 
-  final Map<Query, ValueExpressionFactory> _knownMatches = {};
+  final Map<InterfaceType, ValueExpressionFactory> _knownMatches = {};
 
-  ValueExpressionFactory? findFor(Query query,
-      [Set<Query> queriesBeingSearched = const {}]) {
-    if (_knownMatches.containsKey(query)) {
-      return _knownMatches[query];
+  ValueExpressionFactory? findFor(InterfaceType typeToConvert,
+      [Set<InterfaceType> typesBeingSearched = const {}]) {
+    if (_knownMatches.containsKey(typeToConvert)) {
+      return _knownMatches[typeToConvert];
     }
 
     for (var valueExpressionFactory in this) {
       var result = valueExpressionFactory.supports(
-          query.typeToConvert, query.propertyAnnotation);
+          typeToConvert);
       if (result is Supported) {
-        _knownMatches[query] = valueExpressionFactory;
+        _knownMatches[typeToConvert] = valueExpressionFactory;
         return valueExpressionFactory;
       }
-      if (result is SupportedIfQueriesAreSupported) {
-        queriesBeingSearched = {...queriesBeingSearched, query};
+      if (result is SupportedIfTypesAreSupported) {
+        typesBeingSearched = {...typesBeingSearched, typeToConvert};
         // removing queriesBeingSearched from typesThatMustBeSupported (if any)
         // to prevent infinite recursive calls
-        var queriesThatMustBeSupported = result.queriesThatMustBeSupported
-          ..removeAll(queriesBeingSearched);
+        var queriesThatMustBeSupported = result.typesThatMustBeSupported
+          ..removeAll(typesBeingSearched);
         if (supportsAll(queriesThatMustBeSupported)) {
           return valueExpressionFactory;
         }
@@ -201,13 +166,13 @@ class ValueExpressionFactories extends DelegatingList<ValueExpressionFactory> {
     return null;
   }
 
-  bool supportsAll(Set<Query> queryThatMustBeSupported,
-          [Set<Query> queriesBeingSearched = const {}]) =>
+  bool supportsAll(Set<InterfaceType> queryThatMustBeSupported,
+          [Set<InterfaceType> typesBeingSearched = const {}]) =>
       queryThatMustBeSupported
-          .every((query) => supports(query, queriesBeingSearched));
+          .every((query) => supports(query, typesBeingSearched));
 
-  bool supports(Query query, [Set<Query> queriesBeingSearched = const {}]) =>
-      findFor(query, queriesBeingSearched) != null;
+  bool supports(InterfaceType typeToConvert, [Set<InterfaceType> typesBeingSearched = const {}]) =>
+      findFor(typeToConvert, typesBeingSearched) != null;
 }
 
 code.Type createType(Element element, bool nullable) => code.Type(

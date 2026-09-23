@@ -892,8 +892,7 @@ class PersonElementFake extends ClassElement {
   String? get documentationComment => throw UnimplementedError();
 
   @override
-  List<FieldElement> get fields =>
-      [FieldElementFake('name', TypeFake.string())];
+  List<FieldElement> get fields => [FieldElementFake('name', TypeFake.string())];
 
   @override
   FieldElement? getField(String name) {
@@ -1159,12 +1158,6 @@ class PersonElementFake extends ClassElement {
   @override
   void visitChildren<T>(visitor) {}
 
-  //TODO ? @override
-  // List<ElementAnnotation> get metadata =>
-  //     [ElementAnnotationFake(TypeFake.mapConverter())];
-
-  // TODO ? @override
-  // String get name => 'Person';
 }
 
 class MetaDataFake extends Metadata {

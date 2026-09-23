@@ -29,7 +29,7 @@ void main() {
     });
 
     test("should.not.containKey('ignore')", () {
-      ignore.skip.should.be('ignore');
+      ignore.skip.should.be('do not convert');
     });
   });
 }

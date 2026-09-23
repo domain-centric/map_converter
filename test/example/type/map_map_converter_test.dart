@@ -65,20 +65,6 @@ void main() {
             .be({4.3: 'test'});
       });
     });
-// FIXME:
-    // group('Complex Key and Primitive Value', () {
-    //   test('mapWithComplexKeyAndPrimitiveValue', () {
-    //     example.mapWithComplexKeyAndPrimitiveValue.keys.first.name.should
-    //         .be('John');
-    //     example.mapWithComplexKeyAndPrimitiveValue.values.first.should.be(5);
-    //   });
-    //   test('mapWithComplexNullableKeyAndPrimitiveValue', () {
-    //     example.mapWithComplexNullableKeyAndPrimitiveValue.keys.first.should
-    //         .beNull();
-    //     example.mapWithComplexNullableKeyAndPrimitiveValue.values.first.should
-    //         .be(6);
-    //   });
-    // });
 
     group('Primitive Key and Complex Value', () {
       test('mapWithPrimitiveKeyAndComplexValue', () {

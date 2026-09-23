@@ -1,4 +1,3 @@
-import 'package:map_converter/src/builder/map_converter_builder.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/double.dart';
 import 'package:map_converter/src/builder/value_expression_factory/value_expression_factory.dart';
 import 'package:shouldly/shouldly.dart';
@@ -15,33 +14,28 @@ void main() {
   group('class $DoubleExpressionFactory()', () {
     var expressionFactory = DoubleExpressionFactory();
     var propertyName = 'ageInDays';
-    var propertyWithBuildInfo = PropertyWithBuildInfo(
-      propertyName,
-      fieldElement: FieldElementFake(propertyName, TypeFake.double()),
-    );
     test('supports(double) should return Supported', () {
       expressionFactory
-          .supports(TypeFake.double(), null)
+          .supports(TypeFake.double())
           .should
           .beOfType<Supported>();
     });
     test('supports(double?) should return Supported', () {
       expressionFactory
-          .supports(TypeFake.double(), null)
+          .supports(TypeFake.double())
           .should
           .beOfType<Supported>();
     });
     test('supports(int) should return NotSupported', () {
       expressionFactory
-          .supports(TypeFake.int(), null)
+          .supports(TypeFake.int())
           .should
           .beOfType<NotSupported>();
     });
     test('mapValueToObject nullable=false', () {
       expressionFactory
-          .mapValueToObject(
+          .mapValueToObjectFunction(
             idFactory,
-            propertyWithBuildInfo,
             mapValueExpression(mapVariableName, propertyName),
             TypeFake.double(),
           )
@@ -51,9 +45,8 @@ void main() {
     });
     test('mapValueToObject nullable=true', () {
       expressionFactory
-          .mapValueToObject(
+          .mapValueToObjectFunction(
             idFactory,
-            propertyWithBuildInfo,
             mapValueExpression(mapVariableName, propertyName),
             TypeFake.double(nullable: true),
           )
@@ -64,9 +57,8 @@ void main() {
 
     test('objectToMapValue nullable=false', () {
       expressionFactory
-          .objectToMapValue(
+          .objectToMapValueFunction(
             idFactory,
-            propertyWithBuildInfo,
             objectPropertyExpression(instanceVariableName, propertyName),
             TypeFake.double(),
           )
@@ -76,9 +68,8 @@ void main() {
     });
     test('objectToMapValue nullable=true', () {
       expressionFactory
-          .objectToMapValue(
+          .objectToMapValueFunction(
             idFactory,
-            propertyWithBuildInfo,
             objectPropertyExpression(instanceVariableName, propertyName),
             TypeFake.double(nullable: true),
           )

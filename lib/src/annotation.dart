@@ -1,6 +1,5 @@
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
-import 'package:analyzer/dart/element/type.dart';
 import 'package:collection/collection.dart';
 
 /// [Annotation] to add to your class to:
@@ -38,17 +37,17 @@ class MapConverter {
 }
 
 class GenerateOptions {
-  /// Indicates to generate a toMap function.
-  static const toMapFunction = 0x1;
+  /// Indicates to generate a toMap method.
+  static const int toMap = 0x1;
 
-  /// Indicates to to generate a fromMap function.
-  static const fromMapFunction = 0x2;
+  /// Indicates to to generate a fromMap method.
+  static const int fromMap = 0x2;
 
-  /// Indicates to to generate a schema function.
-  static const schemaFunction = 0x4;
+  /// Indicates to to generate a schema method.
+  static const int schema = 0x4;
 
   /// Indicates to generate all available methods.
-  static const all = 0xF;
+  static const int all = toMap + fromMap + schema;
 }
 
 typedef Converter<RETURN_VALUE, SOURCE_VALUE> = RETURN_VALUE Function(
@@ -86,39 +85,6 @@ class Field<OBJECT_TYPE, PRIMITIVE_TYPE> {
   }
 }
 
-// abstract class PrimitiveConverter<SOURCE, PRIMITIVE> {
-//   const PrimitiveConverter();
-
-//   PRIMITIVE toPrimitive(SOURCE value);
-
-//   SOURCE fromPrimitive(PRIMITIVE value);
-// }
-
-// MapConverter? createFromClassElement(ClassElement domainClassElement) {
-//   final mapConverterAnnotation =
-//       createMapConverterAnnotation(domainClassElement);
-
-//   final generateOptions =
-//       mapConverterAnnotation?.getField('generateOptions')?.toIntValue() ??
-//           GenerateOptions.all;
-
-//   final fields = mapConverterAnnotation
-//           ?.getField('fields')
-//           ?.toListValue()
-//           ?.map((element) => Field(
-//                 Symbol(element.getField('symbol')!.toStringValue() ?? ''),
-//                 alias: element.getField('alias')?.toStringValue(),
-//                 ignore: element.getField('ignore')!.toBoolValue() ?? false,
-//                 // toPrimitiveConverterType:
-//                 //     _converterType(element, 'toPrimitiveConverter'),
-//                 // fromPrimitiveConverterType:
-//                 //     _converterType(element, 'fromPrimitiveConverter'),
-//               ))
-//           .toList() ??
-//       [];
-
-//   return MapConverter(generateOptions: generateOptions, fields: fields);
-// }
 
 DartObject? findMapConverterAnnotation(ClassElement domainClassElement) =>
     domainClassElement.metadata.annotations
@@ -129,24 +95,4 @@ DartObject? findMapConverterAnnotation(ClassElement domainClassElement) =>
         )
         ?.computeConstantValue();
 
-DartType? _converterType(DartObject element, String fieldName) {
-  final DartObject? converterObject = element.getField(fieldName);
-  if (converterObject == null || converterObject.isNull) {
-    return null;
-  } else {
-    return converterObject.type;
-  }
-}
 
-// class FieldWithConverterTypes extends Field {
-//   final DartType? toPrimitiveConverterType;
-//   final DartType? fromPrimitiveConverterType;
-
-//   const FieldWithConverterTypes(
-//     String name, {
-//     super.alias,
-//     super.ignore = false,
-//     this.toPrimitiveConverterType,
-//     this.fromPrimitiveConverterType,
-//   }) : super(Symbol(name));
-// }

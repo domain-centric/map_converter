@@ -1,4 +1,3 @@
-import 'package:map_converter/src/builder/map_converter_builder.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/uri.dart';
 import 'package:map_converter/src/builder/value_expression_factory/value_expression_factory.dart';
 import 'package:shouldly/shouldly.dart';
@@ -15,33 +14,28 @@ void main() {
   group('class: $UriExpressionFactory()', () {
     var expressionFactory = UriExpressionFactory();
     var propertyName = 'webSite';
-    var propertyWithBuildInfo = PropertyWithBuildInfo(
-      propertyName,
-      fieldElement: FieldElementFake(propertyName, TypeFake.uri()),
-    );
     test('supports(Uri) should return Supported', () {
       expressionFactory
-          .supports(TypeFake.uri(), null)
+          .supports(TypeFake.uri())
           .should
           .beOfType<Supported>();
     });
     test('supports(Uri?) should return Supported', () {
       expressionFactory
-          .supports(TypeFake.uri(nullable: true), null)
+          .supports(TypeFake.uri(nullable: true))
           .should
           .beOfType<Supported>();
     });
     test('supports(int) should return NotSupported', () {
       expressionFactory
-          .supports(TypeFake.int(), null)
+          .supports(TypeFake.int())
           .should
           .beOfType<NotSupported>();
     });
     test('mapValueToObject nullable=false', () {
       expressionFactory
-          .mapValueToObject(
+          .mapValueToObjectFunction(
             idFactory,
-            propertyWithBuildInfo,
             mapValueExpression(mapVariableName, propertyName),
             TypeFake.uri(),
           )
@@ -51,9 +45,8 @@ void main() {
     });
     test('mapValueToObject nullable=true', () {
       expressionFactory
-          .mapValueToObject(
+          .mapValueToObjectFunction(
             idFactory,
-            propertyWithBuildInfo,
             mapValueExpression(mapVariableName, propertyName),
             TypeFake.uri(nullable: true),
           )
@@ -64,9 +57,8 @@ void main() {
 
     test('objectToMapValue nullable=false', () {
       expressionFactory
-          .objectToMapValue(
+          .objectToMapValueFunction(
             idFactory,
-            propertyWithBuildInfo,
             objectPropertyExpression(instanceVariableName, propertyName),
             TypeFake.uri(),
           )
@@ -76,9 +68,8 @@ void main() {
     });
     test('objectToMapValue nullable=true', () {
       expressionFactory
-          .objectToMapValue(
+          .objectToMapValueFunction(
               idFactory,
-              propertyWithBuildInfo,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.uri(nullable: true))
           .toUnFormattedString()

@@ -1,4 +1,3 @@
-import 'package:map_converter/src/builder/map_converter_builder.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/bool.dart';
 import 'package:map_converter/src/builder/value_expression_factory/value_expression_factory.dart';
 import 'package:shouldly/shouldly.dart';
@@ -15,15 +14,10 @@ void main() {
   group('class: $BoolExpressionFactory', () {
     var expressionFactory = BoolExpressionFactory();
     var propertyName = 'adult';
-    var propertyWithBuildInfo = PropertyWithBuildInfo(
-      propertyName,
-      fieldElement: FieldElementFake(propertyName, TypeFake.bool()),
-    );
     test('supports(bool)', () {
       expressionFactory
           .supports(
             TypeFake.bool(),
-            null,
           )
           .should
           .beOfType<Supported>();
@@ -32,7 +26,6 @@ void main() {
       expressionFactory
           .supports(
             TypeFake.bool(nullable: true),
-            null,
           )
           .should
           .beOfType<Supported>();
@@ -41,16 +34,14 @@ void main() {
       expressionFactory
           .supports(
             TypeFake.int(),
-            null,
           )
           .should
           .beOfType<NotSupported>();
     });
     test('mapValueToObject nullable=false', () {
       expressionFactory
-          .mapValueToObject(
+          .mapValueToObjectFunction(
             idFactory,
-            propertyWithBuildInfo,
             mapValueExpression(mapVariableName, propertyName),
             TypeFake.bool(),
           )
@@ -60,9 +51,8 @@ void main() {
     });
     test('mapValueToObject nullable=true', () {
       expressionFactory
-          .mapValueToObject(
+          .mapValueToObjectFunction(
             idFactory,
-            propertyWithBuildInfo,
             mapValueExpression(mapVariableName, propertyName),
             TypeFake.bool(nullable: true),
           )
@@ -73,9 +63,8 @@ void main() {
 
     test('objectToMapValue nullable=false', () {
       expressionFactory
-          .mapValueToObject(
+          .mapValueToObjectFunction(
             idFactory,
-            propertyWithBuildInfo,
             objectPropertyExpression(instanceVariableName, propertyName),
             TypeFake.bool(),
           )
@@ -85,9 +74,8 @@ void main() {
     });
     test('objectToMapValue nullable=true', () {
       expressionFactory
-          .objectToMapValue(
+          .objectToMapValueFunction(
             idFactory,
-            propertyWithBuildInfo,
             objectPropertyExpression(instanceVariableName, propertyName),
             TypeFake.bool(nullable: true),
           )

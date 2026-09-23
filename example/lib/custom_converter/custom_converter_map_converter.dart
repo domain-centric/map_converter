@@ -6,7 +6,7 @@ import '../../../example/lib/custom_converter/custom_converter.dart' as i1;
 /// Generate command: dart run build_runner build --delete-conflicting-outputs
 /// For more information see: https://pub.dev/packages/map_converter
 i1.Example mapToExample(Map<String, dynamic> exampleMap) =>
-    i1.Example(i1.MyConverter().fromPrimitive(exampleMap['dateTime']));
+    i1.Example(DateTime.parse(exampleMap['dateTime'] as String));
 Map<String, dynamic> exampleToMap(i1.Example example) => {
-  'dateTime': i1.MyConverter().toPrimitive(example.dateTime),
+  'dateTime': example.dateTime.toIso8601String(),
 };

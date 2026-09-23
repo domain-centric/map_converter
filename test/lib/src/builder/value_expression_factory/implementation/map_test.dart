@@ -1,4 +1,3 @@
-import 'package:map_converter/src/builder/map_converter_builder.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/map.dart';
 import 'package:map_converter/src/builder/value_expression_factory/value_expression_factory.dart';
 import 'package:shouldly/shouldly.dart';
@@ -19,36 +18,32 @@ void main() {
     group("for: Map<int,String>", () {
       var keyType = TypeFake.int();
       var valueType = TypeFake.string();
-      var propertyWithBuildInfo = PropertyWithBuildInfo(propertyName,
-          fieldElement: FieldElementFake(
-              mapVariableName, TypeFake.map(keyType, valueType)));
       test(
           'supports(Map<int,String>) should return SupportedIfQueriesAreSupported',
           () {
         expressionFactory
-            .supports(TypeFake.map(keyType, valueType), null)
+            .supports(TypeFake.map(keyType, valueType))
             .should
-            .beOfType<SupportedIfQueriesAreSupported>();
+            .beOfType<SupportedIfTypesAreSupported>();
       });
       test(
           'supports(Map<int,String>?) should return SupportedIfQueriesAreSupported',
           () {
         expressionFactory
-            .supports(TypeFake.map(keyType, valueType, nullable: true), null)
+            .supports(TypeFake.map(keyType, valueType, nullable: true))
             .should
-            .beOfType<SupportedIfQueriesAreSupported>();
+            .beOfType<SupportedIfTypesAreSupported>();
       });
       test('supports(int) should return NotSupported', () {
         expressionFactory
-            .supports(TypeFake.int(), null)
+            .supports(TypeFake.int())
             .should
             .beOfType<NotSupported>();
       });
       test('mapValueToObject nullable=false', () {
         expressionFactory
-            .mapValueToObject(
+            .mapValueToObjectFunction(
               idFactory,
-              propertyWithBuildInfo,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.map(keyType, valueType),
             )
@@ -58,9 +53,8 @@ void main() {
       });
       test('mapValueToObject nullable=true', () {
         expressionFactory
-            .mapValueToObject(
+            .mapValueToObjectFunction(
               idFactory,
-              propertyWithBuildInfo,
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.map(keyType, valueType, nullable: true),
             )
@@ -70,9 +64,8 @@ void main() {
       });
       test('objectToMapValue nullable=false', () {
         expressionFactory
-            .objectToMapValue(
+            .objectToMapValueFunction(
               idFactory,
-              propertyWithBuildInfo,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.map(keyType, valueType),
             )
@@ -82,9 +75,8 @@ void main() {
       });
       test('objectToMapValue nullable=true', () {
         expressionFactory
-            .objectToMapValue(
+            .objectToMapValueFunction(
               idFactory,
-              propertyWithBuildInfo,
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.map(keyType, valueType, nullable: true),
             )

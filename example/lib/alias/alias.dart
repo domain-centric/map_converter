@@ -1,8 +1,8 @@
 import 'package:map_converter/map_converter.dart';
 
-@MapConverter([
-  Property('email', alias: 'emailAddress'),
-  Property('phoneNumber', alias: 'contactNumber'),
+@MapConverter(fields: [
+  Field(#email, alias: 'emailAddress'),
+  Field(#phoneNumber, alias: 'contactNumber'),
 ])
 class Example {
   final String email;

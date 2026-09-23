@@ -1,24 +1,22 @@
 import 'package:map_converter/map_converter.dart';
 
-@MapConverter([
-  Property(
-    'dateTime',
-    converter: MyConverter(),
+@MapConverter(fields:[
+  Field<DateTime, int>(
+    #dateTime,
+    toPrimitiveConverter: dateTimeToPrimitive,
+    fromPrimitiveConverter: dateTimeFromPrimitive
   )
 ])
+
+
 class Example {
   final DateTime dateTime;
 
   Example(this.dateTime);
 }
 
-class MyConverter extends PrimitiveConverter<DateTime, int> {
-  const MyConverter();
+  int dateTimeToPrimitive(DateTime value) => value.millisecondsSinceEpoch;
 
-  @override
-  int toPrimitive(DateTime value) => value.millisecondsSinceEpoch;
-
-  @override
-  DateTime fromPrimitive(int value) =>
+  DateTime dateTimeFromPrimitive(int value) =>
       DateTime.fromMillisecondsSinceEpoch(value);
-}
+

@@ -1,4 +1,3 @@
-import 'package:map_converter/src/builder/map_converter_builder.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/enum.dart';
 import 'package:map_converter/src/builder/value_expression_factory/value_expression_factory.dart';
 import 'package:shouldly/shouldly.dart';
@@ -15,33 +14,28 @@ void main() {
   group("class: $EnumExpressionFactory()", () {
     var expressionFactory = EnumExpressionFactory();
     var propertyName = 'gender';
-    var propertyWithBuildInfo = PropertyWithBuildInfo(
-      propertyName,
-      fieldElement: FieldElementFake(propertyName, TypeFake.genderEnum()),
-    );
     test('supports(TestEnum) should return Supported', () {
       expressionFactory
-          .supports(TypeFake.genderEnum(), null)
+          .supports(TypeFake.genderEnum())
           .should
           .beOfType<Supported>();
     });
     test('supports(TestEnum?) should return Supported', () {
       expressionFactory
-          .supports(TypeFake.genderEnum(nullable: true), null)
+          .supports(TypeFake.genderEnum(nullable: true))
           .should
           .beOfType<Supported>();
     });
     test('supports(int) should return NotSupported', () {
       expressionFactory
-          .supports(TypeFake.int(), null)
+          .supports(TypeFake.int())
           .should
           .beOfType<NotSupported>();
     });
-    test('mapValueToObject nullable=false', () {
+    test('.mapValueToObjectFunction nullable=false', () {
       expressionFactory
-          .mapValueToObject(
+          .mapValueToObjectFunction(
             idFactory,
-            propertyWithBuildInfo,
             mapValueExpression(mapVariableName, propertyName),
             TypeFake.genderEnum(),
           )
@@ -50,11 +44,11 @@ void main() {
           .be("i1.Gender.values.firstWhere((enumValue) "
               "=> enumValue.name==$mapVariableName['$propertyName'])");
     });
-    test('mapValueToObject nullable=true', () {
+    test('.mapValueToObjectFunction nullable=true', () {
       expressionFactory
-          .mapValueToObject(
+          .mapValueToObjectFunction(
             idFactory,
-            propertyWithBuildInfo,
+            
             mapValueExpression(mapVariableName, propertyName),
             TypeFake.genderEnum(nullable: true),
           )
@@ -68,9 +62,9 @@ void main() {
 
     test('objectToMapValue nullable=false', () {
       expressionFactory
-          .objectToMapValue(
+          .objectToMapValueFunction(
             idFactory,
-            propertyWithBuildInfo,
+            
             objectPropertyExpression(instanceVariableName, propertyName),
             TypeFake.genderEnum(),
           )
@@ -80,9 +74,9 @@ void main() {
     });
     test('objectToMapValue nullable=true', () {
       expressionFactory
-          .objectToMapValue(
+          .objectToMapValueFunction(
             idFactory,
-            propertyWithBuildInfo,
+            
             objectPropertyExpression(instanceVariableName, propertyName),
             TypeFake.genderEnum(nullable: true),
           )

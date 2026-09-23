@@ -1,4 +1,3 @@
-import 'package:map_converter/src/builder/map_converter_builder.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/big_int.dart';
 import 'package:map_converter/src/builder/value_expression_factory/value_expression_factory.dart';
 import 'package:shouldly/shouldly.dart';
@@ -15,19 +14,19 @@ void main() {
   group('class: $BigIntExpressionFactory()', () {
     var expressionFactory = BigIntExpressionFactory();
     var propertyName = 'ageInMicroSeconds';
-    var propertyWithBuildInfo = PropertyWithBuildInfo(
-      propertyName,
-      fieldElement: FieldElementFake(propertyName, TypeFake.bigInt()),
-    );
+    // var propertyWithBuildInfo = PropertyWithBuildInfo(
+    //   propertyName,
+    //   element: elementFake(propertyName, TypeFake.bigInt()),
+    // );
     test('supports(BigInt)', () {
       expressionFactory
-          .supports(TypeFake.bigInt(), null)
+          .supports(TypeFake.bigInt())
           .should
           .beOfType<Supported>();
     });
     test('supports(BigInt?)', () {
       expressionFactory
-          .supports(TypeFake.bigInt(nullable: true), null)
+          .supports(TypeFake.bigInt(nullable: true))
           .should
           .beOfType<Supported>();
     });
@@ -35,16 +34,14 @@ void main() {
       expressionFactory
           .supports(
             TypeFake.int(),
-            null,
           )
           .should
           .beOfType<NotSupported>();
     });
     test('mapValueToObject(BigInt)', () {
       expressionFactory
-          .mapValueToObject(
+          .mapValueToObjectFunction(
             idFactory,
-            propertyWithBuildInfo,
             mapValueExpression(mapVariableName, propertyName),
             TypeFake.bigInt(),
           )
@@ -54,9 +51,8 @@ void main() {
     });
     test('mapValueToObject(BigInt?)', () {
       expressionFactory
-          .mapValueToObject(
+          .mapValueToObjectFunction(
             idFactory,
-            propertyWithBuildInfo,
             mapValueExpression(mapVariableName, propertyName),
             TypeFake.bigInt(nullable: true),
           )
@@ -67,9 +63,8 @@ void main() {
 
     test('objectToMapValue(BigInt)', () {
       expressionFactory
-          .objectToMapValue(
+          .objectToMapValueFunction(
             idFactory,
-            propertyWithBuildInfo,
             objectPropertyExpression(instanceVariableName, propertyName),
             TypeFake.bigInt(),
           )
@@ -79,9 +74,8 @@ void main() {
     });
     test('objectToMapValue(BigInt?)', () {
       expressionFactory
-          .objectToMapValue(
+          .objectToMapValueFunction(
             idFactory,
-            propertyWithBuildInfo,
             objectPropertyExpression(instanceVariableName, propertyName),
             TypeFake.bigInt(nullable: true),
           )

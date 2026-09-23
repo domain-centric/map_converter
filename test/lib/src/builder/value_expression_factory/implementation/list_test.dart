@@ -1,4 +1,3 @@
-import 'package:map_converter/src/builder/map_converter_builder.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/list.dart';
 import 'package:map_converter/src/builder/value_expression_factory/value_expression_factory.dart';
 import 'package:recase/recase.dart';
@@ -19,34 +18,31 @@ void main() {
     group("for: List<bool>", () {
       var genericType = TypeFake.bool();
       var propertyName = '${genericType.toString().camelCase}s';
-      var propertyWithBuildInfo = PropertyWithBuildInfo(propertyName,
-          fieldElement:
-              FieldElementFake(propertyName, TypeFake.list(genericType)));
       test('supports(List<bool>) should return SupportedIfQueriesAreSupported',
           () {
         expressionFactory
-            .supports(TypeFake.list(genericType), null)
+            .supports(TypeFake.list(genericType))
             .should
-            .beOfType<SupportedIfQueriesAreSupported>();
+            .beOfType<SupportedIfTypesAreSupported>();
       });
       test('supports(List<bool>?) should return SupportedIfQueriesAreSupported',
           () {
         expressionFactory
-            .supports(TypeFake.list(genericType, nullable: true), null)
+            .supports(TypeFake.list(genericType, nullable: true))
             .should
-            .beOfType<SupportedIfQueriesAreSupported>();
+            .beOfType<SupportedIfTypesAreSupported>();
       });
       test('supports(int) should return NotSupported', () {
         expressionFactory
-            .supports(TypeFake.int(), null)
+            .supports(TypeFake.int())
             .should
             .beOfType<NotSupported>();
       });
       test('mapValueToObject nullable=false', () {
         expressionFactory
-            .mapValueToObject(
+            .mapValueToObjectFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.list(genericType),
             )
@@ -56,9 +52,9 @@ void main() {
       });
       test('mapValueToObject nullable=true', () {
         expressionFactory
-            .mapValueToObject(
+            .mapValueToObjectFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.list(genericType, nullable: true),
             )
@@ -68,9 +64,9 @@ void main() {
       });
       test('objectToMapValue nullable=false', () {
         expressionFactory
-            .objectToMapValue(
+            .objectToMapValueFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.list(genericType),
             )
@@ -80,9 +76,9 @@ void main() {
       });
       test('objectToMapValue nullable=true', () {
         expressionFactory
-            .objectToMapValue(
+            .objectToMapValueFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.list(genericType, nullable: true),
             )
@@ -95,46 +91,43 @@ void main() {
     group("for: List<num>", () {
       var genericType = TypeFake.num();
       var propertyName = '${genericType.toString().camelCase}s';
-      var propertyWithBuildInfo = PropertyWithBuildInfo(propertyName,
-          fieldElement:
-              FieldElementFake(propertyName, TypeFake.list(genericType)));
       test('supports(List<num>) should return SupportedIfQueriesAreSupported',
           () {
         expressionFactory
-            .supports(TypeFake.list(genericType), null)
+            .supports(TypeFake.list(genericType))
             .should
-            .beOfType<SupportedIfQueriesAreSupported>();
+            .beOfType<SupportedIfTypesAreSupported>();
       });
       test('supports(List<num>?) should return SupportedIfQueriesAreSupported',
           () {
         expressionFactory
-            .supports(TypeFake.list(genericType, nullable: true), null)
+            .supports(TypeFake.list(genericType, nullable: true))
             .should
-            .beOfType<SupportedIfQueriesAreSupported>();
+            .beOfType<SupportedIfTypesAreSupported>();
       });
       test('supports(int) should return NotSupported', () {
         expressionFactory
-            .supports(TypeFake.int(), null)
+            .supports(TypeFake.int())
             .should
             .beOfType<NotSupported>();
       });
       test('mapValueToObject nullable=false', () {
         expressionFactory
-            .mapValueToObject(
+            .mapValueToObjectFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.list(genericType),
             )
             .toUnFormattedString()
             .should
-            .be("$mapVariableName['$propertyName'].map((listElement) => listElement as $genericType ).toList().cast<i1.num>()");
+            .be("map['nums'].map((listElement) => listElement as num ).toList().cast<i1.num>()");
       });
       test('mapValueToObject nullable=true', () {
         expressionFactory
-            .mapValueToObject(
+            .mapValueToObjectFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.list(genericType, nullable: true),
             )
@@ -144,9 +137,9 @@ void main() {
       });
       test('objectToMapValue nullable=false', () {
         expressionFactory
-            .objectToMapValue(
+            .objectToMapValueFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.list(genericType),
             )
@@ -156,9 +149,9 @@ void main() {
       });
       test('objectToMapValue nullable=true', () {
         expressionFactory
-            .objectToMapValue(
+            .objectToMapValueFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.list(genericType, nullable: true),
             )
@@ -171,34 +164,31 @@ void main() {
     group("for: List<int>", () {
       var genericType = TypeFake.int();
       var propertyName = '${genericType.toString().camelCase}s';
-      var propertyWithBuildInfo = PropertyWithBuildInfo(propertyName,
-          fieldElement:
-              FieldElementFake(propertyName, TypeFake.list(genericType)));
       test('supports(List<int>) should return SupportedIfQueriesAreSupported',
           () {
         expressionFactory
-            .supports(TypeFake.list(genericType), null)
+            .supports(TypeFake.list(genericType))
             .should
-            .beOfType<SupportedIfQueriesAreSupported>();
+            .beOfType<SupportedIfTypesAreSupported>();
       });
       test('supports(List<int>?) should return SupportedIfQueriesAreSupported',
           () {
         expressionFactory
-            .supports(TypeFake.list(genericType, nullable: true), null)
+            .supports(TypeFake.list(genericType, nullable: true))
             .should
-            .beOfType<SupportedIfQueriesAreSupported>();
+            .beOfType<SupportedIfTypesAreSupported>();
       });
       test('supports(List<int>) should return NotSupported', () {
         expressionFactory
-            .supports(TypeFake.int(), null)
+            .supports(TypeFake.int())
             .should
             .beOfType<NotSupported>();
       });
       test('mapValueToObject nullable=false', () {
         expressionFactory
-            .mapValueToObject(
+            .mapValueToObjectFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.list(genericType),
             )
@@ -208,9 +198,9 @@ void main() {
       });
       test('mapValueToObject nullable=true', () {
         expressionFactory
-            .mapValueToObject(
+            .mapValueToObjectFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.list(genericType, nullable: true),
             )
@@ -220,9 +210,9 @@ void main() {
       });
       test('objectToMapValue nullable=false', () {
         expressionFactory
-            .objectToMapValue(
+            .objectToMapValueFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.list(genericType),
             )
@@ -232,9 +222,9 @@ void main() {
       });
       test('objectToMapValue nullable=true', () {
         expressionFactory
-            .objectToMapValue(
+            .objectToMapValueFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.list(genericType, nullable: true),
             )
@@ -247,38 +237,33 @@ void main() {
     group("for: List<double>", () {
       var genericType = TypeFake.double();
       var propertyName = '${genericType.toString().camelCase}s';
-      var propertyWithBuildInfo = PropertyWithBuildInfo(propertyName,
-          fieldElement: FieldElementFake(
-            propertyName,
-            TypeFake.list(genericType),
-          ));
       test(
           'supports(List<double>) should return SupportedIfQueriesAreSupported',
           () {
         expressionFactory
-            .supports(TypeFake.list(genericType), null)
+            .supports(TypeFake.list(genericType))
             .should
-            .beOfType<SupportedIfQueriesAreSupported>();
+            .beOfType<SupportedIfTypesAreSupported>();
       });
       test(
           'supports(List<double>?) should return SupportedIfQueriesAreSupported',
           () {
         expressionFactory
-            .supports(TypeFake.list(genericType, nullable: true), null)
+            .supports(TypeFake.list(genericType, nullable: true))
             .should
-            .beOfType<SupportedIfQueriesAreSupported>();
+            .beOfType<SupportedIfTypesAreSupported>();
       });
       test('supports(List<double>) should return NotSupported', () {
         expressionFactory
-            .supports(TypeFake.int(), null)
+            .supports(TypeFake.int())
             .should
             .beOfType<NotSupported>();
       });
       test('mapValueToObject nullable=false', () {
         expressionFactory
-            .mapValueToObject(
+            .mapValueToObjectFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.list(genericType),
             )
@@ -288,9 +273,9 @@ void main() {
       });
       test('mapValueToObject nullable=true', () {
         expressionFactory
-            .mapValueToObject(
+            .mapValueToObjectFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.list(genericType, nullable: true),
             )
@@ -300,9 +285,9 @@ void main() {
       });
       test('objectToMapValue nullable=false', () {
         expressionFactory
-            .objectToMapValue(
+            .objectToMapValueFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.list(genericType),
             )
@@ -312,9 +297,9 @@ void main() {
       });
       test('objectToMapValue nullable=true', () {
         expressionFactory
-            .objectToMapValue(
+            .objectToMapValueFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.list(genericType, nullable: true),
             )
@@ -327,36 +312,33 @@ void main() {
     group("for: List<String>", () {
       var genericType = TypeFake.string();
       var propertyName = '${genericType.toString().camelCase}s';
-      var propertyWithBuildInfo = PropertyWithBuildInfo(propertyName,
-          fieldElement:
-              FieldElementFake(propertyName, TypeFake.list(genericType)));
       test(
           'supports(List<String>) should return SupportedIfQueriesAreSupported',
           () {
         expressionFactory
-            .supports(TypeFake.list(genericType), null)
+            .supports(TypeFake.list(genericType))
             .should
-            .beOfType<SupportedIfQueriesAreSupported>();
+            .beOfType<SupportedIfTypesAreSupported>();
       });
       test(
           'supports(List<String>?) should return SupportedIfQueriesAreSupported',
           () {
         expressionFactory
-            .supports(TypeFake.list(genericType, nullable: true), null)
+            .supports(TypeFake.list(genericType, nullable: true))
             .should
-            .beOfType<SupportedIfQueriesAreSupported>();
+            .beOfType<SupportedIfTypesAreSupported>();
       });
       test('supports(List<String>) should return NotSupported', () {
         expressionFactory
-            .supports(TypeFake.int(), null)
+            .supports(TypeFake.int())
             .should
             .beOfType<NotSupported>();
       });
       test('mapValueToObject nullable=false', () {
         expressionFactory
-            .mapValueToObject(
+            .mapValueToObjectFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.list(genericType),
             )
@@ -366,9 +348,9 @@ void main() {
       });
       test('mapValueToObject nullable=true', () {
         expressionFactory
-            .mapValueToObject(
+            .mapValueToObjectFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.list(genericType, nullable: true),
             )
@@ -378,9 +360,9 @@ void main() {
       });
       test('objectToMapValue nullable=false', () {
         expressionFactory
-            .objectToMapValue(
+            .objectToMapValueFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.list(genericType),
             )
@@ -390,9 +372,9 @@ void main() {
       });
       test('objectToMapValue nullable=true', () {
         expressionFactory
-            .objectToMapValue(
+            .objectToMapValueFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.list(genericType, nullable: true),
             )
@@ -405,34 +387,31 @@ void main() {
     group("for: List<Uri>", () {
       var genericType = TypeFake.uri();
       var propertyName = '${genericType.toString().camelCase}s';
-      var propertyWithBuildInfo = PropertyWithBuildInfo(propertyName,
-          fieldElement:
-              FieldElementFake(propertyName, TypeFake.list(genericType)));
       test('supports(List<Uri>) should return SupportedIfQueriesAreSupported',
           () {
         expressionFactory
-            .supports(TypeFake.list(genericType), null)
+            .supports(TypeFake.list(genericType))
             .should
-            .beOfType<SupportedIfQueriesAreSupported>();
+            .beOfType<SupportedIfTypesAreSupported>();
       });
       test('supports(List<Uri>?) should return SupportedIfQueriesAreSupported',
           () {
         expressionFactory
-            .supports(TypeFake.list(genericType, nullable: true), null)
+            .supports(TypeFake.list(genericType, nullable: true))
             .should
-            .beOfType<SupportedIfQueriesAreSupported>();
+            .beOfType<SupportedIfTypesAreSupported>();
       });
       test('supports(List<Uri>) should return NotSupported', () {
         expressionFactory
-            .supports(TypeFake.int(), null)
+            .supports(TypeFake.int())
             .should
             .beOfType<NotSupported>();
       });
       test('mapValueToObject nullable=false', () {
         expressionFactory
-            .mapValueToObject(
+            .mapValueToObjectFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.list(genericType),
             )
@@ -442,9 +421,9 @@ void main() {
       });
       test('mapValueToObject nullable=true', () {
         expressionFactory
-            .mapValueToObject(
+            .mapValueToObjectFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.list(genericType, nullable: true),
             )
@@ -454,9 +433,9 @@ void main() {
       });
       test('objectToMapValue nullable=false', () {
         expressionFactory
-            .objectToMapValue(
+            .objectToMapValueFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.list(genericType),
             )
@@ -466,9 +445,9 @@ void main() {
       });
       test('objectToMapValue nullable=true', () {
         expressionFactory
-            .objectToMapValue(
+            .objectToMapValueFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.list(genericType, nullable: true),
             )
@@ -481,36 +460,33 @@ void main() {
     group("for: List<BigInt>", () {
       var genericType = TypeFake.bigInt();
       var propertyName = '${genericType.toString().camelCase}s';
-      var propertyWithBuildInfo = PropertyWithBuildInfo(propertyName,
-          fieldElement:
-              FieldElementFake(propertyName, TypeFake.list(genericType)));
       test(
           'supports(List<BigInt>) should return SupportedIfQueriesAreSupported',
           () {
         expressionFactory
-            .supports(TypeFake.list(genericType), null)
+            .supports(TypeFake.list(genericType))
             .should
-            .beOfType<SupportedIfQueriesAreSupported>();
+            .beOfType<SupportedIfTypesAreSupported>();
       });
       test(
           'supports(List<BigInt>?) should return SupportedIfQueriesAreSupported',
           () {
         expressionFactory
-            .supports(TypeFake.list(genericType, nullable: true), null)
+            .supports(TypeFake.list(genericType, nullable: true))
             .should
-            .beOfType<SupportedIfQueriesAreSupported>();
+            .beOfType<SupportedIfTypesAreSupported>();
       });
       test('supports(List<BigInt>) should return NotSupported', () {
         expressionFactory
-            .supports(TypeFake.int(), null)
+            .supports(TypeFake.int())
             .should
             .beOfType<NotSupported>();
       });
       test('mapValueToObject nullable=false', () {
         expressionFactory
-            .mapValueToObject(
+            .mapValueToObjectFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.list(genericType),
             )
@@ -520,9 +496,9 @@ void main() {
       });
       test('mapValueToObject nullable=true', () {
         expressionFactory
-            .mapValueToObject(
+            .mapValueToObjectFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.list(genericType, nullable: true),
             )
@@ -532,9 +508,9 @@ void main() {
       });
       test('objectToMapValue nullable=false', () {
         expressionFactory
-            .objectToMapValue(
+            .objectToMapValueFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.list(genericType),
             )
@@ -544,9 +520,9 @@ void main() {
       });
       test('objectToMapValue nullable=true', () {
         expressionFactory
-            .objectToMapValue(
+            .objectToMapValueFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.list(genericType, nullable: true),
             )
@@ -559,36 +535,33 @@ void main() {
     group("for: List<DateTime>", () {
       var genericType = TypeFake.dateTime();
       var propertyName = '${genericType.toString().camelCase}s';
-      var propertyWithBuildInfo = PropertyWithBuildInfo(propertyName,
-          fieldElement:
-              FieldElementFake(propertyName, TypeFake.list(genericType)));
       test(
           'supports(List<DateTime>) should return SupportedIfQueriesAreSupported',
           () {
         expressionFactory
-            .supports(TypeFake.list(genericType), null)
+            .supports(TypeFake.list(genericType))
             .should
-            .beOfType<SupportedIfQueriesAreSupported>();
+            .beOfType<SupportedIfTypesAreSupported>();
       });
       test(
           'supports(List<DateTime>?) should return SupportedIfQueriesAreSupported',
           () {
         expressionFactory
-            .supports(TypeFake.list(genericType, nullable: true), null)
+            .supports(TypeFake.list(genericType, nullable: true))
             .should
-            .beOfType<SupportedIfQueriesAreSupported>();
+            .beOfType<SupportedIfTypesAreSupported>();
       });
       test('supports(List<DateTime>) should return Supported', () {
         expressionFactory
-            .supports(TypeFake.int(), null)
+            .supports(TypeFake.int())
             .should
             .beOfType<NotSupported>();
       });
       test('mapValueToObject nullable=false', () {
         expressionFactory
-            .mapValueToObject(
+            .mapValueToObjectFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.list(genericType),
             )
@@ -598,9 +571,9 @@ void main() {
       });
       test('mapValueToObject nullable=true', () {
         expressionFactory
-            .mapValueToObject(
+            .mapValueToObjectFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.list(genericType, nullable: true),
             )
@@ -610,9 +583,9 @@ void main() {
       });
       test('objectToMapValue nullable=false', () {
         expressionFactory
-            .objectToMapValue(
+            .objectToMapValueFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.list(genericType),
             )
@@ -622,9 +595,9 @@ void main() {
       });
       test('objectToMapValue nullable=true', () {
         expressionFactory
-            .objectToMapValue(
+            .objectToMapValueFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.list(genericType, nullable: true),
             )
@@ -637,36 +610,33 @@ void main() {
     group("for: List<Duration>", () {
       var genericType = TypeFake.duration();
       var propertyName = '${genericType.toString().camelCase}s';
-      var propertyWithBuildInfo = PropertyWithBuildInfo(propertyName,
-          fieldElement:
-              FieldElementFake(propertyName, TypeFake.list(genericType)));
       test(
           'supports(List<Duration>) should return SupportedIfQueriesAreSupported',
           () {
         expressionFactory
-            .supports(TypeFake.list(genericType), null)
+            .supports(TypeFake.list(genericType))
             .should
-            .beOfType<SupportedIfQueriesAreSupported>();
+            .beOfType<SupportedIfTypesAreSupported>();
       });
       test(
           'supports(List<Duration>) should return SupportedIfQueriesAreSupported',
           () {
         expressionFactory
-            .supports(TypeFake.list(genericType, nullable: true), null)
+            .supports(TypeFake.list(genericType, nullable: true))
             .should
-            .beOfType<SupportedIfQueriesAreSupported>();
+            .beOfType<SupportedIfTypesAreSupported>();
       });
       test('supports(int) should return NotSupported', () {
         expressionFactory
-            .supports(TypeFake.int(), null)
+            .supports(TypeFake.int())
             .should
             .beOfType<NotSupported>();
       });
       test('mapValueToObject nullable=false', () {
         expressionFactory
-            .mapValueToObject(
+            .mapValueToObjectFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.list(genericType),
             )
@@ -676,9 +646,9 @@ void main() {
       });
       test('mapValueToObject nullable=true', () {
         expressionFactory
-            .mapValueToObject(
+            .mapValueToObjectFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.list(genericType, nullable: true),
             )
@@ -688,9 +658,9 @@ void main() {
       });
       test('objectToMapValue nullable=false', () {
         expressionFactory
-            .objectToMapValue(
+            .objectToMapValueFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.list(genericType),
             )
@@ -700,9 +670,9 @@ void main() {
       });
       test('objectToMapValue nullable=true', () {
         expressionFactory
-            .objectToMapValue(
+            .objectToMapValueFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.list(genericType, nullable: true),
             )
@@ -715,36 +685,33 @@ void main() {
     group("for: List<GenderEnum>", () {
       var genericType = TypeFake.genderEnum();
       var propertyName = '${genericType.toString().camelCase}s';
-      var propertyWithBuildInfo = PropertyWithBuildInfo(propertyName,
-          fieldElement:
-              FieldElementFake(propertyName, TypeFake.list(genericType)));
       test(
           'supports(List<GenderEnum>) should return SupportedIfQueriesAreSupported',
           () {
         expressionFactory
-            .supports(TypeFake.list(genericType), null)
+            .supports(TypeFake.list(genericType))
             .should
-            .beOfType<SupportedIfQueriesAreSupported>();
+            .beOfType<SupportedIfTypesAreSupported>();
       });
       test(
           'supports(List<GenderEnum>?) should return SupportedIfQueriesAreSupported',
           () {
         expressionFactory
-            .supports(TypeFake.list(genericType, nullable: true), null)
+            .supports(TypeFake.list(genericType, nullable: true))
             .should
-            .beOfType<SupportedIfQueriesAreSupported>();
+            .beOfType<SupportedIfTypesAreSupported>();
       });
       test('supports(int) should return NotSupported', () {
         expressionFactory
-            .supports(TypeFake.int(nullable: true), null)
+            .supports(TypeFake.int(nullable: true))
             .should
             .beOfType<NotSupported>();
       });
       test('mapValueToObject nullable=false', () {
         expressionFactory
-            .mapValueToObject(
+            .mapValueToObjectFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.list(genericType),
             )
@@ -754,9 +721,9 @@ void main() {
       });
       test('mapValueToObject nullable=true', () {
         expressionFactory
-            .mapValueToObject(
+            .mapValueToObjectFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.list(genericType, nullable: true),
             )
@@ -766,9 +733,9 @@ void main() {
       });
       test('objectToMapValue nullable=false', () {
         expressionFactory
-            .objectToMapValue(
+            .objectToMapValueFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.list(genericType),
             )
@@ -778,9 +745,9 @@ void main() {
       });
       test('objectToMapValue nullable=true', () {
         expressionFactory
-            .objectToMapValue(
+            .objectToMapValueFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.list(genericType, nullable: true),
             )
@@ -793,36 +760,33 @@ void main() {
     group("for: List<Person>", () {
       var genericType = TypeFake.personClass();
       var propertyName = '${genericType.toString().camelCase}s';
-      var propertyWithBuildInfo = PropertyWithBuildInfo(propertyName,
-          fieldElement:
-              FieldElementFake(propertyName, TypeFake.list(genericType)));
       test(
           'supports(List<Person>) should return SupportedIfQueriesAreSupported',
           () {
         expressionFactory
-            .supports(TypeFake.list(genericType), null)
+            .supports(TypeFake.list(genericType))
             .should
-            .beOfType<SupportedIfQueriesAreSupported>();
+            .beOfType<SupportedIfTypesAreSupported>();
       });
       test(
           'supports(List<Person>?) should return SupportedIfQueriesAreSupported',
           () {
         expressionFactory
-            .supports(TypeFake.list(genericType, nullable: true), null)
+            .supports(TypeFake.list(genericType, nullable: true))
             .should
-            .beOfType<SupportedIfQueriesAreSupported>();
+            .beOfType<SupportedIfTypesAreSupported>();
       });
       test('supports(int) should return NotSupported', () {
         expressionFactory
-            .supports(TypeFake.int(), null)
+            .supports(TypeFake.int())
             .should
             .beOfType<NotSupported>();
       });
       test('mapValueToObject nullable=false', () {
         expressionFactory
-            .mapValueToObject(
+            .mapValueToObjectFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.list(genericType),
             )
@@ -832,9 +796,9 @@ void main() {
       });
       test('mapValueToObject nullable=true', () {
         expressionFactory
-            .mapValueToObject(
+            .mapValueToObjectFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               mapValueExpression(mapVariableName, propertyName),
               TypeFake.list(genericType, nullable: true),
             )
@@ -844,9 +808,9 @@ void main() {
       });
       test('objectToMapValue nullable=false', () {
         expressionFactory
-            .objectToMapValue(
+            .objectToMapValueFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.list(genericType),
             )
@@ -856,9 +820,9 @@ void main() {
       });
       test('objectToMapValue nullable=true', () {
         expressionFactory
-            .objectToMapValue(
+            .objectToMapValueFunction(
               idFactory,
-              propertyWithBuildInfo,
+              
               objectPropertyExpression(instanceVariableName, propertyName),
               TypeFake.list(genericType, nullable: true),
             )

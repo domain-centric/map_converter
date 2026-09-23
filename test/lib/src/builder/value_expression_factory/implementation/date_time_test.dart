@@ -1,4 +1,3 @@
-import 'package:map_converter/src/builder/map_converter_builder.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/date_time.dart';
 import 'package:map_converter/src/builder/value_expression_factory/value_expression_factory.dart';
 import 'package:shouldly/shouldly.dart';
@@ -15,20 +14,16 @@ void main() {
   group("class: $DateTimeExpressionFactory()", () {
     var expressionFactory = DateTimeExpressionFactory();
     var propertyName = 'dateOfBirth';
-    var propertyWithBuildInfo = PropertyWithBuildInfo(
-      propertyName,
-      fieldElement: FieldElementFake(propertyName, TypeFake.dateTime()),
-    );
     test('supports(DateTime) should return Supported', () {
       expressionFactory
-          .supports(TypeFake.dateTime(), null)
+          .supports(TypeFake.dateTime())
           .should
           .beOfType<Supported>();
     });
 
     test('supports(DateTime?) should return Supported', () {
       expressionFactory
-          .supports(TypeFake.dateTime(nullable: true), null)
+          .supports(TypeFake.dateTime(nullable: true))
           .should
           .beOfType<Supported>();
     });
@@ -36,16 +31,14 @@ void main() {
       expressionFactory
           .supports(
             TypeFake.int(),
-            null,
           )
           .should
           .beOfType<NotSupported>();
     });
     test('mapValueToObject nullable=false', () {
       expressionFactory
-          .mapValueToObject(
+          .mapValueToObjectFunction(
             idFactory,
-            propertyWithBuildInfo,
             mapValueExpression(mapVariableName, propertyName),
             TypeFake.dateTime(),
           )
@@ -55,9 +48,8 @@ void main() {
     });
     test('mapValueToObject nullable=true', () {
       expressionFactory
-          .mapValueToObject(
+          .mapValueToObjectFunction(
             idFactory,
-            propertyWithBuildInfo,
             mapValueExpression(mapVariableName, propertyName),
             TypeFake.dateTime(nullable: true),
           )
@@ -68,9 +60,8 @@ void main() {
 
     test('objectToMapValue nullable=false', () {
       expressionFactory
-          .objectToMapValue(
+          .objectToMapValueFunction(
             idFactory,
-            propertyWithBuildInfo,
             objectPropertyExpression(instanceVariableName, propertyName),
             TypeFake.dateTime(),
           )
@@ -80,9 +71,8 @@ void main() {
     });
     test('objectToMapValue nullable=true', () {
       expressionFactory
-          .objectToMapValue(
+          .objectToMapValueFunction(
             idFactory,
-            propertyWithBuildInfo,
             objectPropertyExpression(instanceVariableName, propertyName),
             TypeFake.dateTime(nullable: true),
           )
