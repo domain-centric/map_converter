@@ -1,4 +1,5 @@
 import 'package:analyzer/dart/element/element.dart';
+import 'package:map_converter/map_converter.dart';
 import 'package:map_converter/src/builder/map_converter_builder.dart';
 import 'package:shouldly/shouldly.dart';
 import 'package:test/test.dart';
@@ -44,20 +45,23 @@ void main() {
           fromMapValueExpressionFunction: null,
         ),
       ],
+      GenerateOptions.all,
     );
 
     SchemaField(domainClass, MapConverterLibraryAssetIdFactoryFake())
         .toUnFormattedString()
         .should
-        .be("static Map<String,dynamic> schema = {'className' : 'Person',"
-            "'classDescription' : 'A person','classLibraryUri' : "
-            "'person/person.dart','mapperClassName' : 'PersonMapper',"
-            "'mapperClassLibraryUri' : "
-            "'package:map_converter/src/builder/map_converter_builder.dart',"
+        .be("final Map<String,dynamic> schema = const "
+            "{'className' : 'Person','classDescription' : "
+            "'A person','classLibraryUri' : "
+            "'person/person.dart','mapperClassName' : "
+            "'PersonMapper','mapperClassLibraryUri' : '"
+            "package:map_converter/src/builder/map_converter_builder.dart',"
             "'fields' : [{'name' : 'name','mapKey' : 'fullName',"
-            "'description' : 'Field documentation','presence' : 'required',"
-            "'type' : 'String','typeLibraryUri' : ''},{'name' : 'age',"
+            "'description' : 'Field documentation',"
+            "'presence' : 'required','type' : 'String?',"
+            "'typeLibraryUri' : ''},{'name' : 'age',"
             "'mapKey' : 'age','description' : 'Field documentation',"
-            "'presence' : 'optional','type' : 'int','typeLibraryUri' : ''}]};");
+            "'presence' : 'optional','type' : 'int?','typeLibraryUri' : ''}]};");
   });
 }
