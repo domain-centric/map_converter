@@ -44,47 +44,46 @@ bool isListSetMapIteratorType(InterfaceElement element) {
           string.contains('class Iterator<'));
 }
 
-  /// discriminator key for a class with a @MapConverter annotation.
-  /// If the class does not have a discriminator key,
-  /// it will look for a superclass with a @MapConverter annotation
-  /// and return its discriminator key (or its default value '_type').
-  /// If no superclass has a @MapConverter annotation, it will return null.
-  String? findDiscriminatorKey(ClassElement classElement) {
-    var annotation = findMapConverterAnnotation(classElement);
-    var discriminatorKey =
-        annotation?.getField('discriminatorKey')?.toStringValue();
-    if (discriminatorKey != null && discriminatorKey.isNotEmpty) {
-      return discriminatorKey;
-    }
-
-    var superClass = findSuperClassWithMapConverterAnnotation(classElement);
-    if (superClass == null || superClass is! ClassElement) {
-      return null;
-    }
-    var superClassAnnotation = findMapConverterAnnotation(superClass);
-    var superClassDiscriminatorKey =
-        superClassAnnotation?.getField('discriminatorKey')?.toStringValue();
-    if (superClassDiscriminatorKey != null &&
-        superClassDiscriminatorKey.isNotEmpty) {
-      return superClassDiscriminatorKey;
-    } else {
-      return '_type';
-    }
+/// discriminator key for a class with a @MapConverter annotation.
+/// If the class does not have a discriminator key,
+/// it will look for a superclass with a @MapConverter annotation
+/// and return its discriminator key (or its default value '_type').
+/// If no superclass has a @MapConverter annotation, it will return null.
+String? findDiscriminatorKey(ClassElement classElement) {
+  var annotation = findMapConverterAnnotation(classElement);
+  var discriminatorKey =
+      annotation?.getField('discriminatorKey')?.toStringValue();
+  if (discriminatorKey != null && discriminatorKey.isNotEmpty) {
+    return discriminatorKey;
   }
 
-  InterfaceElement? findSuperClassWithMapConverterAnnotation(
-      ClassElement classElement) {
-
-    var superClass = classElement.supertype?.element;
-    while (superClass != null) {
-      if (superClass is! ClassElement) {
-        return null;
-      }
-      var annotation = findMapConverterAnnotation(superClass);
-      if (annotation != null) {
-        return superClass;
-      }
-      superClass = superClass.supertype?.element;
-    }
+  var superClass = findSuperClassWithMapConverterAnnotation(classElement);
+  if (superClass == null || superClass is! ClassElement) {
     return null;
   }
+  var superClassAnnotation = findMapConverterAnnotation(superClass);
+  var superClassDiscriminatorKey =
+      superClassAnnotation?.getField('discriminatorKey')?.toStringValue();
+  if (superClassDiscriminatorKey != null &&
+      superClassDiscriminatorKey.isNotEmpty) {
+    return superClassDiscriminatorKey;
+  } else {
+    return '_type';
+  }
+}
+
+InterfaceElement? findSuperClassWithMapConverterAnnotation(
+    ClassElement classElement) {
+  var superClass = classElement.supertype?.element;
+  while (superClass != null) {
+    if (superClass is! ClassElement) {
+      return null;
+    }
+    var annotation = findMapConverterAnnotation(superClass);
+    if (annotation != null) {
+      return superClass;
+    }
+    superClass = superClass.supertype?.element;
+  }
+  return null;
+}

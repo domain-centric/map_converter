@@ -101,16 +101,16 @@ class ExampleMapper {
             .toList()
             .cast<String?>();
   Map<String, dynamic> toMap(i1.Example example) => {
-    'iterableOfBool': example.iterableOfBool,
-    'iterableOfGender': example.iterableOfGender
-        .map((i2.Gender element) => element.name)
-        .toList(),
-    'iterableOfPerson': example.iterableOfPerson
-        .map((i2.Person element) => const i3.PersonMapper().toMap(element))
-        .toList(),
-    'iterableOfNullableInt': example.iterableOfNullableInt,
-    'nullableIterableOfDouble': example.nullableIterableOfDouble,
-    'nullableIterableOfNullableStrings':
-        example.nullableIterableOfNullableStrings,
-  };
+        'iterableOfBool': example.iterableOfBool,
+        'iterableOfGender': example.iterableOfGender
+            .map((i2.Gender element) => element.name)
+            .toList(),
+        'iterableOfPerson': example.iterableOfPerson
+            .map((i2.Person element) => const i3.PersonMapper().toMap(element))
+            .toList(),
+        'iterableOfNullableInt': example.iterableOfNullableInt,
+        'nullableIterableOfDouble': example.nullableIterableOfDouble,
+        'nullableIterableOfNullableStrings':
+            example.nullableIterableOfNullableStrings,
+      };
 }

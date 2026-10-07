@@ -37,7 +37,7 @@ class ExampleMapper {
     ..myInt = (exampleMap['myInt'] as num).toInt()
     ..myNullableInt = (exampleMap['myNullableInt'] as num?)?.toInt();
   Map<String, dynamic> toMap(i1.Example example) => {
-    'myInt': example.myInt,
-    'myNullableInt': example.myNullableInt,
-  };
+        'myInt': example.myInt,
+        'myNullableInt': example.myNullableInt,
+      };
 }

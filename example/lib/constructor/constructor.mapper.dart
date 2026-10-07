@@ -36,15 +36,17 @@ class DefaultConstructorExampleMapper {
   const DefaultConstructorExampleMapper();
   i1.DefaultConstructorExample fromMap(
     Map<String, dynamic> defaultConstructorExampleMap,
-  ) => i1.DefaultConstructorExample()
-    ..property1 = defaultConstructorExampleMap['property1'] as String
-    ..property2 = defaultConstructorExampleMap['property2'] as String?;
+  ) =>
+      i1.DefaultConstructorExample()
+        ..property1 = defaultConstructorExampleMap['property1'] as String
+        ..property2 = defaultConstructorExampleMap['property2'] as String?;
   Map<String, dynamic> toMap(
     i1.DefaultConstructorExample defaultConstructorExample,
-  ) => {
-    'property1': defaultConstructorExample.property1,
-    'property2': defaultConstructorExample.property2,
-  };
+  ) =>
+      {
+        'property1': defaultConstructorExample.property1,
+        'property2': defaultConstructorExample.property2,
+      };
 }
 
 class ConstructorExampleMapper {
@@ -81,9 +83,9 @@ class ConstructorExampleMapper {
         ..property1 = constructorExampleMap['property1'] as String
         ..property2 = constructorExampleMap['property2'] as String?;
   Map<String, dynamic> toMap(i1.ConstructorExample constructorExample) => {
-    'property1': constructorExample.property1,
-    'property2': constructorExample.property2,
-  };
+        'property1': constructorExample.property1,
+        'property2': constructorExample.property2,
+      };
 }
 
 class ConstructorWithRequiredPositionalParametersExampleMapper {
@@ -136,11 +138,11 @@ class ConstructorWithRequiredPositionalParametersExampleMapper {
     Map<String, dynamic> constructorWithRequiredPositionalParametersExampleMap,
   ) =>
       i1.ConstructorWithRequiredPositionalParametersExample(
-          constructorWithRequiredPositionalParametersExampleMap['property1']
-              as String,
-          constructorWithRequiredPositionalParametersExampleMap['property2']
-              as String?,
-        )
+        constructorWithRequiredPositionalParametersExampleMap['property1']
+            as String,
+        constructorWithRequiredPositionalParametersExampleMap['property2']
+            as String?,
+      )
         ..property3 =
             constructorWithRequiredPositionalParametersExampleMap['property3']
                 as String
@@ -149,13 +151,18 @@ class ConstructorWithRequiredPositionalParametersExampleMapper {
                 as String?;
   Map<String, dynamic> toMap(
     i1.ConstructorWithRequiredPositionalParametersExample
-    constructorWithRequiredPositionalParametersExample,
-  ) => {
-    'property1': constructorWithRequiredPositionalParametersExample.property1,
-    'property2': constructorWithRequiredPositionalParametersExample.property2,
-    'property3': constructorWithRequiredPositionalParametersExample.property3,
-    'property4': constructorWithRequiredPositionalParametersExample.property4,
-  };
+        constructorWithRequiredPositionalParametersExample,
+  ) =>
+      {
+        'property1':
+            constructorWithRequiredPositionalParametersExample.property1,
+        'property2':
+            constructorWithRequiredPositionalParametersExample.property2,
+        'property3':
+            constructorWithRequiredPositionalParametersExample.property3,
+        'property4':
+            constructorWithRequiredPositionalParametersExample.property4,
+      };
 }
 
 class ConstructorWithNamedParametersExampleMapper {
@@ -207,24 +214,25 @@ class ConstructorWithNamedParametersExampleMapper {
     Map<String, dynamic> constructorWithNamedParametersExampleMap,
   ) =>
       i1.ConstructorWithNamedParametersExample(
-          property1:
-              constructorWithNamedParametersExampleMap['property1'] as String,
-          property2:
-              constructorWithNamedParametersExampleMap['property2'] as String?,
-        )
+        property1:
+            constructorWithNamedParametersExampleMap['property1'] as String,
+        property2:
+            constructorWithNamedParametersExampleMap['property2'] as String?,
+      )
         ..property3 =
             constructorWithNamedParametersExampleMap['property3'] as String
         ..property4 =
             constructorWithNamedParametersExampleMap['property4'] as String?;
   Map<String, dynamic> toMap(
     i1.ConstructorWithNamedParametersExample
-    constructorWithNamedParametersExample,
-  ) => {
-    'property1': constructorWithNamedParametersExample.property1,
-    'property2': constructorWithNamedParametersExample.property2,
-    'property3': constructorWithNamedParametersExample.property3,
-    'property4': constructorWithNamedParametersExample.property4,
-  };
+        constructorWithNamedParametersExample,
+  ) =>
+      {
+        'property1': constructorWithNamedParametersExample.property1,
+        'property2': constructorWithNamedParametersExample.property2,
+        'property3': constructorWithNamedParametersExample.property3,
+        'property4': constructorWithNamedParametersExample.property4,
+      };
 }
 
 class ConstructorWithRequiredPositionalParametersAndNamedParametersExampleMapper {
@@ -234,7 +242,8 @@ class ConstructorWithRequiredPositionalParametersAndNamedParametersExampleMapper
     'classDescription': '',
     'classLibraryUri':
         'asset:map_converter/example/lib/constructor/constructor.dart',
-    'mapperClassName': 'ConstructorWithRequiredPositionalParametersAndNamedParametersExampleMapper',
+    'mapperClassName':
+        'ConstructorWithRequiredPositionalParametersAndNamedParametersExampleMapper',
     'mapperClassLibraryUri':
         'asset:map_converter/example/lib/constructor/constructor.mapper.dart',
     'fields': [
@@ -290,51 +299,53 @@ class ConstructorWithRequiredPositionalParametersAndNamedParametersExampleMapper
   };
   const ConstructorWithRequiredPositionalParametersAndNamedParametersExampleMapper();
   i1.ConstructorWithRequiredPositionalParametersAndNamedParametersExample
-  fromMap(
+      fromMap(
     Map<String, dynamic>
-    constructorWithRequiredPositionalParametersAndNamedParametersExampleMap,
+        constructorWithRequiredPositionalParametersAndNamedParametersExampleMap,
   ) =>
-      i1.ConstructorWithRequiredPositionalParametersAndNamedParametersExample(
-          constructorWithRequiredPositionalParametersAndNamedParametersExampleMap['property1']
-              as String,
-          constructorWithRequiredPositionalParametersAndNamedParametersExampleMap['property2']
-              as String?,
-          property3:
-              constructorWithRequiredPositionalParametersAndNamedParametersExampleMap['property3']
-                  as String,
-          property4:
-              constructorWithRequiredPositionalParametersAndNamedParametersExampleMap['property4']
-                  as String?,
-        )
-        ..property5 =
-            constructorWithRequiredPositionalParametersAndNamedParametersExampleMap['property5']
-                as String
-        ..property6 =
-            constructorWithRequiredPositionalParametersAndNamedParametersExampleMap['property6']
-                as String?;
+          i1
+              .ConstructorWithRequiredPositionalParametersAndNamedParametersExample(
+            constructorWithRequiredPositionalParametersAndNamedParametersExampleMap[
+                'property1'] as String,
+            constructorWithRequiredPositionalParametersAndNamedParametersExampleMap[
+                'property2'] as String?,
+            property3:
+                constructorWithRequiredPositionalParametersAndNamedParametersExampleMap[
+                    'property3'] as String,
+            property4:
+                constructorWithRequiredPositionalParametersAndNamedParametersExampleMap[
+                    'property4'] as String?,
+          )
+            ..property5 =
+                constructorWithRequiredPositionalParametersAndNamedParametersExampleMap[
+                    'property5'] as String
+            ..property6 =
+                constructorWithRequiredPositionalParametersAndNamedParametersExampleMap[
+                    'property6'] as String?;
   Map<String, dynamic> toMap(
     i1.ConstructorWithRequiredPositionalParametersAndNamedParametersExample
-    constructorWithRequiredPositionalParametersAndNamedParametersExample,
-  ) => {
-    'property1':
-        constructorWithRequiredPositionalParametersAndNamedParametersExample
-            .property1,
-    'property2':
-        constructorWithRequiredPositionalParametersAndNamedParametersExample
-            .property2,
-    'property3':
-        constructorWithRequiredPositionalParametersAndNamedParametersExample
-            .property3,
-    'property4':
-        constructorWithRequiredPositionalParametersAndNamedParametersExample
-            .property4,
-    'property5':
-        constructorWithRequiredPositionalParametersAndNamedParametersExample
-            .property5,
-    'property6':
-        constructorWithRequiredPositionalParametersAndNamedParametersExample
-            .property6,
-  };
+        constructorWithRequiredPositionalParametersAndNamedParametersExample,
+  ) =>
+      {
+        'property1':
+            constructorWithRequiredPositionalParametersAndNamedParametersExample
+                .property1,
+        'property2':
+            constructorWithRequiredPositionalParametersAndNamedParametersExample
+                .property2,
+        'property3':
+            constructorWithRequiredPositionalParametersAndNamedParametersExample
+                .property3,
+        'property4':
+            constructorWithRequiredPositionalParametersAndNamedParametersExample
+                .property4,
+        'property5':
+            constructorWithRequiredPositionalParametersAndNamedParametersExample
+                .property5,
+        'property6':
+            constructorWithRequiredPositionalParametersAndNamedParametersExample
+                .property6,
+      };
 }
 
 class ConstructorWithOptionalParametersExampleMapper {
@@ -386,31 +397,34 @@ class ConstructorWithOptionalParametersExampleMapper {
     Map<String, dynamic> constructorWithOptionalParametersExampleMap,
   ) =>
       i1.ConstructorWithOptionalParametersExample(
-          constructorWithOptionalParametersExampleMap['property1'] as String,
-          constructorWithOptionalParametersExampleMap['property2'] as String?,
-        )
+        constructorWithOptionalParametersExampleMap['property1'] as String,
+        constructorWithOptionalParametersExampleMap['property2'] as String?,
+      )
         ..property3 =
             constructorWithOptionalParametersExampleMap['property3'] as String
         ..property4 =
             constructorWithOptionalParametersExampleMap['property4'] as String?;
   Map<String, dynamic> toMap(
     i1.ConstructorWithOptionalParametersExample
-    constructorWithOptionalParametersExample,
-  ) => {
-    'property1': constructorWithOptionalParametersExample.property1,
-    'property2': constructorWithOptionalParametersExample.property2,
-    'property3': constructorWithOptionalParametersExample.property3,
-    'property4': constructorWithOptionalParametersExample.property4,
-  };
+        constructorWithOptionalParametersExample,
+  ) =>
+      {
+        'property1': constructorWithOptionalParametersExample.property1,
+        'property2': constructorWithOptionalParametersExample.property2,
+        'property3': constructorWithOptionalParametersExample.property3,
+        'property4': constructorWithOptionalParametersExample.property4,
+      };
 }
 
 class ConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMapper {
   final Map<String, dynamic> schema = const {
-    'className': 'ConstructorWithRequiredPositionalParametersAndOptionalParametersExample',
+    'className':
+        'ConstructorWithRequiredPositionalParametersAndOptionalParametersExample',
     'classDescription': '',
     'classLibraryUri':
         'asset:map_converter/example/lib/constructor/constructor.dart',
-    'mapperClassName': 'ConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMapper',
+    'mapperClassName':
+        'ConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMapper',
     'mapperClassLibraryUri':
         'asset:map_converter/example/lib/constructor/constructor.mapper.dart',
     'fields': [
@@ -466,58 +480,62 @@ class ConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMap
   };
   const ConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMapper();
   i1.ConstructorWithRequiredPositionalParametersAndOptionalParametersExample
-  fromMap(
+      fromMap(
     Map<String, dynamic>
-    constructorWithRequiredPositionalParametersAndOptionalParametersExampleMap,
+        constructorWithRequiredPositionalParametersAndOptionalParametersExampleMap,
   ) =>
-      i1.ConstructorWithRequiredPositionalParametersAndOptionalParametersExample(
-          constructorWithRequiredPositionalParametersAndOptionalParametersExampleMap['property1']
-              as String,
-          constructorWithRequiredPositionalParametersAndOptionalParametersExampleMap['property2']
-              as String?,
-          constructorWithRequiredPositionalParametersAndOptionalParametersExampleMap['property3']
-              as String,
-          constructorWithRequiredPositionalParametersAndOptionalParametersExampleMap['property4']
-              as String?,
-        )
-        ..property5 =
-            constructorWithRequiredPositionalParametersAndOptionalParametersExampleMap['property5']
-                as String
-        ..property6 =
-            constructorWithRequiredPositionalParametersAndOptionalParametersExampleMap['property6']
-                as String?;
+          i1
+              .ConstructorWithRequiredPositionalParametersAndOptionalParametersExample(
+            constructorWithRequiredPositionalParametersAndOptionalParametersExampleMap[
+                'property1'] as String,
+            constructorWithRequiredPositionalParametersAndOptionalParametersExampleMap[
+                'property2'] as String?,
+            constructorWithRequiredPositionalParametersAndOptionalParametersExampleMap[
+                'property3'] as String,
+            constructorWithRequiredPositionalParametersAndOptionalParametersExampleMap[
+                'property4'] as String?,
+          )
+            ..property5 =
+                constructorWithRequiredPositionalParametersAndOptionalParametersExampleMap[
+                    'property5'] as String
+            ..property6 =
+                constructorWithRequiredPositionalParametersAndOptionalParametersExampleMap[
+                    'property6'] as String?;
   Map<String, dynamic> toMap(
     i1.ConstructorWithRequiredPositionalParametersAndOptionalParametersExample
-    constructorWithRequiredPositionalParametersAndOptionalParametersExample,
-  ) => {
-    'property1':
-        constructorWithRequiredPositionalParametersAndOptionalParametersExample
-            .property1,
-    'property2':
-        constructorWithRequiredPositionalParametersAndOptionalParametersExample
-            .property2,
-    'property3':
-        constructorWithRequiredPositionalParametersAndOptionalParametersExample
-            .property3,
-    'property4':
-        constructorWithRequiredPositionalParametersAndOptionalParametersExample
-            .property4,
-    'property5':
-        constructorWithRequiredPositionalParametersAndOptionalParametersExample
-            .property5,
-    'property6':
-        constructorWithRequiredPositionalParametersAndOptionalParametersExample
-            .property6,
-  };
+        constructorWithRequiredPositionalParametersAndOptionalParametersExample,
+  ) =>
+      {
+        'property1':
+            constructorWithRequiredPositionalParametersAndOptionalParametersExample
+                .property1,
+        'property2':
+            constructorWithRequiredPositionalParametersAndOptionalParametersExample
+                .property2,
+        'property3':
+            constructorWithRequiredPositionalParametersAndOptionalParametersExample
+                .property3,
+        'property4':
+            constructorWithRequiredPositionalParametersAndOptionalParametersExample
+                .property4,
+        'property5':
+            constructorWithRequiredPositionalParametersAndOptionalParametersExample
+                .property5,
+        'property6':
+            constructorWithRequiredPositionalParametersAndOptionalParametersExample
+                .property6,
+      };
 }
 
 class NamedConstructorWithRequiredPositionalParametersAndNamedParametersExampleMapper {
   final Map<String, dynamic> schema = const {
-    'className': 'NamedConstructorWithRequiredPositionalParametersAndNamedParametersExample',
+    'className':
+        'NamedConstructorWithRequiredPositionalParametersAndNamedParametersExample',
     'classDescription': '',
     'classLibraryUri':
         'asset:map_converter/example/lib/constructor/constructor.dart',
-    'mapperClassName': 'NamedConstructorWithRequiredPositionalParametersAndNamedParametersExampleMapper',
+    'mapperClassName':
+        'NamedConstructorWithRequiredPositionalParametersAndNamedParametersExampleMapper',
     'mapperClassLibraryUri':
         'asset:map_converter/example/lib/constructor/constructor.mapper.dart',
     'fields': [
@@ -573,60 +591,64 @@ class NamedConstructorWithRequiredPositionalParametersAndNamedParametersExampleM
   };
   const NamedConstructorWithRequiredPositionalParametersAndNamedParametersExampleMapper();
   i1.NamedConstructorWithRequiredPositionalParametersAndNamedParametersExample
-  fromMap(
+      fromMap(
     Map<String, dynamic>
-    namedConstructorWithRequiredPositionalParametersAndNamedParametersExampleMap,
+        namedConstructorWithRequiredPositionalParametersAndNamedParametersExampleMap,
   ) =>
-      i1.NamedConstructorWithRequiredPositionalParametersAndNamedParametersExample.name(
-          namedConstructorWithRequiredPositionalParametersAndNamedParametersExampleMap['property1']
-              as String,
-          namedConstructorWithRequiredPositionalParametersAndNamedParametersExampleMap['property2']
-              as String?,
-          property3:
-              namedConstructorWithRequiredPositionalParametersAndNamedParametersExampleMap['property3']
-                  as String,
-          property4:
-              namedConstructorWithRequiredPositionalParametersAndNamedParametersExampleMap['property4']
-                  as String?,
-        )
-        ..property5 =
-            namedConstructorWithRequiredPositionalParametersAndNamedParametersExampleMap['property5']
-                as String
-        ..property6 =
-            namedConstructorWithRequiredPositionalParametersAndNamedParametersExampleMap['property6']
-                as String?;
+          i1.NamedConstructorWithRequiredPositionalParametersAndNamedParametersExample
+              .name(
+            namedConstructorWithRequiredPositionalParametersAndNamedParametersExampleMap[
+                'property1'] as String,
+            namedConstructorWithRequiredPositionalParametersAndNamedParametersExampleMap[
+                'property2'] as String?,
+            property3:
+                namedConstructorWithRequiredPositionalParametersAndNamedParametersExampleMap[
+                    'property3'] as String,
+            property4:
+                namedConstructorWithRequiredPositionalParametersAndNamedParametersExampleMap[
+                    'property4'] as String?,
+          )
+            ..property5 =
+                namedConstructorWithRequiredPositionalParametersAndNamedParametersExampleMap[
+                    'property5'] as String
+            ..property6 =
+                namedConstructorWithRequiredPositionalParametersAndNamedParametersExampleMap[
+                    'property6'] as String?;
   Map<String, dynamic> toMap(
     i1.NamedConstructorWithRequiredPositionalParametersAndNamedParametersExample
-    namedConstructorWithRequiredPositionalParametersAndNamedParametersExample,
-  ) => {
-    'property1':
-        namedConstructorWithRequiredPositionalParametersAndNamedParametersExample
-            .property1,
-    'property2':
-        namedConstructorWithRequiredPositionalParametersAndNamedParametersExample
-            .property2,
-    'property3':
-        namedConstructorWithRequiredPositionalParametersAndNamedParametersExample
-            .property3,
-    'property4':
-        namedConstructorWithRequiredPositionalParametersAndNamedParametersExample
-            .property4,
-    'property5':
-        namedConstructorWithRequiredPositionalParametersAndNamedParametersExample
-            .property5,
-    'property6':
-        namedConstructorWithRequiredPositionalParametersAndNamedParametersExample
-            .property6,
-  };
+        namedConstructorWithRequiredPositionalParametersAndNamedParametersExample,
+  ) =>
+      {
+        'property1':
+            namedConstructorWithRequiredPositionalParametersAndNamedParametersExample
+                .property1,
+        'property2':
+            namedConstructorWithRequiredPositionalParametersAndNamedParametersExample
+                .property2,
+        'property3':
+            namedConstructorWithRequiredPositionalParametersAndNamedParametersExample
+                .property3,
+        'property4':
+            namedConstructorWithRequiredPositionalParametersAndNamedParametersExample
+                .property4,
+        'property5':
+            namedConstructorWithRequiredPositionalParametersAndNamedParametersExample
+                .property5,
+        'property6':
+            namedConstructorWithRequiredPositionalParametersAndNamedParametersExample
+                .property6,
+      };
 }
 
 class NamedConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMapper {
   final Map<String, dynamic> schema = const {
-    'className': 'NamedConstructorWithRequiredPositionalParametersAndOptionalParametersExample',
+    'className':
+        'NamedConstructorWithRequiredPositionalParametersAndOptionalParametersExample',
     'classDescription': '',
     'classLibraryUri':
         'asset:map_converter/example/lib/constructor/constructor.dart',
-    'mapperClassName': 'NamedConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMapper',
+    'mapperClassName':
+        'NamedConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMapper',
     'mapperClassLibraryUri':
         'asset:map_converter/example/lib/constructor/constructor.mapper.dart',
     'fields': [
@@ -682,47 +704,49 @@ class NamedConstructorWithRequiredPositionalParametersAndOptionalParametersExamp
   };
   const NamedConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMapper();
   i1.NamedConstructorWithRequiredPositionalParametersAndOptionalParametersExample
-  fromMap(
+      fromMap(
     Map<String, dynamic>
-    namedConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMap,
+        namedConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMap,
   ) =>
-      i1.NamedConstructorWithRequiredPositionalParametersAndOptionalParametersExample.name(
-          namedConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMap['property1']
-              as String,
-          namedConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMap['property2']
-              as String?,
-          namedConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMap['property3']
-              as String,
-          namedConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMap['property4']
-              as String?,
-        )
-        ..property5 =
-            namedConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMap['property5']
-                as String
-        ..property6 =
-            namedConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMap['property6']
-                as String?;
+          i1.NamedConstructorWithRequiredPositionalParametersAndOptionalParametersExample
+              .name(
+            namedConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMap[
+                'property1'] as String,
+            namedConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMap[
+                'property2'] as String?,
+            namedConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMap[
+                'property3'] as String,
+            namedConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMap[
+                'property4'] as String?,
+          )
+            ..property5 =
+                namedConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMap[
+                    'property5'] as String
+            ..property6 =
+                namedConstructorWithRequiredPositionalParametersAndOptionalParametersExampleMap[
+                    'property6'] as String?;
   Map<String, dynamic> toMap(
     i1.NamedConstructorWithRequiredPositionalParametersAndOptionalParametersExample
-    namedConstructorWithRequiredPositionalParametersAndOptionalParametersExample,
-  ) => {
-    'property1':
-        namedConstructorWithRequiredPositionalParametersAndOptionalParametersExample
-            .property1,
-    'property2':
-        namedConstructorWithRequiredPositionalParametersAndOptionalParametersExample
-            .property2,
-    'property3':
-        namedConstructorWithRequiredPositionalParametersAndOptionalParametersExample
-            .property3,
-    'property4':
-        namedConstructorWithRequiredPositionalParametersAndOptionalParametersExample
-            .property4,
-    'property5':
-        namedConstructorWithRequiredPositionalParametersAndOptionalParametersExample
-            .property5,
-    'property6':
-        namedConstructorWithRequiredPositionalParametersAndOptionalParametersExample
-            .property6,
-  };
+        namedConstructorWithRequiredPositionalParametersAndOptionalParametersExample,
+  ) =>
+      {
+        'property1':
+            namedConstructorWithRequiredPositionalParametersAndOptionalParametersExample
+                .property1,
+        'property2':
+            namedConstructorWithRequiredPositionalParametersAndOptionalParametersExample
+                .property2,
+        'property3':
+            namedConstructorWithRequiredPositionalParametersAndOptionalParametersExample
+                .property3,
+        'property4':
+            namedConstructorWithRequiredPositionalParametersAndOptionalParametersExample
+                .property4,
+        'property5':
+            namedConstructorWithRequiredPositionalParametersAndOptionalParametersExample
+                .property5,
+        'property6':
+            namedConstructorWithRequiredPositionalParametersAndOptionalParametersExample
+                .property6,
+      };
 }

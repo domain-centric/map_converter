@@ -39,7 +39,7 @@ class ExampleMapper {
         ? null
         : DateTime.parse(exampleMap['myNullableDateTime'] as String);
   Map<String, dynamic> toMap(i1.Example example) => {
-    'myDateTime': example.myDateTime.toIso8601String(),
-    'myNullableDateTime': example.myNullableDateTime?.toIso8601String(),
-  };
+        'myDateTime': example.myDateTime.toIso8601String(),
+        'myNullableDateTime': example.myNullableDateTime?.toIso8601String(),
+      };
 }

@@ -42,13 +42,13 @@ class ExampleMapper {
   };
   const ExampleMapper();
   i1.Example fromMap(Map<String, dynamic> exampleMap) => i1.Example(
-    name: exampleMap['name'] as String,
-    email: exampleMap['emailAddress'] as String,
-    phoneNumber: (exampleMap['contactNumber'] as num).toInt(),
-  );
+        name: exampleMap['name'] as String,
+        email: exampleMap['emailAddress'] as String,
+        phoneNumber: (exampleMap['contactNumber'] as num).toInt(),
+      );
   Map<String, dynamic> toMap(i1.Example example) => {
-    'emailAddress': example.email,
-    'contactNumber': example.phoneNumber,
-    'name': example.name,
-  };
+        'emailAddress': example.email,
+        'contactNumber': example.phoneNumber,
+        'name': example.name,
+      };
 }

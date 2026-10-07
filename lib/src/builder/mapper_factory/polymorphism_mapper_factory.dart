@@ -59,8 +59,6 @@ class PolymorphismMeta {
 
   PolymorphismMeta(
       {required this.classElement,
-
-      /// FIXME  required this.discriminatorKey,
       required this.subClassTypesAndDiscriminatorKeys,
       required this.generateOptions});
 
@@ -170,11 +168,11 @@ class ToMapValueMethod extends code.Method {
         code.Code('switch (${parameterName(polymorphism)}.runtimeType) '),
         code.Block([
           code.SeparatedValues.forParameters([
-            ...polymorphism.subClassTypesAndDiscriminatorKeys.entries.map((entry) =>
-                toSwitchCaseExpression(polymorphism, entry.key,  idFactory)),
-            code.Code(r"_ => throw Exception('Unsupported type: ${" +
-                parameterName(polymorphism) +
-                ".runtimeType}')")
+            ...polymorphism.subClassTypesAndDiscriminatorKeys.entries.map(
+                (entry) =>
+                    toSwitchCaseExpression(polymorphism, entry.key, idFactory)),
+            code.Code(r"_ => throw Exception('Unsupported type: ${"
+                "${parameterName(polymorphism)}.runtimeType}')")
           ])
         ]),
       ]);
@@ -246,13 +244,16 @@ class FromMapValueMethod extends code.Method {
     MapConverterLibraryAssetIdFactory idFactory,
   ) =>
       code.Block([
-        ...polymorphism.subClassTypesAndDiscriminatorKeys.entries.map((entry) => _createIfLine(
-            entry.key,
-            entry.value,
-            entry.key == polymorphism.subClassTypesAndDiscriminatorKeys.keys.first
-                ? 'if'
-                : '} else if',
-            idFactory)),
+        ...polymorphism.subClassTypesAndDiscriminatorKeys.entries.map((entry) =>
+            _createIfLine(
+                entry.key,
+                entry.value,
+                entry.key ==
+                        polymorphism
+                            .subClassTypesAndDiscriminatorKeys.keys.first
+                    ? 'if'
+                    : '} else if',
+                idFactory)),
         code.Code("} else { throw Exception('Unsupported map: \$$_map'); }"),
       ]);
 

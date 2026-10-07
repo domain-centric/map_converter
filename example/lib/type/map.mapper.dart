@@ -94,105 +94,104 @@ class ExampleMapper {
   i1.Example fromMap(Map<String, dynamic> exampleMap) => i1.Example()
     ..mapWithPrimitiveKeyAndPrimitiveValue =
         (exampleMap['mapWithPrimitiveKeyAndPrimitiveValue'] as Map).map(
-          (k, v) => MapEntry(k, (v as num).toInt()),
-        )
+      (k, v) => MapEntry(k, (v as num).toInt()),
+    )
     ..nullableMapWithPrimitiveKeyAndPrimitiveValue =
         (exampleMap['nullableMapWithPrimitiveKeyAndPrimitiveValue'] as Map?)
             ?.map((k, v) => MapEntry((k as num).toInt(), v as bool))
     ..mapWithPrimitiveKeyAndPrimitiveNullableValue =
         (exampleMap['mapWithPrimitiveKeyAndPrimitiveNullableValue'] as Map).map(
-          (k, v) => MapEntry((k as num).toDouble(), v as String?),
-        )
+      (k, v) => MapEntry((k as num).toDouble(), v as String?),
+    )
     ..mapWithPrimitiveKeyAndComplexValue =
         (exampleMap['mapWithPrimitiveKeyAndComplexValue'] as Map).map(
-          (k, v) => MapEntry(
-            (k as num).toInt(),
-            const i2.PersonMapper().fromMap(v as Map<String, dynamic>),
-          ),
-        )
+      (k, v) => MapEntry(
+        (k as num).toInt(),
+        const i2.PersonMapper().fromMap(v as Map<String, dynamic>),
+      ),
+    )
     ..mapWithPrimitiveKeyAndComplexNullableValue =
         (exampleMap['mapWithPrimitiveKeyAndComplexNullableValue'] as Map).map(
+      (k, v) => MapEntry(
+        (k as num).toInt(),
+        v == null
+            ? null
+            : const i2.PersonMapper().fromMap(v as Map<String, dynamic>),
+      ),
+    )
+    ..mapWithPrimitiveKeyAndListValue =
+        (exampleMap['mapWithPrimitiveKeyAndListValue'] as Map).map(
+      (k, v) => MapEntry(
+        (k as num).toInt(),
+        v
+            .map(
+              (listElement) => const i2.PersonMapper().fromMap(
+                listElement as Map<String, dynamic>,
+              ),
+            )
+            .toList()
+            .cast<i3.Person>(),
+      ),
+    )
+    ..mapWithPrimitiveKeyAndNullableListValue =
+        (exampleMap['mapWithPrimitiveKeyAndNullableListValue'] as Map).map(
+      (k, v) => MapEntry(
+        (k as num).toInt(),
+        v
+            ?.map(
+              (listElement) => i3.Gender.values.firstWhere(
+                (enumValue) => enumValue.name == listElement,
+              ),
+            )
+            .toList()
+            .cast<i3.Gender>(),
+      ),
+    )
+    ..mapWithPrimitiveKeyAndMapValue =
+        (exampleMap['mapWithPrimitiveKeyAndMapValue'] as Map).map(
+      (k, v) => MapEntry(
+        (k as num).toInt(),
+        (v as Map).map(
           (k, v) => MapEntry(
             (k as num).toInt(),
             v == null
                 ? null
-                : const i2.PersonMapper().fromMap(v as Map<String, dynamic>),
-          ),
-        )
-    ..mapWithPrimitiveKeyAndListValue =
-        (exampleMap['mapWithPrimitiveKeyAndListValue'] as Map).map(
-          (k, v) => MapEntry(
-            (k as num).toInt(),
-            v
-                .map(
-                  (listElement) => const i2.PersonMapper().fromMap(
-                    listElement as Map<String, dynamic>,
+                : const i2.PersonMapper().fromMap(
+                    v as Map<String, dynamic>,
                   ),
-                )
-                .toList()
-                .cast<i3.Person>(),
           ),
-        )
-    ..mapWithPrimitiveKeyAndNullableListValue =
-        (exampleMap['mapWithPrimitiveKeyAndNullableListValue'] as Map).map(
-          (k, v) => MapEntry(
-            (k as num).toInt(),
-            v
-                ?.map(
-                  (listElement) => i3.Gender.values.firstWhere(
-                    (enumValue) => enumValue.name == listElement,
-                  ),
-                )
-                .toList()
-                .cast<i3.Gender>(),
-          ),
-        )
-    ..mapWithPrimitiveKeyAndMapValue =
-        (exampleMap['mapWithPrimitiveKeyAndMapValue'] as Map).map(
-          (k, v) => MapEntry(
-            (k as num).toInt(),
-            (v as Map).map(
-              (k, v) => MapEntry(
-                (k as num).toInt(),
-                v == null
-                    ? null
-                    : const i2.PersonMapper().fromMap(
-                        v as Map<String, dynamic>,
-                      ),
-              ),
-            ),
-          ),
-        )
+        ),
+      ),
+    )
     ..mapWithPrimitiveKeyAndNullableMapValue =
         (exampleMap['mapWithPrimitiveKeyAndNullableMapValue'] as Map).map(
+      (k, v) => MapEntry(
+        (k as num).toInt(),
+        (v as Map?)?.map(
           (k, v) => MapEntry(
             (k as num).toInt(),
-            (v as Map?)?.map(
-              (k, v) => MapEntry(
-                (k as num).toInt(),
-                i3.Gender.values.firstWhere((enumValue) => enumValue.name == v),
-              ),
-            ),
+            i3.Gender.values.firstWhere((enumValue) => enumValue.name == v),
           ),
-        );
+        ),
+      ),
+    );
   Map<String, dynamic> toMap(i1.Example example) => {
-    'mapWithPrimitiveKeyAndPrimitiveValue':
-        example.mapWithPrimitiveKeyAndPrimitiveValue,
-    'nullableMapWithPrimitiveKeyAndPrimitiveValue':
-        example.nullableMapWithPrimitiveKeyAndPrimitiveValue,
-    'mapWithPrimitiveKeyAndPrimitiveNullableValue':
-        example.mapWithPrimitiveKeyAndPrimitiveNullableValue,
-    'mapWithPrimitiveKeyAndComplexValue': example
-        .mapWithPrimitiveKeyAndComplexValue
-        .map((k, v) => MapEntry(k, const i2.PersonMapper().toMap(v))),
-    'mapWithPrimitiveKeyAndComplexNullableValue': example
-        .mapWithPrimitiveKeyAndComplexNullableValue
-        .map(
+        'mapWithPrimitiveKeyAndPrimitiveValue':
+            example.mapWithPrimitiveKeyAndPrimitiveValue,
+        'nullableMapWithPrimitiveKeyAndPrimitiveValue':
+            example.nullableMapWithPrimitiveKeyAndPrimitiveValue,
+        'mapWithPrimitiveKeyAndPrimitiveNullableValue':
+            example.mapWithPrimitiveKeyAndPrimitiveNullableValue,
+        'mapWithPrimitiveKeyAndComplexValue': example
+            .mapWithPrimitiveKeyAndComplexValue
+            .map((k, v) => MapEntry(k, const i2.PersonMapper().toMap(v))),
+        'mapWithPrimitiveKeyAndComplexNullableValue':
+            example.mapWithPrimitiveKeyAndComplexNullableValue.map(
           (k, v) =>
               MapEntry(k, v == null ? null : const i2.PersonMapper().toMap(v)),
         ),
-    'mapWithPrimitiveKeyAndListValue': example.mapWithPrimitiveKeyAndListValue
-        .map(
+        'mapWithPrimitiveKeyAndListValue':
+            example.mapWithPrimitiveKeyAndListValue.map(
           (k, v) => MapEntry(
             k,
             v
@@ -203,16 +202,15 @@ class ExampleMapper {
                 .toList(),
           ),
         ),
-    'mapWithPrimitiveKeyAndNullableListValue': example
-        .mapWithPrimitiveKeyAndNullableListValue
-        .map(
+        'mapWithPrimitiveKeyAndNullableListValue':
+            example.mapWithPrimitiveKeyAndNullableListValue.map(
           (k, v) => MapEntry(
             k,
             v?.map((i3.Gender listElement) => listElement.name).toList(),
           ),
         ),
-    'mapWithPrimitiveKeyAndMapValue': example.mapWithPrimitiveKeyAndMapValue
-        .map(
+        'mapWithPrimitiveKeyAndMapValue':
+            example.mapWithPrimitiveKeyAndMapValue.map(
           (k, v) => MapEntry(
             k,
             v.map(
@@ -223,8 +221,8 @@ class ExampleMapper {
             ),
           ),
         ),
-    'mapWithPrimitiveKeyAndNullableMapValue': example
-        .mapWithPrimitiveKeyAndNullableMapValue
-        .map((k, v) => MapEntry(k, v?.map((k, v) => MapEntry(k, v.name)))),
-  };
+        'mapWithPrimitiveKeyAndNullableMapValue': example
+            .mapWithPrimitiveKeyAndNullableMapValue
+            .map((k, v) => MapEntry(k, v?.map((k, v) => MapEntry(k, v.name)))),
+      };
 }

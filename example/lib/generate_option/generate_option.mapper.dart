@@ -8,9 +8,9 @@ import '../../../example/lib/generate_option/generate_option.dart' as i1;
 class ToMapExampleMapper {
   const ToMapExampleMapper();
   Map<String, dynamic> toMap(i1.ToMapExample toMapExample) => {
-    'email': toMapExample.email,
-    'phoneNumber': toMapExample.phoneNumber,
-  };
+        'email': toMapExample.email,
+        'phoneNumber': toMapExample.phoneNumber,
+      };
 }
 
 class FromMapExampleMapper {
@@ -29,7 +29,8 @@ class SchemaExampleMapper {
     'classLibraryUri':
         'asset:map_converter/example/lib/generate_option/generate_option.dart',
     'mapperClassName': 'SchemaExampleMapper',
-    'mapperClassLibraryUri': 'asset:map_converter/example/lib/generate_option/generate_option.mapper.dart',
+    'mapperClassLibraryUri':
+        'asset:map_converter/example/lib/generate_option/generate_option.mapper.dart',
     'fields': [
       {
         'name': 'email',
@@ -59,7 +60,8 @@ class MapAndSchemaExampleMapper {
     'classLibraryUri':
         'asset:map_converter/example/lib/generate_option/generate_option.dart',
     'mapperClassName': 'MapAndSchemaExampleMapper',
-    'mapperClassLibraryUri': 'asset:map_converter/example/lib/generate_option/generate_option.mapper.dart',
+    'mapperClassLibraryUri':
+        'asset:map_converter/example/lib/generate_option/generate_option.mapper.dart',
     'fields': [
       {
         'name': 'email',
@@ -81,9 +83,9 @@ class MapAndSchemaExampleMapper {
   };
   const MapAndSchemaExampleMapper();
   Map<String, dynamic> toMap(i1.MapAndSchemaExample mapAndSchemaExample) => {
-    'email': mapAndSchemaExample.email,
-    'phoneNumber': mapAndSchemaExample.phoneNumber,
-  };
+        'email': mapAndSchemaExample.email,
+        'phoneNumber': mapAndSchemaExample.phoneNumber,
+      };
 }
 
 class AllExampleMapper {
@@ -93,7 +95,8 @@ class AllExampleMapper {
     'classLibraryUri':
         'asset:map_converter/example/lib/generate_option/generate_option.dart',
     'mapperClassName': 'AllExampleMapper',
-    'mapperClassLibraryUri': 'asset:map_converter/example/lib/generate_option/generate_option.mapper.dart',
+    'mapperClassLibraryUri':
+        'asset:map_converter/example/lib/generate_option/generate_option.mapper.dart',
     'fields': [
       {
         'name': 'email',
@@ -115,11 +118,11 @@ class AllExampleMapper {
   };
   const AllExampleMapper();
   i1.AllExample fromMap(Map<String, dynamic> allExampleMap) => i1.AllExample(
-    allExampleMap['email'] as String,
-    (allExampleMap['phoneNumber'] as num).toInt(),
-  );
+        allExampleMap['email'] as String,
+        (allExampleMap['phoneNumber'] as num).toInt(),
+      );
   Map<String, dynamic> toMap(i1.AllExample allExample) => {
-    'email': allExample.email,
-    'phoneNumber': allExample.phoneNumber,
-  };
+        'email': allExample.email,
+        'phoneNumber': allExample.phoneNumber,
+      };
 }

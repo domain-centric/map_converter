@@ -21,11 +21,11 @@ class AnimalMapper {
   }
 
   Map<String, dynamic> toMap(i1.Animal animal) => switch (animal.runtimeType) {
-    i1.Dog => const i2.DogMapper().toMap(animal as i1.Dog),
-    i1.Cat => const i2.CatMapper().toMap(animal as i1.Cat),
-    i1.Bird => const i2.BirdMapper().toMap(animal as i1.Bird),
-    _ => throw Exception('Unsupported type: ${animal.runtimeType}'),
-  };
+        i1.Dog => const i2.DogMapper().toMap(animal as i1.Dog),
+        i1.Cat => const i2.CatMapper().toMap(animal as i1.Cat),
+        i1.Bird => const i2.BirdMapper().toMap(animal as i1.Bird),
+        _ => throw Exception('Unsupported type: ${animal.runtimeType}'),
+      };
 }
 
 class DogMapper {
@@ -58,14 +58,14 @@ class DogMapper {
   };
   const DogMapper();
   i1.Dog fromMap(Map<String, dynamic> dogMap) => i1.Dog(
-    name: dogMap['name'] as String,
-    barkVolume: (dogMap['barkVolume'] as num).toInt(),
-  );
+        name: dogMap['name'] as String,
+        barkVolume: (dogMap['barkVolume'] as num).toInt(),
+      );
   Map<String, dynamic> toMap(i1.Dog dog) => {
-    '_type': 'Dog',
-    'name': dog.name,
-    'barkVolume': dog.barkVolume,
-  };
+        '_type': 'Dog',
+        'name': dog.name,
+        'barkVolume': dog.barkVolume,
+      };
 }
 
 class CatMapper {
@@ -98,14 +98,14 @@ class CatMapper {
   };
   const CatMapper();
   i1.Cat fromMap(Map<String, dynamic> catMap) => i1.Cat(
-    name: catMap['name'] as String,
-    livesLeft: (catMap['livesLeft'] as num).toInt(),
-  );
+        name: catMap['name'] as String,
+        livesLeft: (catMap['livesLeft'] as num).toInt(),
+      );
   Map<String, dynamic> toMap(i1.Cat cat) => {
-    '_type': 'Cat',
-    'name': cat.name,
-    'livesLeft': cat.livesLeft,
-  };
+        '_type': 'Cat',
+        'name': cat.name,
+        'livesLeft': cat.livesLeft,
+      };
 }
 
 class BirdMapper {
@@ -138,14 +138,14 @@ class BirdMapper {
   };
   const BirdMapper();
   i1.Bird fromMap(Map<String, dynamic> birdMap) => i1.Bird(
-    name: birdMap['name'] as String,
-    wingSpan: (birdMap['wingSpan'] as num).toDouble(),
-  );
+        name: birdMap['name'] as String,
+        wingSpan: (birdMap['wingSpan'] as num).toDouble(),
+      );
   Map<String, dynamic> toMap(i1.Bird bird) => {
-    '_type': 'Bird',
-    'name': bird.name,
-    'wingSpan': bird.wingSpan,
-  };
+        '_type': 'Bird',
+        'name': bird.name,
+        'wingSpan': bird.wingSpan,
+      };
 }
 
 class PetClinicMapper {
@@ -170,20 +170,21 @@ class PetClinicMapper {
   };
   const PetClinicMapper();
   i1.PetClinic fromMap(Map<String, dynamic> petClinicMap) => i1.PetClinic(
-    petClinicMap['animals']
-        .map(
-          (listElement) => const i2.AnimalMapper().fromMap(
-            listElement as Map<String, dynamic>,
-          ),
-        )
-        .toList()
-        .cast<i1.Animal>(),
-  );
+        petClinicMap['animals']
+            .map(
+              (listElement) => const i2.AnimalMapper().fromMap(
+                listElement as Map<String, dynamic>,
+              ),
+            )
+            .toList()
+            .cast<i1.Animal>(),
+      );
   Map<String, dynamic> toMap(i1.PetClinic petClinic) => {
-    'animals': petClinic.animals
-        .map(
-          (i1.Animal listElement) => const i2.AnimalMapper().toMap(listElement),
-        )
-        .toList(),
-  };
+        'animals': petClinic.animals
+            .map(
+              (i1.Animal listElement) =>
+                  const i2.AnimalMapper().toMap(listElement),
+            )
+            .toList(),
+      };
 }

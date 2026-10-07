@@ -39,7 +39,7 @@ class ExampleMapper {
         ? null
         : Uri.parse(exampleMap['myNullableUri'] as String);
   Map<String, dynamic> toMap(i1.Example example) => {
-    'myUri': example.myUri.toString(),
-    'myNullableUri': example.myNullableUri?.toString(),
-  };
+        'myUri': example.myUri.toString(),
+        'myNullableUri': example.myNullableUri?.toString(),
+      };
 }
