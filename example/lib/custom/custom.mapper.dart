@@ -28,6 +28,6 @@ class ExampleMapper {
   i1.Example fromMap(Map<String, dynamic> exampleMap) =>
       i1.Example(i1.dateTimeFromMapValue(exampleMap['dateTime']));
   Map<String, dynamic> toMap(i1.Example example) => {
-        'dateTime': i1.dateTimeToMapValue(example.dateTime),
-      };
+    'dateTime': i1.dateTimeToMapValue(example.dateTime),
+  };
 }

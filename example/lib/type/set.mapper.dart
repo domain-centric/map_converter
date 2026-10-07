@@ -101,18 +101,17 @@ class ExampleMapper {
         .toSet()
         .cast<String?>();
   Map<String, dynamic> toMap(i1.Example example) => {
-        'setOfBool': example.setOfBool,
-        'setOfGender': example.setOfGender
-            .map((i2.Gender setElement) => setElement.name)
-            .toSet(),
-        'setOfPerson': example.setOfPerson
-            .map(
-              (i2.Person setElement) =>
-                  const i3.PersonMapper().toMap(setElement),
-            )
-            .toSet(),
-        'setOfNullableInt': example.setOfNullableInt,
-        'nullableSetOfDouble': example.nullableSetOfDouble,
-        'nullableSetOfNullableStrings': example.nullableSetOfNullableStrings,
-      };
+    'setOfBool': example.setOfBool,
+    'setOfGender': example.setOfGender
+        .map((i2.Gender setElement) => setElement.name)
+        .toSet(),
+    'setOfPerson': example.setOfPerson
+        .map(
+          (i2.Person setElement) => const i3.PersonMapper().toMap(setElement),
+        )
+        .toSet(),
+    'setOfNullableInt': example.setOfNullableInt,
+    'nullableSetOfDouble': example.nullableSetOfDouble,
+    'nullableSetOfNullableStrings': example.nullableSetOfNullableStrings,
+  };
 }

@@ -44,9 +44,9 @@ class ExampleMapper {
             exampleMap['myNullablePerson'] as Map<String, dynamic>,
           );
   Map<String, dynamic> toMap(i1.Example example) => {
-        'myPerson': const i2.PersonMapper().toMap(example.myPerson),
-        'myNullablePerson': example.myNullablePerson == null
-            ? null
-            : const i2.PersonMapper().toMap(example.myNullablePerson!),
-      };
+    'myPerson': const i2.PersonMapper().toMap(example.myPerson),
+    'myNullablePerson': example.myNullablePerson == null
+        ? null
+        : const i2.PersonMapper().toMap(example.myNullablePerson!),
+  };
 }

@@ -37,7 +37,7 @@ class ExampleMapper {
     ..myBool = exampleMap['myBool'] as bool
     ..myNullableBool = exampleMap['myNullableBool'] as bool?;
   Map<String, dynamic> toMap(i1.Example example) => {
-        'myBool': example.myBool,
-        'myNullableBool': example.myNullableBool,
-      };
+    'myBool': example.myBool,
+    'myNullableBool': example.myNullableBool,
+  };
 }

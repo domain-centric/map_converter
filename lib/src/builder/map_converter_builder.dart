@@ -9,8 +9,9 @@ import 'package:collection/collection.dart';
 import 'package:dart_code/dart_code.dart' as code;
 import 'package:logging/logging.dart';
 import 'package:map_converter/map_converter.dart';
+import 'package:map_converter/src/builder/mapper_factory/domain_class_mapper_factory.dart';
+import 'package:map_converter/src/builder/mapper_factory/mapper_factory.dart';
 import 'package:map_converter/src/builder/value_expression_factory/value_expression_factory.dart';
-import 'package:recase/recase.dart';
 
 class MapConverterBuilder implements Builder {
   final BuilderOptions builderOptions;
@@ -76,11 +77,15 @@ class MapperLibrary extends code.Library {
   bool get isNotEmpty => classes?.isNotEmpty ?? false;
 
   static List<code.Class> _createMapperClasses(LibraryElement libraryElement,
-          MapConverterLibraryAssetIdFactory idFactory) =>
-      DomainClassFactory()
-          .create(libraryElement)
-          .map((domainClass) => MapperClass(domainClass, idFactory))
-          .toList();
+      MapConverterLibraryAssetIdFactory idFactory) {
+    var mapperFactories = MapperFactories();
+    var mappableElements = libraryElement.children
+        .where((element) => mapperFactories.supports(element));
+    var mapperClasses = mappableElements
+        .map((element) => mapperFactories.create(element, idFactory))
+        .toList();
+    return mapperClasses;
+  }
 
   static List<code.DocComment> _createDocComments(
           LibraryElement libraryElement) =>
@@ -94,496 +99,6 @@ class MapperLibrary extends code.Library {
           'For more information see: https://pub.dev/packages/map_converter',
         ])
       ];
-}
-
-class MapperClass extends code.Class {
-  MapperClass(
-      DomainClass domainClass, MapConverterLibraryAssetIdFactory idFactory)
-      : super(_name(domainClass), constructors: [
-          _constructor(domainClass)
-        ], methods: [
-          if (domainClass.generateFromMapValueMethod)
-            FromMapValueMethod(domainClass, idFactory),
-          if (domainClass.generateToMapValueMethod)
-            ToMapValueMethod(domainClass, idFactory)
-        ], fields: [
-          if (domainClass.generateSchemaField)
-            SchemaField(domainClass, idFactory)
-        ]);
-
-  static String _name(DomainClass domainClass) =>
-      '${domainClass.classElement.name!}Mapper';
-
-  static code.Constructor _constructor(DomainClass domainClass) =>
-      code.Constructor(code.Type(_name(domainClass)), constant: true);
-}
-
-class ToMapValueMethod extends code.Method {
-  ToMapValueMethod(
-    DomainClass domainClass,
-    MapConverterLibraryAssetIdFactory idFactory,
-  ) : super(
-          'toMap',
-          _createBody(domainClass, idFactory),
-          parameters: _createParameters(domainClass),
-          returnType: _createReturnType(),
-        );
-
-  static code.CodeNode _createBody(
-    DomainClass domainClass,
-    MapConverterLibraryAssetIdFactory idFactory,
-  ) {
-    Map<code.Expression, code.Expression> map = {};
-    for (var field in domainClass.fields.where((f) =>
-        f.element.name != null && f.toMapValueExpressionFunction != null)) {
-      var fieldName =
-          code.Expression.ofString(field.alias ?? field.element.name!);
-      var fieldType = field.element.type as InterfaceType;
-      var instanceVariableName = domainClass.classElement.name!.camelCase;
-      var source = code.Expression.ofVariable(instanceVariableName)
-          .getProperty(field.element.name!);
-      var fieldValueExpression = field.toMapValueExpressionFunction!(
-        idFactory,
-        source,
-        fieldType,
-      );
-      map[fieldName] = fieldValueExpression;
-    }
-    return code.Expression.ofMap(map);
-  }
-
-  static code.Parameters _createParameters(DomainClass domainClass) =>
-      code.Parameters([
-        code.Parameter.required(
-          domainClass.classElement.name!.camelCase,
-          type: createDomainType(domainClass),
-        ),
-      ]);
-
-  static code.Type _createReturnType() => code.Type.ofMap(
-      keyType: code.Type.ofString(), valueType: code.Type.ofDynamic());
-}
-
-class FromMapValueMethod extends code.Method {
-  FromMapValueMethod(
-    DomainClass domainClass,
-    MapConverterLibraryAssetIdFactory idFactory,
-  ) : super(
-          'fromMap',
-          _createBody(domainClass, idFactory),
-          parameters: _createFunctionParameters(domainClass),
-          returnType: createDomainType(domainClass),
-        );
-
-  static code.CodeNode _createBody(
-    DomainClass domainClass,
-    MapConverterLibraryAssetIdFactory idFactory,
-  ) {
-    var domainMapVariableName = _domainMapVariableName(domainClass);
-    var constructorCall = _createConstructorCall(
-      domainClass,
-      idFactory,
-    );
-    for (var field in domainClass.fieldsSetBySetter) {
-      var propertyName = field.alias ?? field.element.name!;
-      var propertyValue = propertyValueExpression(
-        field,
-        idFactory,
-        domainMapVariableName,
-      );
-      constructorCall = constructorCall.setProperty(
-        propertyName,
-        propertyValue,
-        cascade: true,
-      );
-    }
-    return constructorCall;
-  }
-
-  static code.Expression _createConstructorCall(
-      DomainClass domainClass, MapConverterLibraryAssetIdFactory idFactory) {
-    var name = domainClass.bestConstructor.name;
-    if (name == 'new') {
-      name = null;
-    }
-    var parameters = _createConstructorParameterValues(domainClass, idFactory);
-    return code.Expression.callConstructor(createDomainType(domainClass),
-        name: name, parameterValues: parameters);
-  }
-
-  static code.Parameters _createFunctionParameters(DomainClass domainClass) =>
-      code.Parameters([
-        code.Parameter.required(
-          _domainMapVariableName(domainClass),
-          type: code.Type.ofMap(
-              keyType: code.Type.ofString(), valueType: code.Type.ofDynamic()),
-        ),
-      ]);
-
-  static String _domainMapVariableName(DomainClass domainClass) =>
-      '${domainClass.classElement.name!.camelCase}Map';
-
-  static code.ParameterValues _createConstructorParameterValues(
-    DomainClass domainClass,
-    MapConverterLibraryAssetIdFactory idFactory,
-  ) {
-    var bestConstructor = domainClass.bestConstructor;
-    String mapVariableName = _domainMapVariableName(domainClass);
-    var parameterValues = <code.ParameterValue>[];
-    for (var parameter in bestConstructor.requiredPositionalParameters) {
-      code.Expression valueExpression =
-          propertyValueExpression(parameter, idFactory, mapVariableName);
-      parameterValues.add(code.ParameterValue(valueExpression));
-    }
-    for (var parameter in bestConstructor.optionalParameters) {
-      code.Expression valueExpression =
-          propertyValueExpression(parameter, idFactory, mapVariableName);
-      parameterValues.add(code.ParameterValue(valueExpression));
-    }
-    for (var parameter in bestConstructor.namedParameters) {
-      code.Expression valueExpression =
-          propertyValueExpression(parameter, idFactory, mapVariableName);
-      parameterValues.add(
-          code.ParameterValue.named(parameter.element.name!, valueExpression));
-    }
-    return code.ParameterValues(parameterValues);
-  }
-}
-
-code.Type createDomainType(DomainClass domainClass) => code.Type(
-      domainClass.classElement.name!,
-      libraryUri: createLibraryUri(domainClass.classElement),
-    );
-
-code.Expression propertyValueExpression(FieldMetadata field,
-    MapConverterLibraryAssetIdFactory idFactory, String mapVariableName) {
-  var fieldName = field.alias ?? field.element.name!;
-  var fieldType = field.element.type as InterfaceType;
-  var source = code.Expression.ofVariable(mapVariableName)
-      .index(code.Expression.ofString(fieldName));
-  var valueExpression = field.fromMapValueExpressionFunction!(
-    idFactory,
-    source,
-    fieldType,
-  );
-  return valueExpression;
-}
-
-/// Contains information on a [DomainClass] to generate [MapConverter]s
-class DomainClass {
-  final ClassElement classElement;
-  final Constructor bestConstructor;
-  final List<FieldMetadata> fields;
-  final List<FieldMetadata> fieldsSetBySetter;
-  final int generateOptions;
-  late final bool generateFromMapValueMethod =
-      generateOptions & GenerateOptions.fromMap > 0;
-  late final bool generateToMapValueMethod =
-      generateOptions & GenerateOptions.toMap > 0;
-  late final bool generateSchemaField =
-      generateOptions & GenerateOptions.schema > 0;
-
-  DomainClass(
-    this.classElement,
-    this.bestConstructor,
-    this.fields,
-    this.generateOptions,
-  ) : fieldsSetBySetter = fields
-            .where((field) =>
-                !bestConstructor.fieldsBeingSet.contains(field) &&
-                field.element.setter != null)
-            .toList();
-}
-
-class Constructor {
-  late String? name;
-  final List<FieldMetadata> requiredPositionalParameters;
-  final List<FieldMetadata> namedParameters;
-  final List<FieldMetadata> optionalParameters;
-  late Set<FieldMetadata> fieldsBeingSet;
-
-  Constructor({
-    String? name,
-    required this.requiredPositionalParameters,
-    required this.namedParameters,
-    required this.optionalParameters,
-  }) {
-    this.name = (name == null || name.isEmpty) ? null : name;
-    fieldsBeingSet = {};
-    fieldsBeingSet.addAll(requiredPositionalParameters);
-    fieldsBeingSet.addAll(namedParameters);
-    fieldsBeingSet.addAll(optionalParameters);
-  }
-
-  Constructor.withoutParameters()
-      : name = null,
-        requiredPositionalParameters = [],
-        namedParameters = [],
-        optionalParameters = [],
-        fieldsBeingSet = {};
-}
-
-class FieldMetadata {
-  final FieldElement element;
-  final String? alias;
-  final ToMapValueExpressionFunction? toMapValueExpressionFunction;
-  final FromMapValueExpressionFunction? fromMapValueExpressionFunction;
-
-  FieldMetadata(this.element,
-      {this.alias,
-      required this.toMapValueExpressionFunction,
-      required this.fromMapValueExpressionFunction});
-}
-
-typedef ToMapValueExpressionFunction =
-
-    /// Creates a Dart code expressions for a generated MapConverter
-    /// to convert a [source] object to a [PrimitiveType]
-    code.Expression Function(
-  MapConverterLibraryAssetIdFactory idFactory,
-
-  /// [source]: An expression of the source data, e.g.:
-  /// * person.name (a field or property value of an object)
-  /// * enumValue
-  /// * listElement
-  /// * setElement
-  /// * k (for a key value in a [Map])
-  /// * v (for a value in a [Map])
-  code.Expression source,
-  InterfaceType typeToConvert,
-);
-
-typedef FromMapValueExpressionFunction =
-
-    /// Creates a Dart code expressions for a generated MapConverter
-    /// to convert a [PrimitiveType] to an object
-    code.Expression Function(
-  MapConverterLibraryAssetIdFactory idFactory,
-
-  /// [source]: An expression of the source data, e.g.:
-  /// * personMap['propertyName'] (a [PrimitiveType] within a [Map])
-  /// * enumValue
-  /// * listElement
-  /// * setElement
-  /// * k (for a key value in a [Map])
-  /// * v (for a value in a [Map])
-  code.Expression source,
-  InterfaceType typeToConvert,
-);
-
-class DomainClassFactory {
-  List<DomainClass> create(LibraryElement libraryElement) {
-    var domainClasses = <DomainClass>[];
-    var topElements = libraryElement.children;
-    for (var topElement in topElements) {
-      if (isDomainClass(topElement)) {
-        var classElement = topElement as ClassElement;
-        var fields = _createFields(classElement);
-        if (fields.isNotEmpty) {
-          var bestConstructor =
-              BestConstructorFactory().createFor(classElement, fields);
-          var fieldsThatAreNotSet =
-              findFieldsThatAreNotSet(fields, bestConstructor);
-          validateIfAllFieldsAreSet(fieldsThatAreNotSet, classElement);
-          var generateOptions = _generateOptions(classElement);
-          if (fieldsThatAreNotSet.length != fields.length) {
-            var domainClass = DomainClass(
-                classElement, bestConstructor, fields, generateOptions);
-            domainClasses.add(domainClass);
-          }
-        }
-      }
-    }
-    return domainClasses;
-  }
-
-  void validateIfAllFieldsAreSet(
-      List<FieldMetadata> fieldsThatAreNotSet, ClassElement classElement) {
-    if (fieldsThatAreNotSet.isNotEmpty) {
-      var fieldNamesThatAreNotSet =
-          fieldsThatAreNotSet.map((field) => field.element.name).join(', ');
-      log.log(
-          Level.WARNING,
-          'Class: ${classElement.name} '
-          'contains fields that could not be set: $fieldNamesThatAreNotSet');
-    }
-  }
-
-  bool isDomainClass(Element element) {
-    return hasMapConverterAnnotation(element) &&
-        element is ClassElement &&
-        element.isPublic &&
-        !element.isAbstract &&
-        element is! EnumElement &&
-        element.thisType.allSupertypes
-            .none((e) => _isListSetMapIteratorType(e.element));
-  }
-
-  bool hasMapConverterAnnotation(Element element) =>
-      _findMapConverterAnnotation(element) != null;
-
-  bool isDomainClassWithSupportedPropertyTypes(Element element) {
-    return isDomainClass(element) &&
-        _createFields(element as ClassElement).isNotEmpty;
-  }
-
-  bool _isListSetMapIteratorType(InterfaceElement element) {
-    String string = element.toString();
-    return element.library.name == 'dart.core' &&
-        (string.contains('class List<') ||
-            string.contains('class Set<') ||
-            string.contains('class Map<') ||
-            string.contains('class Iterator<'));
-  }
-
-  /// Gets all fields that represent properties from the [InterfaceElement]
-  /// including those from super classes, mixins and interfaces
-  List<FieldElement> _findAllPublicFields(InterfaceElement interfaceElement) {
-    Map<String, FieldElement> fields = {};
-    for (var element in interfaceElement.fields) {
-      if (_isPublicPropertyField(element)) {
-        fields[element.name!] = element;
-      }
-    }
-    for (var superType in interfaceElement.allSupertypes) {
-      var superTypeFields = _findAllPublicFields(superType.element);
-      for (var superTypeField in superTypeFields) {
-        fields[superTypeField.name!] = superTypeField;
-      }
-    }
-    return fields.values.toList();
-  }
-
-  List<FieldMetadata> _createFields(ClassElement classElement) {
-    final mapConverterAnnotation = findMapConverterAnnotation(classElement);
-
-    var fieldMetaData = <FieldMetadata>[];
-    var fields = _findAllPublicFields(classElement);
-    var fieldAnnotations = _findFieldAnnotations(mapConverterAnnotation);
-    for (var field in fields) {
-      var fieldAnnotation = findFieldAnnotation(fieldAnnotations, field);
-      var ignore = fieldAnnotation?.getField('ignore')?.toBoolValue() ?? false;
-      if (!ignore) {
-        var fieldPath = '${classElement.name}.${field.name}';
-        try {
-          var fieldType = field.type as InterfaceType;
-          var valueExpressionFactory =
-              ValueExpressionFactories().findFor(fieldType);
-          var alias = fieldAnnotation?.getField('alias')?.toStringValue();
-          var fromMapValueExpressionFunction =
-              createFromMapValueExpressionFunction(
-                  fieldAnnotation, valueExpressionFactory);
-          var toMapValueExpressionFunction = createToMapValueExpressionFunction(
-              fieldAnnotation, valueExpressionFactory);
-
-          if (fromMapValueExpressionFunction == null &&
-              toMapValueExpressionFunction == null) {
-            log.log(
-                Level.WARNING,
-                'Property: $fieldPath '
-                'has an unsupported type: $fieldType. '
-                'Define a custom converter in the @MapConverter annotation.');
-          } else {
-            var fieldExpressionFactory = FieldMetadata(
-              field,
-              alias: alias,
-              fromMapValueExpressionFunction: fromMapValueExpressionFunction,
-              toMapValueExpressionFunction: toMapValueExpressionFunction,
-            );
-            fieldMetaData.add(fieldExpressionFactory);
-          }
-        } on Exception catch (e) {
-          throw Exception('$fieldPath: $e');
-        }
-      }
-    }
-    return fieldMetaData;
-  }
-
-  DartObject? findFieldAnnotation(
-      List<DartObject>? fieldAnnotations, FieldElement field) {
-    return fieldAnnotations?.firstWhereOrNull((dartObject) =>
-        (dartObject.getField('symbol')?.toSymbolValue()) == field.name);
-  }
-
-  FromMapValueExpressionFunction? createFromMapValueExpressionFunction(
-      DartObject? fieldAnnotation,
-      ValueExpressionFactory? valueExpressionFactory) {
-    var fromMapValueCustomFunction =
-        fieldAnnotation?.getField('fromMapValue')?.toFunctionValue();
-    if (fromMapValueCustomFunction == null && valueExpressionFactory == null) {
-      return null;
-    }
-    if (fromMapValueCustomFunction != null) {
-      return createCustomFromMapValueExpressionFunction(
-          functionName: fromMapValueCustomFunction.name!,
-          functionLibraryUri: createRelativeLibraryUri(
-              fromMapValueCustomFunction.library.uri.toString()));
-    } else {
-      return valueExpressionFactory!.fromMapValue;
-    }
-  }
-
-  ToMapValueExpressionFunction? createToMapValueExpressionFunction(
-      DartObject? fieldAnnotation,
-      ValueExpressionFactory? valueExpressionFactory) {
-    var toMapValueExpressionFunction =
-        fieldAnnotation?.getField('toMapValue')?.toFunctionValue();
-    if (toMapValueExpressionFunction == null &&
-        valueExpressionFactory == null) {
-      return null;
-    }
-    if (toMapValueExpressionFunction != null) {
-      return createCustomToMapValueExpressionFunction(
-          functionName: toMapValueExpressionFunction.name!,
-          functionLibraryUri: createRelativeLibraryUri(
-              toMapValueExpressionFunction.library.uri.toString()));
-    } else {
-      return valueExpressionFactory!.toMapValue;
-    }
-  }
-
-  List<DartObject>? _findFieldAnnotations(DartObject? mapConverterAnnotation) =>
-      mapConverterAnnotation?.getField('fields')?.toListValue();
-
-  bool _isPublicPropertyField(FieldElement element) =>
-      element.isPublic &&
-      !element.isAbstract &&
-      !element.isStatic &&
-      !element.isConst &&
-      (element.setter != null || _isSetInConstructor(element)) &&
-      element.type is InterfaceType;
-
-  bool _isSetInConstructor(FieldElement element) => element.isFinal;
-
-  DartObject? _findMapConverterAnnotation(Element element) {
-    for (var annotation in element.metadata.annotations) {
-      var constantValue = annotation.computeConstantValue();
-      if (constantValue?.type?.element?.name == "MapConverter") {
-        return constantValue!;
-      }
-    }
-    return null;
-  }
-
-  List<FieldMetadata> findFieldsThatAreNotSet(
-      List<FieldMetadata> fields, Constructor bestConstructor) {
-    var fieldsSetByConstructor = bestConstructor.fieldsBeingSet;
-    var fieldsWithSetter =
-        fields.where((field) => field.element.setter != null);
-    var fieldsThatAreNotSet = [...fields]..removeWhere((field) =>
-        fieldsSetByConstructor.contains(field) ||
-        fieldsWithSetter.contains(field));
-    return fieldsThatAreNotSet;
-  }
-
-  int _generateOptions(ClassElement classElement) {
-    var annotation = _findMapConverterAnnotation(classElement);
-    var generateOptions =
-        annotation?.getField('generateOptions')?.toIntValue() ??
-            GenerateOptions.all;
-    return generateOptions;
-  }
 }
 
 FromMapValueExpressionFunction createCustomFromMapValueExpressionFunction({
@@ -712,7 +227,7 @@ class BestConstructorFactory {
 //       }]}
 class SchemaField extends code.Field {
   SchemaField(
-      DomainClass domainClass, MapConverterLibraryAssetIdFactory idFactory)
+      DomainClassMeta domainClass, MapConverterLibraryAssetIdFactory idFactory)
       : super('schema',
             type: _type(),
             value: _toMapExpression(domainClass, idFactory),
@@ -723,7 +238,7 @@ class SchemaField extends code.Field {
         keyType: code.Type.ofString(), valueType: code.Type.ofDynamic());
   }
 
-  static code.Expression _toMapExpression(DomainClass domainClass,
+  static code.Expression _toMapExpression(DomainClassMeta domainClass,
           MapConverterLibraryAssetIdFactory idFactory) =>
       code.Expression([
         code.KeyWord.const$,
@@ -766,4 +281,31 @@ class SchemaField extends code.Field {
         code.Expression.ofString('typeLibraryUri'): code.Expression.ofString(
             field.element.type.element?.library?.uri.toString() ?? ''),
       });
+}
+
+code.Type createType(Element element, bool nullable) => code.Type(
+      element.displayName,
+      libraryUri: createLibraryUri(element),
+      nullable: nullable,
+    );
+
+String? createLibraryUri(Element element) {
+  String libraryUri = element.library?.uri.toString() ?? '';
+  if (libraryUri == 'dart:core') {
+    return null;
+  }
+  if (libraryUri.startsWith('package:')) {
+    return libraryUri;
+  }
+  return createRelativeLibraryUri(libraryUri);
+}
+
+String createRelativeLibraryUri(String libraryUri) {
+  var numberOfSlashes = '/'.allMatches(libraryUri).length;
+  var foldersUpToRoot = numberOfSlashes - 1;
+  int indexFirstSlash = libraryUri.indexOf('/');
+  if (indexFirstSlash == -1) {
+    return libraryUri;
+  }
+  return '${'../' * foldersUpToRoot}${libraryUri.substring(indexFirstSlash + 1)}';
 }

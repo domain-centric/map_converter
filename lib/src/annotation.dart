@@ -9,18 +9,11 @@ class MapConverter {
   // defines what to generate. See [GenerateOptions]
   final int generateOptions;
 
-  /// Specify additional subclasses of this class for polymorphism.
-  final Iterable<Type> subClasses;
-
   /// Property key used for type discriminators.
   ///
   /// For polymorphic classes this will be used for identifying the
   /// correct subtype when decoding an object.
   final String? discriminatorKey;
-
-  /// Custom value for the discriminator property.
-  /// If not set this defaults to the class name.
-  final dynamic discriminatorValue;
 
   /// Specify additional subclasses of this class for polymorphism.
   final Iterable<Type>? includeSubClasses;
@@ -29,9 +22,7 @@ class MapConverter {
 
   const MapConverter(
       {this.generateOptions = GenerateOptions.all,
-      this.subClasses = const <Type>[],
       this.discriminatorKey,
-      this.discriminatorValue,
       this.includeSubClasses,
       this.fields = const <Field>[]});
 }
@@ -82,11 +73,14 @@ class Field<OBJECT_TYPE, MAP_VALUE_TYPE> {
         fromMapValue = null;
 }
 
-DartObject? findMapConverterAnnotation(ClassElement domainClassElement) =>
-    domainClassElement.metadata.annotations
+DartObject? findMapConverterAnnotation(ClassElement classElement) =>
+    classElement.metadata.annotations
         .firstWhereOrNull(
           (element) =>
               element.computeConstantValue()?.type?.element?.name ==
               'MapConverter',
         )
         ?.computeConstantValue();
+
+bool hasMapConverterAnnotation(ClassElement classElement) =>
+    findMapConverterAnnotation(classElement) != null;

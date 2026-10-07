@@ -863,6 +863,41 @@ class LibraryElementFake implements LibraryElement {
   void visitChildren<T>(visitor) {}
 }
 
+class _PersonConstructorElementFake implements ConstructorElement {
+  @override
+  String get name => '';
+
+  @override
+  List<FormalParameterElement> get formalParameters =>
+      [_PersonParameterElementFake()];
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+class _PersonParameterElementFake implements FormalParameterElement {
+  @override
+  String get name => 'name';
+
+  @override
+  DartType get type => TypeFake.string();
+
+  @override
+  bool get isNamed => true;
+
+  @override
+  bool get isRequired => true;
+
+  @override
+  bool get isRequiredPositional => false;
+
+  @override
+  bool get isOptional => false;
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
 class MapConverterLibraryAssetIdFactoryFake
     implements MapConverterLibraryAssetIdFactory {
   @override
@@ -883,7 +918,8 @@ class PersonElementFake extends ClassElement {
   List<InterfaceType> get allSupertypes => [];
 
   @override
-  List<ConstructorElement> get constructors => throw UnimplementedError();
+  List<ConstructorElement> get constructors =>
+      [_PersonConstructorElementFake()];
 
   @override
   String get displayName => thisType.element.name ?? '';
@@ -1416,9 +1452,7 @@ class DartObjectFake extends DartObject {
   }
 
   @override
-  int? toIntValue() {
-    throw UnimplementedError();
-  }
+  int? toIntValue() => null;
 
   @override
   List<DartObject>? toListValue() => [DartObjectFake(typeFake)];
@@ -1437,9 +1471,7 @@ class DartObjectFake extends DartObject {
   String? toStringValue() => 'Name';
 
   @override
-  String? toSymbolValue() {
-    throw UnimplementedError();
-  }
+  String? toSymbolValue() => null;
 
   @override
   DartType? toTypeValue() => DartTypeFake(typeFake);
@@ -1617,7 +1649,7 @@ class FieldElementFake extends FieldElement {
   bool get isExternal => throw UnimplementedError();
 
   @override
-  bool get isFinal => throw UnimplementedError();
+  bool get isFinal => true;
 
   @override
   bool get isLate => throw UnimplementedError();
@@ -1742,7 +1774,7 @@ class FieldElementFake extends FieldElement {
   void visitChildren<T>(visitor) {}
 
   @override
-  SetterElement? get setter => throw UnimplementedError();
+  SetterElement? get setter => null;
 }
 
 class PropertyAccessorElementFake extends PropertyAccessorElement {

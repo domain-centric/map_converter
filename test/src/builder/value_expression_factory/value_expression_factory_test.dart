@@ -1,5 +1,5 @@
 import 'package:dart_code/dart_code.dart' as code;
-import 'package:map_converter/src/builder/value_expression_factory/value_expression_factory.dart';
+import 'package:map_converter/src/builder/map_converter_builder.dart';
 import 'package:test/test.dart';
 import 'package:shouldly/shouldly.dart';
 
@@ -26,7 +26,7 @@ void main() {
           .be('package:test/test.dart');
     });
 
-    test('other path should return releative path', () async {
+    test('other path should return relative path', () async {
       createLibraryUri(TypeFake(
                   typeAsString: 'Test',
                   libraryUrl: 'test/my_test/test.dart',

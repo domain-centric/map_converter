@@ -1,4 +1,4 @@
-import 'package:map_converter/src/builder/value_expression_factory/implementation/domain_object.dart';
+import 'package:map_converter/src/builder/value_expression_factory/implementation/mapper.dart';
 import 'package:map_converter/src/builder/value_expression_factory/value_expression_factory.dart';
 import 'package:shouldly/shouldly.dart';
 import 'package:test/test.dart';
@@ -11,8 +11,8 @@ void main() {
   const mapVariableName = 'map';
   const instanceVariableName = 'person';
 
-  group("class: $DomainObjectExpressionFactory()", () {
-    var expressionFactory = DomainObjectExpressionFactory();
+  group("class: $MapperExpressionFactory()", () {
+    var expressionFactory = MapperExpressionFactory();
     var propertyName = 'parent';
     test('supports(Person) should return Supported', () {
       expressionFactory

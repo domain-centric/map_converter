@@ -59,31 +59,30 @@ class PersonMapper {
   };
   const PersonMapper();
   i1.Person fromMap(Map<String, dynamic> personMap) => i1.Person(
-        personMap['name'] as String,
-        dateOfBirth: DateTime.parse(personMap['dateOfBirth'] as String),
-        hobby: personMap['hobby'] as String,
-        gender: i1.Gender.values.firstWhere(
-          (enumValue) => enumValue.name == personMap['gender'],
-        ),
-        children: personMap['children']
-            .map(
-              (listElement) => const i2.PersonMapper().fromMap(
-                listElement as Map<String, dynamic>,
-              ),
-            )
-            .toList()
-            .cast<i1.Person>(),
-      );
+    personMap['name'] as String,
+    dateOfBirth: DateTime.parse(personMap['dateOfBirth'] as String),
+    hobby: personMap['hobby'] as String,
+    gender: i1.Gender.values.firstWhere(
+      (enumValue) => enumValue.name == personMap['gender'],
+    ),
+    children: personMap['children']
+        .map(
+          (listElement) => const i2.PersonMapper().fromMap(
+            listElement as Map<String, dynamic>,
+          ),
+        )
+        .toList()
+        .cast<i1.Person>(),
+  );
   Map<String, dynamic> toMap(i1.Person person) => {
-        'name': person.name,
-        'dateOfBirth': person.dateOfBirth.toIso8601String(),
-        'children': person.children
-            .map(
-              (i1.Person listElement) =>
-                  const i2.PersonMapper().toMap(listElement),
-            )
-            .toList(),
-        'hobby': person.hobby,
-        'gender': person.gender.name,
-      };
+    'name': person.name,
+    'dateOfBirth': person.dateOfBirth.toIso8601String(),
+    'children': person.children
+        .map(
+          (i1.Person listElement) => const i2.PersonMapper().toMap(listElement),
+        )
+        .toList(),
+    'hobby': person.hobby,
+    'gender': person.gender.name,
+  };
 }

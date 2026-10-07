@@ -44,7 +44,7 @@ class ExampleMapper {
             (enumValue) => enumValue.name == exampleMap['myNullableEnum'],
           );
   Map<String, dynamic> toMap(i1.Example example) => {
-        'myEnum': example.myEnum.name,
-        'myNullableEnum': example.myNullableEnum?.name,
-      };
+    'myEnum': example.myEnum.name,
+    'myNullableEnum': example.myNullableEnum?.name,
+  };
 }

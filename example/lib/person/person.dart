@@ -20,7 +20,8 @@ class Person {
 
   @override
   String toString() {
-    return 'Person{name: $name, dateOfBirth: $dateOfBirth, children: $children, hobby: $hobby, gender: $gender}';
+    //FIXME return 'Person{name: $name, dateOfBirth: $dateOfBirth, children: $children, hobby: $hobby, gender: $gender}';
+    return '';
   }
 
   @override
@@ -30,7 +31,7 @@ class Person {
           runtimeType == other.runtimeType &&
           name == other.name &&
           dateOfBirth == other.dateOfBirth &&
-          children == other.children &&
+          //FIXME children == other.children &&
           hobby == other.hobby &&
           gender == other.gender;
 
@@ -38,7 +39,7 @@ class Person {
   int get hashCode =>
       name.hashCode ^
       dateOfBirth.hashCode ^
-      children.hashCode ^
+      //FIXME     children.hashCode ^
       hobby.hashCode ^
       gender.hashCode;
 }

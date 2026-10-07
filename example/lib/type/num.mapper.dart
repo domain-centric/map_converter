@@ -37,7 +37,7 @@ class ExampleMapper {
     ..myNum = exampleMap['myNum'] as num
     ..myNullableNum = exampleMap['myNullableNum'] as num?;
   Map<String, dynamic> toMap(i1.Example example) => {
-        'myNum': example.myNum,
-        'myNullableNum': example.myNullableNum,
-      };
+    'myNum': example.myNum,
+    'myNullableNum': example.myNullableNum,
+  };
 }

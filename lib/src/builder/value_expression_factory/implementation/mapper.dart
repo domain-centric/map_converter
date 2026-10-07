@@ -1,17 +1,20 @@
 import 'package:analyzer/dart/element/type.dart';
 import 'package:dart_code/dart_code.dart' as code;
 import 'package:map_converter/src/builder/map_converter_builder.dart';
+import 'package:map_converter/src/builder/mapper_factory/mapper_factory.dart';
 import 'package:map_converter/src/builder/value_expression_factory/value_expression_factory.dart';
 
-class DomainObjectExpressionFactory implements ValueExpressionFactory {
-  final domainClassFactory = DomainClassFactory();
+class MapperExpressionFactory implements ValueExpressionFactory {
+  final mapperFactories = MapperFactories();
 
   @override
   SupportResult supports(InterfaceType typeToConvert) {
-    if (!domainClassFactory.isDomainClass(typeToConvert.element)) {
+    var isMappable = mapperFactories.supports(typeToConvert.element);
+    if (isMappable) {
+      return const Supported();
+    } else {
       return const NotSupported();
     }
-    return const Supported();
 
     ///SupportedIfTypesAreSupported(domainClassFactory.constructorsWithRequiredFields(typeToConvert.element));
   }

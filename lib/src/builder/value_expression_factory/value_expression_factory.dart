@@ -1,4 +1,3 @@
-import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:collection/collection.dart';
@@ -7,7 +6,7 @@ import 'package:map_converter/src/builder/map_converter_builder.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/big_int.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/bool.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/date_time.dart';
-import 'package:map_converter/src/builder/value_expression_factory/implementation/domain_object.dart';
+import 'package:map_converter/src/builder/value_expression_factory/implementation/mapper.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/double.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/duration.dart';
 import 'package:map_converter/src/builder/value_expression_factory/implementation/enum.dart';
@@ -81,6 +80,42 @@ abstract class ValueExpressionFactory {
   ToMapValueExpressionFunction get toMapValue;
 }
 
+typedef ToMapValueExpressionFunction =
+
+    /// Creates a Dart code expressions for a generated MapConverter
+    /// to convert a [source] object to a [PrimitiveType]
+    code.Expression Function(
+  MapConverterLibraryAssetIdFactory idFactory,
+
+  /// [source]: An expression of the source data, e.g.:
+  /// * person.name (a field or property value of an object)
+  /// * enumValue
+  /// * listElement
+  /// * setElement
+  /// * k (for a key value in a [Map])
+  /// * v (for a value in a [Map])
+  code.Expression source,
+  InterfaceType typeToConvert,
+);
+
+typedef FromMapValueExpressionFunction =
+
+    /// Creates a Dart code expressions for a generated MapConverter
+    /// to convert a [PrimitiveType] to an object
+    code.Expression Function(
+  MapConverterLibraryAssetIdFactory idFactory,
+
+  /// [source]: An expression of the source data, e.g.:
+  /// * personMap['propertyName'] (a [PrimitiveType] within a [Map])
+  /// * enumValue
+  /// * listElement
+  /// * setElement
+  /// * k (for a key value in a [Map])
+  /// * v (for a value in a [Map])
+  code.Expression source,
+  InterfaceType typeToConvert,
+);
+
 /// By convention, a [PrimitiveMap] map:
 /// * Has key values that are often camelCased [String]
 /// * Has a limited set of values types, see [PrimitiveType]
@@ -113,7 +148,7 @@ class ValueExpressionFactories extends DelegatingList<ValueExpressionFactory> {
     DateTimeExpressionFactory(),
     DurationExpressionFactory(),
     EnumExpressionFactory(),
-    DomainObjectExpressionFactory(),
+    MapperExpressionFactory(),
   ];
 
   static final _collectionValueExpressionFactories = [
@@ -172,33 +207,6 @@ class ValueExpressionFactories extends DelegatingList<ValueExpressionFactory> {
   bool supports(InterfaceType typeToConvert,
           [Set<InterfaceType> typesBeingSearched = const {}]) =>
       findFor(typeToConvert, typesBeingSearched) != null;
-}
-
-code.Type createType(Element element, bool nullable) => code.Type(
-      element.displayName,
-      libraryUri: createLibraryUri(element),
-      nullable: nullable,
-    );
-
-String? createLibraryUri(Element element) {
-  String libraryUri = element.library?.uri.toString() ?? '';
-  if (libraryUri == 'dart:core') {
-    return null;
-  }
-  if (libraryUri.startsWith('package:')) {
-    return libraryUri;
-  }
-  return createRelativeLibraryUri(libraryUri);
-}
-
-String createRelativeLibraryUri(String libraryUri) {
-  var numberOfSlashes = '/'.allMatches(libraryUri).length;
-  var foldersUpToRoot = numberOfSlashes - 1;
-  int indexFirstSlash = libraryUri.indexOf('/');
-  if (indexFirstSlash == -1) {
-    return libraryUri;
-  }
-  return '${'../' * foldersUpToRoot}${libraryUri.substring(indexFirstSlash + 1)}';
 }
 
 code.Expression wrapWithIfNullWhenNullable(

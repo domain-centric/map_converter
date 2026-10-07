@@ -1,6 +1,7 @@
 import 'package:analyzer/dart/element/element.dart';
 import 'package:map_converter/map_converter.dart';
 import 'package:map_converter/src/builder/map_converter_builder.dart';
+import 'package:map_converter/src/builder/mapper_factory/domain_class_mapper_factory.dart';
 import 'package:shouldly/shouldly.dart';
 import 'package:test/test.dart';
 
@@ -29,7 +30,7 @@ class _SchemaFieldElementFake extends FieldElementFake {
 
 void main() {
   test('SchemaField should generate the schema map', () {
-    final domainClass = DomainClass(
+    final domainClass = DomainClassMeta(
       _SchemaClassElementFake(),
       Constructor.withoutParameters(),
       [
@@ -45,6 +46,7 @@ void main() {
           fromMapValueExpressionFunction: null,
         ),
       ],
+      null,
       GenerateOptions.all,
     );
 
